@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Service\NewsService;
 use App\Service\YouTubeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
@@ -28,7 +29,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/", name="index")
      */
-    public function index()
+    public function index(): Response
     {
         $news = $this->newsService->getNews();
         $youTubeVideos = $this->youTubeService->getItemsFromChannel();

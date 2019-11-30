@@ -2,26 +2,44 @@
 
 namespace App\Service;
 
+use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\HttpClient\HttpClient;
 
 class NewsService
 {
+    /**
+     * @var CacheItemPoolInterface
+     */
+    private $cache;
+
+    public function __construct(CacheItemPoolInterface $cache)
+    {
+        $this->cache = $cache;
+    }
+
     public function getNews()
     {
-        $client = HttpClient::create();
-        $response = $client->request('GET', 'https://newsapi.org/v2/everything?q=wasserball&from=2019-10-30&sortBy=publishedAt&language=de&apiKey=' . $_ENV['NEWSAPI']);
+        $cacheItem = $this->cache->getItem('news');
 
-        $statusCode = $response->getStatusCode();
-        $contentType = $response->getHeaders()['content-type'][0];
-        $content = $response->getContent();
-        $content = $response->toArray();
+        if (!$cacheItem->isHit()) {
+            $client = HttpClient::create();
+            $response = $client->request('GET', 'https://newsapi.org/v2/everything?q=wasserball&from=2019-10-30&sortBy=publishedAt&language=de&apiKey=' . $_ENV['NEWSAPI']);
 
-        foreach ($content['articles'] as $key => $article) {
-            if ($article['source']['name'] === 'Sueddeutsche.de') {
-                unset($content['articles'][$key]);
+            $statusCode = $response->getStatusCode();
+            $contentType = $response->getHeaders()['content-type'][0];
+            $content = $response->getContent();
+            $content = $response->toArray();
+
+            foreach ($content['articles'] as $key => $article) {
+                if ($article['source']['name'] === 'Sueddeutsche.de') {
+                    unset($content['articles'][$key]);
+                }
             }
+
+            $cacheItem->set($content);
+            $this->cache->save($cacheItem);
         }
 
-        return $content;
+        return $cacheItem->get();
     }
 }

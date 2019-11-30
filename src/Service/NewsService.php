@@ -16,6 +16,12 @@ class NewsService
         $content = $response->getContent();
         $content = $response->toArray();
 
+        foreach ($content['articles'] as $key => $article) {
+            if ($article['source']['name'] === 'Sueddeutsche.de') {
+                unset($content['articles'][$key]);
+            }
+        }
+
         return $content;
     }
 }

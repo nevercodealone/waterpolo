@@ -35,7 +35,8 @@
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.14",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*"
+        "symfony/test-pack": "*",
+        "symfony/web-profiler-bundle": "5.0.*"
     },
     "config": {
         "preferred-install": {

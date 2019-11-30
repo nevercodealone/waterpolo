@@ -12,5 +12,11 @@
         <li>Your controller at <code><a href="{{ '/home/rolandgolla/develoment/playground/symfony/waterpolo/src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a></code></li>
         <li>Your template at <code><a href="{{ '/home/rolandgolla/develoment/playground/symfony/waterpolo/templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a></code></li>
     </ul>
+
+    {% for article in news.articles %}
+        <img src="{{ article.urlToImage }}" class="img-fluid" alt="Responsive image">
+    {% endfor %}
+    {{ dump(controller_name) }}
+
 </div>
 {% endblock %}

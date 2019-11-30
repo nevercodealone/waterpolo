@@ -14,7 +14,7 @@
     </ul>
 
     {% for article in news.articles %}
-        <img src="{{ article.urlToImage }}" class="img-fluid" alt="Responsive image">
+        <img src="{{ article.urlToImage }}" class="img-fluid size-news-startpage" alt="Responsive image">
     {% endfor %}
     {{ dump(controller_name) }}
 

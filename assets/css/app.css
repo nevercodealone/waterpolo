@@ -39,3 +39,9 @@ body > .container {
 code {
     font-size: 80%;
 }
+
+.size-news-startpage {
+    width: 800px;
+    height: 400px;
+    object-fit: cover;
+}

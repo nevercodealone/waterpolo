@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Service\NewsService;
+use App\Service\YouTubeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,9 +14,15 @@ class IndexController extends AbstractController
      */
     private $newsService;
 
-    public function __construct(NewsService $newsService)
+    /**
+     * @var YouTubeService
+     */
+    private $youTubeService;
+
+    public function __construct(NewsService $newsService, YouTubeService $youTubeService)
     {
         $this->newsService = $newsService;
+        $this->youTubeService = $youTubeService;
     }
 
     /**
@@ -24,10 +31,12 @@ class IndexController extends AbstractController
     public function index()
     {
         $news = $this->newsService->getNews();
+        $youTubeVideos = $this->youTubeService->getItemsFromChannel();
 
         return $this->render('index/index.html.twig', [
             'controller_name' => 'IndexController',
-            'news' => $news
+            'news' => $news,
+            'youTubeVideos' => $youTubeVideos
         ]);
     }
 }

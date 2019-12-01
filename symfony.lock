@@ -111,6 +111,27 @@
     "google/auth": {
         "version": "v1.6.1"
     },
+    "google/cloud-core": {
+        "version": "v1.34.0"
+    },
+    "google/cloud-vision": {
+        "version": "v0.24.0"
+    },
+    "google/common-protos": {
+        "version": "1.1"
+    },
+    "google/gax": {
+        "version": "1.2.0"
+    },
+    "google/grpc-gcp": {
+        "version": "0.1.4"
+    },
+    "google/protobuf": {
+        "version": "v3.11.0"
+    },
+    "grpc/grpc": {
+        "version": "1.25.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.4.1"
     },
@@ -170,6 +191,9 @@
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
+    },
+    "rize/uri-template": {
+        "version": "0.3.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

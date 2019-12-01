@@ -9,15 +9,17 @@ $vision = new VisionClient([
 
 // Annotate an image, detecting faces.
 $image = $vision->image(
-    fopen('Existenzgruendung-Developer-Startup.jpg', 'r'),
-    ['text']
+    fopen('marco-stamm-mannschaft.jpg', 'r'),
+    ['WEB_DETECTION']
 );
 
 $annotation = $vision->annotate($image);
 
-// Determine if the detected faces have headwear.
-foreach ($annotation->text() as $key => $text) {
-    if ($text->description()) {
-        echo "Text $key has description: " . $text->description() . "\n";
+$info = $annotation->info();
+$webEntities = $info['webDetection']['webEntities'];
+
+foreach ($webEntities as $webEntity) {
+    if(isset($webEntity['description'])) {
+        echo "has description: " . $webEntity['description'] . "\n";
     }
 }

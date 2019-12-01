@@ -23,6 +23,8 @@ class NewsService
      */
     private $fileSystem;
 
+    private $tmpImg = '/tmp/photos/waterpolo.jpg';
+
     public function __construct(CacheItemPoolInterface $cache, ImageService $imageService, Filesystem $fileSystem)
     {
         $this->cache = $cache;
@@ -32,6 +34,14 @@ class NewsService
 
     public function getNews()
     {
+        $keywords = [
+            'water polo',
+            'wasserball',
+            'wasserfreunde',
+            'swimming',
+            'water polo cap'
+        ];
+
         $cacheItem = $this->cache->getItem('news');
 
         if (!$cacheItem->isHit()) {
@@ -49,17 +59,25 @@ class NewsService
                     continue;
                 }
 
-                ## Store tmp image
-                if (!$this->fileSystem->exists("tmp/photos")) {
-                    $this->fileSystem->mkdir('/tmp/photos', 0700);
+                $this->storeTempFileWithImage($article);
+
+                $webEntities = $this->imageService->getWebEntities($this->tmpImg);
+
+                $isDetectedKeyword = false;
+                foreach ($webEntities as $webEntity) {
+                    foreach ($keywords as $keyword) {
+                        if (strpos(strtolower($webEntity), $keyword)) {
+                            $content['articles'][$key]['webEntities'] = $webEntities;
+                            $isDetectedKeyword = true;
+                            break;
+                        }
+                    }
                 }
 
-                $filename = $article['urlToImage'];
-
-                $this->fileSystem->copy($filename, 'waterpolo.jpg');
-
-
-                $webEntities = $this->imageService->getWebEntities('waterpolo.jpg');
+                if(!$isDetectedKeyword) {
+                    unset($content['articles'][$key]);
+                    continue;
+                }
 
             }
 
@@ -68,5 +86,20 @@ class NewsService
         }
 
         return $cacheItem->get();
+    }
+
+    /**
+     * @param $article
+     */
+    private function storeTempFileWithImage($article): void
+    {
+## Store tmp image
+        if (!$this->fileSystem->exists("tmp/photos")) {
+            $this->fileSystem->mkdir('/tmp/photos', 0700);
+        }
+
+        $filename = $article['urlToImage'];
+
+        $this->fileSystem->copy($filename, $this->tmpImg);
     }
 }

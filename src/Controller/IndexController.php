@@ -32,11 +32,19 @@ class IndexController extends AbstractController
     public function index(): Response
     {
         $news = $this->newsService->getNews();
-        $youTubeVideos = $this->youTubeService->getItemsFromChannel();
 
         return $this->render('index/index.html.twig', [
-            'controller_name' => 'IndexController',
-            'news' => $news,
+            'news' => $news
+        ]);
+    }
+
+    /**
+     * @Route("/videos/", name="videos")
+     */
+    public function videoAction(): Response
+    {
+        $youTubeVideos = $this->youTubeService->getItemsFromChannel();
+        return $this->render('index/video.html.twig', [
             'youTubeVideos' => $youTubeVideos
         ]);
     }

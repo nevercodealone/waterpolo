@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+<div class="example-wrapper">
+    <h1>WP News - Never Code Alone Open Source Projekt</h1>
+
+    <ul class="list-unstyled">
+        {% for video in youTubeVideos %}
+            <li>
+                Video
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% dump(youTubeVideos) %}
+</div>
+{% endblock %}

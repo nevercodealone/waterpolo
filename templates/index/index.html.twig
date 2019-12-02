@@ -7,16 +7,38 @@
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/rolandgolla/develoment/playground/symfony/waterpolo/src/Controller/IndexController.php'|file_link(0) }}">src/Controller/IndexController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/rolandgolla/develoment/playground/symfony/waterpolo/templates/index/index.html.twig'|file_link(0) }}">templates/index/index.html.twig</a></code></li>
+    <ul class="list-unstyled">
+        {% for article in news.articles %}
+            <li>
+                <a href="{{ article.url }}" target="_blank">
+                    <img class="img-fluid size-news-startpage" src="{{ article.urlToImage }}" alt="Responsive image">
+                </a>
+                <div class="media-body">
+                    <h5 class="mt-0 mb-1">{{ article.title }}</h5>
+                    <p>
+                        {{ article.content }}
+                    </p>
+                    <div>
+                        <ul>
+                            <li>
+                                <strong>Url:</strong> {{ article.source.name }}
+                            </li>
+                            <li>
+                                <strong>Published: </strong> {{ article.publishedAt | date("F jS \\a\\t g:ia") }}
+                            </li>
+                            <li>
+                                <strong>Keywords: </strong>
+                                {% for keyword in article.webEntities %}
+                                    {{ keyword }},
+                                {% endfor %}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
     </ul>
 
-    {% for article in news.articles %}
-        <img src="{{ article.urlToImage }}" class="img-fluid size-news-startpage" alt="Responsive image">
-    {% endfor %}
-    {{ dump(controller_name) }}
-
+    {% dump(news.articles) %}
 </div>
 {% endblock %}

@@ -34,14 +34,6 @@ class NewsService
 
     public function getNews()
     {
-        $keywords = [
-            'water polo',
-            'wasserball',
-            'wasserfreunde',
-            'swimming',
-            'water polo cap'
-        ];
-
         $cacheItem = $this->cache->getItem('news');
 
         if (!$cacheItem->isHit()) {
@@ -63,22 +55,14 @@ class NewsService
 
                 $webEntities = $this->imageService->getWebEntities($this->tmpImg);
 
-                $isDetectedKeyword = false;
-                foreach ($webEntities as $webEntity) {
-                    foreach ($keywords as $keyword) {
-                        if (strpos(strtolower($webEntity), $keyword)) {
-                            $content['articles'][$key]['webEntities'] = $webEntities;
-                            $isDetectedKeyword = true;
-                            break;
-                        }
-                    }
-                }
+                $isDetectedKeyword = $this->isDetected($webEntities);
 
                 if(!$isDetectedKeyword) {
                     unset($content['articles'][$key]);
                     continue;
                 }
 
+                $content['articles'][$key]['webEntities'] = $webEntities;
             }
 
             $cacheItem->set($content);
@@ -93,7 +77,6 @@ class NewsService
      */
     private function storeTempFileWithImage($article): void
     {
-## Store tmp image
         if (!$this->fileSystem->exists("tmp/photos")) {
             $this->fileSystem->mkdir('/tmp/photos', 0700);
         }
@@ -101,5 +84,26 @@ class NewsService
         $filename = $article['urlToImage'];
 
         $this->fileSystem->copy($filename, $this->tmpImg);
+    }
+
+    private function isDetected(array $webEntities): bool
+    {
+        $keywords = [
+            'water polo',
+            'wasserball',
+            'wasserfreunde',
+            'swimming',
+            'water polo cap',
+            'marko stamm'
+        ];
+
+        foreach ($webEntities as $webEntity) {
+            $webEntity = strtolower($webEntity);
+            if (in_array($webEntity, $keywords)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

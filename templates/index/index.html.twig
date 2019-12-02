@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>WP News - Never Code Alone Open Source Projekt</h1>
 
     <ul class="list-unstyled">
         {% for article in news.articles %}
@@ -14,9 +14,11 @@
                     <img class="img-fluid size-news-startpage" src="{{ article.urlToImage }}" alt="Responsive image">
                 </a>
                 <div class="media-body">
-                    <h5 class="mt-0 mb-1">{{ article.title }}</h5>
+                    <a href="{{ article.url }}" target="_blank">
+                        <h2 class="mt-0 mb-1">{{ article.title }}</h2>
+                    </a>
                     <p>
-                        {{ article.content }}
+                        {{ article.description }}
                     </p>
                     <div>
                         <ul>

@@ -14,3 +14,9 @@ services:
       traefik.port: 80
       traefik.frontend.headers.SSLRedirect: true
     restart: always
+    secrets:
+      - GOOGLE_API_KEY
+
+secrets:
+  GOOGLE_API_KEY:
+    external: true

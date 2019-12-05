@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y \
         unzip \
         libicu-dev \
         libmagickwand-dev \
-        libzip4
+        libzip-dev
 
 # install PHP extensions
 RUN docker-php-ext-configure intl && docker-php-ext-install -j$(nproc) \

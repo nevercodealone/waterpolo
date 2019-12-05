@@ -87,7 +87,7 @@ deploy_production_image_to_stage:
   variables:
     HTTP_URL: stage.waterpolo.nevercodealone.de
   before_script:
-    - rancher rm --type stack --stop stage-waterpolo-nevercodealone-de || true
+    - rancher rm --type stack --stop stage-waterpolo-nevercodealone-de ||true
   script:
     - rancher up -s stage-waterpolo-nevercodealone-de -f docker-compose.yml -d --pull
   tags:

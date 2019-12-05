@@ -11,11 +11,11 @@ class YouTubeService
         $this->youtubeService = $youtubeService;
     }
 
-    public function getItemsFromChannel()
+    public function getItemsFromChannel(): array
     {
         $params = [
             'maxResults' => 10,
-            'playlistId' => 'PLKrKzhBjw2Y8XpxPMbaTvc8hHLqDTcDNF'
+            'playlistId' => 'PLf9rhfhnyGJ-l6WlrMdy-0fZNcSEqjb4y'
         ];
 
         $videoList = $this->playlistItemsListByPlaylistId('snippet',$params);
@@ -25,13 +25,13 @@ class YouTubeService
         return $videos;
     }
 
-    private function playlistItemsListByPlaylistId($part, $params) {
+    private function playlistItemsListByPlaylistId(string $part, array $params): \Google_Service_YouTube_PlaylistItemListResponse
+    {
         $params = array_filter($params);
-        $response = $this->youtubeService->playlistItems->listPlaylistItems(
+
+        return $this->youtubeService->playlistItems->listPlaylistItems(
             $part,
             $params
         );
-
-        return $response;
     }
 }

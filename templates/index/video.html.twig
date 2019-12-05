@@ -8,7 +8,11 @@
     <ul class="list-unstyled">
         {% for video in youTubeVideos %}
             <li>
-                Video
+                <figure class="item youtube">
+                    <div class="picture">
+                        <iframe title="{{ video['snippet']['title'] }}" width="560" height="315" src="https://www.youtube.com/embed/{{ video['snippet']['resourceId']['videoId'] }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    </div>
+                </figure>
             </li>
         {% endfor %}
     </ul>

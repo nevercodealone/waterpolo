@@ -20,6 +20,7 @@ services:
       - APP_ENV_FILE=/run/secrets/waterpolo_app_env
       - APP_SECRET_FILE=/run/secrets/waterpolo_app_secret
       - GOOGLE_JSON_FILE=/run/secrets/waterpolo_google_json
+      - DATABASE_URL_FILE=/run/secrets/waterpolo_database_url
       - JSON_TYPE_FILE=/run/secrets/waterpolo_json_type
       - JSON_PROJECT_ID_FILE=/run/secrets/waterpolo_json_project_id
       - JSON_PRIVATE_KEY_ID_FILE=/run/secrets/waterpolo_json_private_key_id
@@ -36,6 +37,7 @@ services:
       - waterpolo_app_env
       - waterpolo_app_secret
       - waterpolo_google_json
+      - waterpolo_database_url
       - waterpolo_json_type
       - waterpolo_json_project_id
       - waterpolo_json_private_key_id
@@ -59,6 +61,8 @@ secrets:
   waterpolo_google_json:
     external: true
   waterpolo_json_type:
+    external: true
+  waterpolo_database_url:
     external: true
   waterpolo_json_project_id:
     external: true

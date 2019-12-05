@@ -1,6 +1,6 @@
 FROM composer AS composer
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/
 
 RUN composer global require hirak/prestissimo --no-plugins --no-scripts
 
@@ -18,7 +18,7 @@ RUN composer install --apcu-autoloader -o --no-scripts --ignore-platform-reqs
 # Build actual image
 FROM php:7.4-apache AS webserver
 
-WORKDIR /var/www/html
+WORKDIR /var/www/html/
 
 # install packages
 RUN apt-get update && apt-get install -y \

@@ -57,6 +57,7 @@ COPY --chown=www-data:www-data . /var/www/html/
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/sbin/apachectl", "-DFOREGROUND"]
 
 FROM webserver AS toolbox

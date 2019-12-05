@@ -58,7 +58,6 @@ RUN chmod +x /entrypoint.sh
 RUN mkdir -p /var/www/html/var && chown www-data:www-data /var/www/html/var && chmod 775 /var/www/html/var
 RUN touch /var/www/html/.env
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD ["/usr/sbin/apachectl", "-DFOREGROUND"]
 
 FROM webserver AS toolbox
@@ -75,6 +74,5 @@ ARG RANCHER_COMPOSE_URL=https://github.com/rancher/rancher-compose/releases/down
 RUN curl -sSL "$RANCHER_CLI_URL" | tar -xzp -C /usr/local/bin/ --strip-components=2 \
  && curl -sSL "$RANCHER_COMPOSE_URL" | tar -xzp -C /usr/local/bin/ --strip-components=2
 
-ENTRYPOINT ["/entrypoint.sh"]
 CMD []
 

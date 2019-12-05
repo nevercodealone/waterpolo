@@ -53,10 +53,8 @@ ADD ./deploy/config/msmtprc /etc/msmtprc
 # copy needed files from build containers
 COPY --from=composer-web /var/www/html/vendor/ /var/www/html/vendor/
 
-COPY . /var/www/html/
+COPY --chown=www-data:www-data . /var/www/html/
 COPY entrypoint.sh /entrypoint.sh
-
-RUN chown www-data:www-data -R /var/www/html 
 RUN chmod 755 /entrypoint.sh
 
 CMD ["/usr/sbin/apachectl", "-DFOREGROUND"]

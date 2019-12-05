@@ -16,9 +16,65 @@ services:
     restart: always
     environment:
       - GOOGLE_API_KEY_FILE=/run/secrets/GOOGLE_API_KEY
+      - NEWSAPI_FILE=/run/secrets/NEWSAPI
+      - APP_ENV_FILE=/run/secrets/waterpolo_app_env
+      - APP_SECRET_FILE=/run/secrets/waterpolo_app_secret
+      - GOOGLE_JSON_FILE=/run/secrets/waterpolo_google_json
+      - JSON_TYPE_FILE=/run/secrets/waterpolo_json_type
+      - JSON_PROJECT_ID_FILE=/run/secrets/waterpolo_json_project_id
+      - JSON_PRIVATE_KEY_ID_FILE=/run/secrets/waterpolo_json_private_key_id
+      - JSON_PRIVATE_KEY_FILE=/run/secrets/waterpolo_json_private_key
+      - JSON_CLIENT_EMAIL_FILE=/run/secrets/waterpolo_json_client_email
+      - JSON_CLIENT_ID_FILE=/run/secrets/waterpolo_json_client_id
+      - JSON_AUTH_URI_FILE=/run/secrets/waterpolo_json_auth_uri
+      - JSON_TOKEN_URI_FILE=/run/secrets/waterpolo_json_token_uri
+      - JSON_AUTH_PROVIDER_X509_CERT_URL_FILE=/run/secrets/waterpolo_json_auth_provider_x509_cert_url
+      - JSON_CLIENT_X509_CERT_URL_FILE=/run/secrets/waterpolo_json_client_x509_cert_url
     secrets:
       - GOOGLE_API_KEY
+      - NEWSAPI
+      - waterpolo_app_env
+      - waterpolo_app_secret
+      - waterpolo_google_json
+      - waterpolo_json_type
+      - waterpolo_json_project_id
+      - waterpolo_json_private_key_id
+      - waterpolo_json_private_key
+      - waterpolo_json_client_email
+      - waterpolo_json_client_id
+      - waterpolo_json_auth_uri
+      - waterpolo_json_token_uri
+      - waterpolo_json_auth_provider_x509_cert_url
+      - waterpolo_json_client_x509_cert_url
 
 secrets:
   GOOGLE_API_KEY:
+    external: true
+  NEWSAPI:
+    external: true
+  waterpolo_app_env:
+    external: true
+  waterpolo_app_secret:
+    external: true
+  waterpolo_google_json:
+    external: true
+  waterpolo_json_type:
+    external: true
+  waterpolo_json_project_id:
+    external: true
+  waterpolo_json_private_key_id:
+    external: true
+  waterpolo_json_private_key:
+    external: true
+  waterpolo_json_client_email:
+    external: true
+  waterpolo_json_client_id:
+    external: true
+  waterpolo_json_auth_uri:
+    external: true
+  waterpolo_json_token_uri:
+    external: true
+  waterpolo_json_auth_provider_x509_cert_url:
+    external: true
+  waterpolo_json_client_x509_cert_url:
     external: true

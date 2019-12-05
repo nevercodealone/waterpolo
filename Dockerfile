@@ -55,7 +55,7 @@ COPY --from=composer-web /var/www/html/vendor/ /var/www/html/vendor/
 
 COPY --chown=www-data:www-data . /var/www/html/
 COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod 755 /entrypoint.sh
 
 CMD ["/usr/sbin/apachectl", "-DFOREGROUND"]
 

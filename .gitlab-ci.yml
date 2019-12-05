@@ -15,12 +15,8 @@ stages:
   - postrollout
 
 variables:
-  LATEST_PROD_WEB_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH
   HTTP_URL: $CI_COMMIT_REF_SLUG.develop.waterpolo.nevercodealone.de
-  WWW_URL: www.$CI_COMMIT_REF_SLUG.develop.waterpolo.nevercodealone.de
-  PROD_WEB_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_PIPELINE_ID
   RANCHER_PROJECT_NAME: $CI_PROJECT_NAME-$CI_COMMIT_REF_SLUG
-  REPORT_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/reports:$CI_PIPELINE_ID
   TOOLBOX_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG/toolbox:$CI_PIPELINE_ID
   WEB_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH/$CI_COMMIT_REF_SLUG:$CI_PIPELINE_ID
   WEBDRIVER_URL: rancher.waterpolo.nevercodealone.de
@@ -45,7 +41,6 @@ build_development_image:
     - docker-executor
   except:
     - master
-    - /^prod\/.*/
 
 build_production_image:
   stage: build
@@ -59,7 +54,6 @@ build_production_image:
     - docker-executor
   only:
     - master
-    - /^prod\/.*/
 
 build_toolbox_image:
   stage: build
@@ -92,10 +86,8 @@ deploy_production_image_to_stage:
   image: $TOOLBOX_IMAGE
   variables:
     HTTP_URL: stage.waterpolo.nevercodealone.de
-    WWW_URL: www.stage.waterpolo.nevercodealone.de
   before_script:
     - rancher rm --type stack --stop stage-waterpolo-nevercodealone-de || true
-#    - WEB_IMAGE=$LATEST_PROD_WEB_IMAGE rancher up -s stage-waterpolo-nevercodealone-de -d --pull
   script:
     - rancher up -s stage-waterpolo-nevercodealone-de -f docker-compose.yml -d --pull
   tags:
@@ -110,8 +102,6 @@ deploy_production_image_to_prod:
   image: $TOOLBOX_IMAGE
   variables:
     HTTP_URL: waterpolo.nevercodealone.de
-    WWW_URL: waterpolo.nevercodealone.de
-    WEB_IMAGE: $CI_REGISTRY/$CI_PROJECT_PATH:$CI_PIPELINE_ID
   script:
     - rancher up -s www-nevercodealone-de -d --pull --prune --upgrade
   tags:

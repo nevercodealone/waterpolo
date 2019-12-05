@@ -27,7 +27,8 @@ RUN apt-get update && apt-get install -y \
         msmtp \
         unzip \
         libicu-dev \
-        libmagickwand-dev
+        libmagickwand-dev \
+        libzip4
 
 # install PHP extensions
 RUN docker-php-ext-configure intl && docker-php-ext-install -j$(nproc) \

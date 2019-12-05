@@ -1,0 +1,32 @@
+---
+version: '2'
+
+services:
+  web:
+    environment:
+    - APP_ENV_FILE=/run/secrets/waterpolo_nca_app_env
+    - APP_SECRET_FILE=/run/secrets/waterpolo_nca_app_secret
+    - GOOGLE_API_KEY_FILE=/run/secrets/sulu_GOOGLE_API_KEY
+    image: $WEB_IMAGE
+    labels:
+      io.rancher.container.pull_image: always
+      traefik.docker.network: proxy
+      traefik.enable: true
+      traefik.frontend.passHostHeader: true
+      traefik.frontend.rule: 'Host:$HTTP_URL'
+      traefik.frontend.entryPoints: http,https
+      traefik.port: 80
+      traefik.frontend.headers.SSLRedirect: true
+    restart: always
+    secrets:
+    - sulu_nca_app_env
+    - sulu_nca_app_secret
+    - sulu_GOOGLE_API_KEY
+
+secrets:
+  waterpolo_nca_app_env:
+    external: true
+  waterpolo_nca_app_secret:
+    external: true
+  GOOGLE_API_KEY:
+    external: true

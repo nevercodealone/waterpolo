@@ -7,8 +7,8 @@ echo "NEWSAPI=`cat $NEWSAPI_FILE`" >> .env
 echo "GOOGLE_API_KEY=`cat $GOOGLE_API_KEY_FILE`" >> .env
 echo "GOOGLE_JSON=`cat $GOOGLE_JSON_FILE`" >> .env
 
-echo "{" >> $GOOGLE_JSON_FILE
-echo "\"type\"\: \"`cat $JSON_TYPE_FILE`\"," >> $GOOGLE_JSON_FILE
-echo "}" >> $GOOGLE_JSON_FILE
+echo "{" >> `cat $GOOGLE_JSON_FILE`
+echo "\"type\"\: \"`cat $JSON_TYPE_FILE`\"," >> `cat $GOOGLE_JSON_FILE`
+echo "}" >> `cat $GOOGLE_JSON_FILE`
 
 exec "$@"

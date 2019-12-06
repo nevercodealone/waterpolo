@@ -37,39 +37,47 @@ class NewsService
         $cacheItem = $this->cache->getItem('news');
 
         if (!$cacheItem->isHit()) {
-            $client = HttpClient::create();
-            $response = $client->request('GET', 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=' . $_ENV['NEWSAPI']);
-
-            $statusCode = $response->getStatusCode();
-            $contentType = $response->getHeaders()['content-type'][0];
-            $content = $response->getContent();
-            $content = $response->toArray();
-
-            foreach ($content['articles'] as $key => $article) {
-                if ($article['source']['name'] === 'Sueddeutsche.de') {
-                    unset($content['articles'][$key]);
-                    continue;
-                }
-
-                $this->storeTempFileWithImage($article);
-
-                $webEntities = $this->imageService->getWebEntities($this->tmpImg);
-
-                $isDetectedKeyword = $this->isDetected($webEntities);
-
-                if(!$isDetectedKeyword) {
-                    unset($content['articles'][$key]);
-                    continue;
-                }
-
-                $content['articles'][$key]['webEntities'] = $webEntities;
-            }
-
-            $cacheItem->set($content);
-            $this->cache->save($cacheItem);
+            $content = [];
+        } else {
+            $cacheContent = $cacheItem->get();
+            $content = $cacheContent['news'];
         }
 
-        return $cacheItem->get();
+        return $content;
+    }
+
+    public function getNewsFromApi(): array
+    {
+        $client = HttpClient::create();
+        $response = $client->request('GET', 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=' . $_ENV['NEWSAPI']);
+
+        $statusCode = $response->getStatusCode();
+        $contentType = $response->getHeaders()['content-type'][0];
+        $content = $response->getContent();
+        $content = $response->toArray();
+        $articles = $content['articles'];
+
+        foreach ($articles as $key => $news) {
+            if ($news['source']['name'] === 'Sueddeutsche.de') {
+                unset($articles[$key]);
+                continue;
+            }
+
+            $this->storeTempFileWithImage($news);
+
+            $webEntities = $this->imageService->getWebEntities($this->tmpImg);
+
+            $isDetectedKeyword = $this->isDetected($webEntities);
+
+            if (!$isDetectedKeyword) {
+                unset($articles[$key]);
+                continue;
+            }
+
+            $articles[$key]['webEntities'] = $webEntities;
+        }
+
+        return $articles;
     }
 
     /**

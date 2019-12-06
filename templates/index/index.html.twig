@@ -6,37 +6,41 @@
     <h1>WP News - Never Code Alone Open Source Projekt</h1>
 
     <ul class="list-unstyled">
-        {% for article in news.articles %}
-            <li>
-                <a href="{{ article.url }}" target="_blank">
-                    <img class="img-fluid size-news-startpage" src="{{ article.urlToImage }}" alt="Responsive image">
-                </a>
-                <div class="media-body">
-                    <a href="{{ article.url }}" target="_blank">
-                        <h2 class="mt-0 mb-1">{{ article.title }}</h2>
+        {% if news %}
+            {% for newsItem in news %}
+                <li>
+                    <a href="{{ newsItem.url }}" target="_blank">
+                        <img class="img-fluid size-news-startpage" src="{{ newsItem.urlToImage }}" alt="Responsive image">
                     </a>
-                    <p>
-                        {{ article.description }}
-                    </p>
-                    <div>
-                        <ul>
-                            <li>
-                                <strong>Url:</strong> {{ article.source.name }}
-                            </li>
-                            <li>
-                                <strong>Published: </strong> {{ article.publishedAt | date("F jS \\a\\t g:ia") }}
-                            </li>
-                            <li>
-                                <strong>Keywords: </strong>
-                                {% for keyword in article.webEntities %}
-                                    {{ keyword }},
-                                {% endfor %}
-                            </li>
-                        </ul>
+                    <div class="media-body">
+                        <a href="{{ newsItem.url }}" target="_blank">
+                            <h2 class="mt-0 mb-1">{{ newsItem.title }}</h2>
+                        </a>
+                        <p>
+                            {{ newsItem.description }}
+                        </p>
+                        <div>
+                            <ul>
+                                <li>
+                                    <strong>Url:</strong> {{ newsItem.source.name }}
+                                </li>
+                                <li>
+                                    <strong>Published: </strong> {{ newsItem.publishedAt | date("F jS \\a\\t g:ia") }}
+                                </li>
+                                <li>
+                                    <strong>Keywords: </strong>
+                                    {% for keyword in newsItem.webEntities %}
+                                        {{ keyword }},
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </li>
-        {% endfor %}
+                </li>
+            {% endfor %}
+        {% else %}
+            <p>Please come back later!!</p>
+        {% endif %}
     </ul>
 </div>
 {% endblock %}

@@ -22,5 +22,6 @@ echo "}" >> `cat $GOOGLE_JSON_FILE`
 
 cd /var/www/html
 bin/console app:import:content
+chown www-data.www-data /var/www/html/var -R
 
 exec "$@"

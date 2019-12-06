@@ -33,10 +33,12 @@
         "symfony/yaml": "5.0.*"
     },
     "require-dev": {
+        "symfony/browser-kit": "5.0.*",
+        "symfony/css-selector": "5.0.*",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.14",
         "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*",
+        "symfony/test-pack": "^1.0",
         "symfony/web-profiler-bundle": "5.0.*"
     },
     "config": {

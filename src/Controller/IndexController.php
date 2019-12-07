@@ -43,7 +43,7 @@ class IndexController extends AbstractController
      */
     public function videoAction(): Response
     {
-        $youTubeVideos = $this->youTubeService->getItemsFromChannel();
+        $youTubeVideos = $this->youTubeService->getVideoByKeywords(['waterpolo', 'wasserball']);
         return $this->render('index/video.html.twig', [
             'youTubeVideos' => $youTubeVideos
         ]);

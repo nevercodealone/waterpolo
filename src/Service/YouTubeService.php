@@ -17,6 +17,33 @@ class YouTubeService
         $this->cache = $cache;
     }
 
+    public function getVideoByKeywords(array $keywords): array
+    {
+        $videos = [];
+        $dates = [];
+
+        foreach ($keywords as $keyword) {
+            $params = [
+                'q' => $keyword,
+                'order' => 'date',
+                'maxResults' => 10
+            ];
+
+            $videoList = $this->youtubeService->search->listSearch('snippet', $params);
+
+            $videos = array_merge($videos, $videoList['items']);
+        }
+
+        foreach ($videos as $key => $item) {
+            $videos[$key]['publishedAt'] = $item['snippet']['publishedAt'];
+            $dates[] = $item['snippet']['publishedAt'];
+        }
+
+        array_multisort($dates,SORT_DESC,SORT_STRING,$videos);
+
+        return $videos;
+    }
+
     public function getItemsFromChannel(): array
     {
         $params = [

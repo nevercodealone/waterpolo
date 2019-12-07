@@ -6,6 +6,9 @@ html {
 body {
     background-color: lightgray;
 }
+
+li {list-style-type: none}
+
 /* Sticky footer styles
 -------------------------------------------------- */
 body {

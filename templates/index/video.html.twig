@@ -7,43 +7,51 @@
 
     <ul class="list-unstyled">
         {% for key,video in youTubeVideos %}
-            <li>
-                <div>
-                    <iframe title="{{ video['snippet']['title'] }}" width="560" height="315" src="https://www.youtube.com/embed/{{ video['snippet']['resourceId']['videoId'] }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#info-{{ key }}" aria-controls="info-{{ key }}" role="tab" data-toggle="tab">
-                                Infos:
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Channel:</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Published:</a>
-                        </li>
-                    </ul>
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="info-{{ key }}">
-                            <ul>
-                                <li>
-                                    <strong>Title:</strong> {{ video['snippet']['title'] }}
+            {% if video.id.videoId %}
+                <li>
+                    <div>
+                        <iframe title="{{ video['snippet']['title'] }}" width="560" height="315" src="https://www.youtube.com/embed/{{ video['id']['videoId'] }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#info-{{ key }}" aria-controls="info-{{ key }}" role="tab" data-toggle="tab">
+                                    Infos:
+                                </a>
+                            </li>
+                            {% if video['snippet']['description'] != '' %}
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#description-{{ key }}" aria-controls="profile" role="tab" data-toggle="tab">Description:</a>
                                 </li>
-                                <li>
-                                    <strong>Channel:</strong> {{ video['snippet']['channelTitle'] }}
-                                </li>
-                                <li>
-                                    <strong>Published: </strong> {{ video['snippet']['publishedAt'] | date("F jS \\a\\t g:ia") }}
-                                </li>
-                            </ul>
+                            {% endif %}
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="info-{{ key }}">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item-dark">
+                                        <strong>Title:</strong> {{ video['snippet']['title'] }}
+                                    </li>
+                                    <li class="list-group-item-dark">
+                                        <strong>Channel:</strong> {{ video['snippet']['channelTitle'] }}
+                                    </li>
+                                    <li class="list-group-item-dark">
+                                        <strong>Published: </strong> {{ video['snippet']['publishedAt'] | date("F jS \\a\\t g:ia") }}
+                                    </li>
+                                </ul>
+                            </div>
+                            {% if video['snippet']['description'] != '' %}
+                                <div role="tabpanel" class="tab-pane" id="description-{{ key }}">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item-dark">
+                                            {{ video['snippet']['description'] }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            {% endif %}
                         </div>
-                        <div role="tabpanel" class="tab-pane" id="profile">Channel: tab</div>
-                        <div role="tabpanel" class="tab-pane" id="messages">Published: tab</div>
                     </div>
-                </div>
-            </li>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 

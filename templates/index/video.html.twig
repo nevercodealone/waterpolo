@@ -7,22 +7,22 @@
     <ul class="nav nav-tabs">
         <li class="nav-item">
             <button class="nav-link active filter-button" role="tab" data-toggle="tab" data-filter="all">
-                Alle
+                Alle ({{ youTubeVideos|length }})
             </button>
         </li>
         <li class="nav-item">
             <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="wasserball">
-                Wasserball
+                Wasserball ({{ youTubeVideos.counts.wasserball }})
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="waterpolo">
-                Waterpolo
+                Waterpolo ({{ youTubeVideos.counts.waterpolo }})
             </a>
         </li>
     </ul>
     <div class="row">
-        {% for key,video in youTubeVideos %}
+        {% for key,video in youTubeVideos.videos %}
             {% if video.id.videoId %}
                 <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter {{ video.keyword }}">
                     <div class="video-container">

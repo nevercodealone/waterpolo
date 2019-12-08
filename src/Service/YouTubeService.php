@@ -21,6 +21,7 @@ class YouTubeService
     {
         $videos = [];
         $dates = [];
+        $counts = [];
 
         foreach ($keywords as $keyword) {
             $params = [
@@ -37,6 +38,8 @@ class YouTubeService
                 $videosFromApi[$key]['keyword'] = $keyword;
             }
 
+            $counts[$keyword] = count($videosFromApi);
+
             $videos = array_merge($videos, $videosFromApi);
         }
 
@@ -47,7 +50,10 @@ class YouTubeService
 
         array_multisort($dates,SORT_DESC,SORT_STRING,$videos);
 
-        return $videos;
+        return [
+            'videos' => $videos,
+            'counts' => $counts
+        ];
     }
 
     public function getItemsFromChannel(): array

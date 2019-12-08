@@ -31,9 +31,17 @@ class IndexController extends AbstractController
      */
     public function index(): Response
     {
+        return $this->redirectToRoute('videos');
+    }
+
+    /**
+     * @Route("/news/", name="news")
+     */
+    public function newsAction(): Response
+    {
         $news = $this->newsService->getNews();
 
-        return $this->render('index/index.html.twig', [
+        return $this->render('index/news.html.twig', [
             'news' => $news
         ]);
     }

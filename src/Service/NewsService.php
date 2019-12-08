@@ -34,7 +34,7 @@ class NewsService
 
     public function getNews()
     {
-        $cacheItem = $this->cache->getItem('news');
+        $cacheItem = $this->cache->getItem('content');
 
         if (!$cacheItem->isHit()) {
             $content = [];

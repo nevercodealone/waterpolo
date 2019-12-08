@@ -17,7 +17,21 @@ class YouTubeService
         $this->cache = $cache;
     }
 
-    public function getVideoByKeywords(array $keywords): array
+    public function getVideos()
+    {
+        $cacheItem = $this->cache->getItem('content');
+
+        if (!$cacheItem->isHit()) {
+            $content = [];
+        } else {
+            $cacheContent = $cacheItem->get();
+            $content = $cacheContent['videos'];
+        }
+
+        return $content;
+    }
+
+    public function getVideoByKeywordsFromApi(array $keywords): array
     {
         $videos = [];
         $dates = [];
@@ -54,6 +68,11 @@ class YouTubeService
             'videos' => $videos,
             'counts' => $counts
         ];
+    }
+
+    public function getVideoByKeywords(array $keywords): array
+    {
+
     }
 
     public function getItemsFromChannel(): array

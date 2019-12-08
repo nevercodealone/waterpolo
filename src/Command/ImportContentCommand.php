@@ -5,6 +5,7 @@ namespace App\Command;
 
 
 use App\Service\NewsService;
+use App\Service\YouTubeService;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,10 +21,14 @@ class ImportContentCommand extends Command
     /** @var NewsService */
     private $newsService;
 
-    public function __construct(NewsService $newsService, CacheItemPoolInterface $cache)
+    /** @var YouTubeService */
+    private $youTubeService;
+
+    public function __construct(YouTubeService $youTubeService, NewsService $newsService, CacheItemPoolInterface $cache)
     {
         $this->cache = $cache;
         $this->newsService = $newsService;
+        $this->youTubeService = $youTubeService;
 
         parent::__construct();
     }
@@ -37,18 +42,18 @@ class ImportContentCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $content = [];
+
+        $output->writeln([
+            'Start job.',
+        ]);
+
         $output->writeln([
             'Import NEWS process',
             '============',
             '',
         ]);
 
-
-        $output->writeln(['Import NEWS process',
-            '============',
-            '',
-        ]);
-        $content = [];
         $content['news'] = $this->newsService->getNewsFromApi();
 
         $output->writeln([
@@ -64,14 +69,35 @@ class ImportContentCommand extends Command
         ]);
 
         $output->writeln([
+            'Import VIDEOS process',
+            '============',
+            '',
+        ]);
+
+
+        $content['videos'] = $this->youTubeService->getVideoByKeywordsFromApi(['wasserball', 'waterpolo']);
+
+        $output->writeln([
+            'Count:' . count($content['videos']['videos']),
+            '============',
+            '',
+        ]);
+
+        $output->writeln([
+            'End import VIDEOS',
+            '============',
+            '',
+        ]);
+
+        $output->writeln([
             'Cache handling',
         ]);
 
-        if ($this->cache->getItem('news')) {
-            $this->cache->deleteItem('news');
+        if ($this->cache->getItem('content')) {
+            $this->cache->deleteItem('content');
         }
+        $cacheItem = $this->cache->getItem('content');
 
-        $cacheItem = $this->cache->getItem('news');
         $cacheItem->set($content);
         $this->cache->save($cacheItem);
 

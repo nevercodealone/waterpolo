@@ -31,7 +31,13 @@ class YouTubeService
 
             $videoList = $this->youtubeService->search->listSearch('snippet', $params);
 
-            $videos = array_merge($videos, $videoList['items']);
+            $videosFromApi = $videoList['items'];
+
+            foreach ($videosFromApi as $key => $item) {
+                $videosFromApi[$key]['keyword'] = $keyword;
+            }
+
+            $videos = array_merge($videos, $videosFromApi);
         }
 
         foreach ($videos as $key => $item) {

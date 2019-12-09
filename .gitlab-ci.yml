@@ -103,7 +103,7 @@ deploy_production_image_to_prod:
   variables:
     HTTP_URL: waterpolo.nevercodealone.de
   script:
-    - rancher up -s www-nevercodealone-de -d --pull --prune --upgrade
+    - rancher up -s waterpolo-nevercodealone-de -d --pull --prune --upgrade
   tags:
     - docker-executor
   only:

@@ -30,7 +30,11 @@
                                 <li>
                                     <strong>Keywords: </strong>
                                     {% for keyword in newsItem.webEntities %}
-                                        {{ keyword }},
+                                        {% if loop.last %}
+                                            {{ keyword }}
+                                        {% else %}
+                                            {{ keyword }},
+                                        {% endif %}
                                     {% endfor %}
                                 </li>
                             </ul>

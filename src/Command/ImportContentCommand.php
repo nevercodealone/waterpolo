@@ -4,6 +4,7 @@
 namespace App\Command;
 
 
+use App\Service\GrabberService;
 use App\Service\NewsService;
 use App\Service\YouTubeService;
 use Psr\Cache\CacheItemPoolInterface;
@@ -24,11 +25,15 @@ class ImportContentCommand extends Command
     /** @var YouTubeService */
     private $youTubeService;
 
-    public function __construct(YouTubeService $youTubeService, NewsService $newsService, CacheItemPoolInterface $cache)
+    /** @var GrabberService */
+    private $grabberService;
+
+    public function __construct(YouTubeService $youTubeService, NewsService $newsService, CacheItemPoolInterface $cache, GrabberService $grabberService)
     {
         $this->cache = $cache;
         $this->newsService = $newsService;
         $this->youTubeService = $youTubeService;
+        $this->grabberService = $grabberService;
 
         parent::__construct();
     }
@@ -54,7 +59,7 @@ class ImportContentCommand extends Command
             '',
         ]);
 
-        $content['news'] = $this->newsService->getNewsFromApi();
+        $content['news'] = $this->grabberService->getItems();
 
         $output->writeln([
             'Count:' . count($content['news']),

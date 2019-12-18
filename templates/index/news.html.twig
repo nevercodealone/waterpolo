@@ -7,7 +7,6 @@
 
     <ul class="list-unstyled">
         {% if news %}
-            {% dump(news) %}
             {% for newsItem in news %}
                 <li>
                     <a href="{{ newsItem.link }}" target="_blank">

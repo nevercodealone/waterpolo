@@ -4,24 +4,48 @@
 
 <div class="example-wrapper">
     <h1>WP News - Never Code Alone Open Source Projekt</h1>
-
-    <ul class="list-unstyled">
+    {% if news %}
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <button class="nav-link active filter-button" role="tab" data-toggle="tab" data-filter="all">
+                    Alle ({{ news|length }})
+                </button>
+            </li>
+        </ul>
+    {% endif %}
+    <div class="row">
         {% if news %}
-            {% for newsItem in news %}
-                <li>
-                    <a href="{{ newsItem.link }}" target="_blank">
-                        <img class="img-fluid size-news-startpage" src="{{ newsItem.image }}" alt="Responsive image">
-                    </a>
-                    <div class="media-body">
+            {% for key,newsItem in news %}
+                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter ">
                         <a href="{{ newsItem.link }}" target="_blank">
-                            <h2 class="mt-0 mb-1">{{ newsItem.title }}</h2>
+                            <img class="img-fluid size-news-startpage" src="{{ newsItem.image }}" alt="Responsive image">
                         </a>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#info-{{ key }}" aria-controls="info-{{ key }}" role="tab" data-toggle="tab">
+                                    Infos:
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="info-{{ key }}">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item-dark">
+                                        <strong>Title:</strong> {{ newsItem.title }}
+                                    </li>
+                                    <li class="list-group-item-dark">
+                                        <strong>Published:</strong> {{ newsItem.pubDate | date("F jS \\a\\t g:ia") }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                </li>
             {% endfor %}
         {% else %}
             <p>Please come back later!!</p>
         {% endif %}
-    </ul>
+    </div>
 </div>
 {% endblock %}

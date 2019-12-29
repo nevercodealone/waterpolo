@@ -73,10 +73,16 @@ class GrabberService
             $allNews = array_merge($allNews, $news);
         }
 
-        return $allNews;
+        usort($allNews, function($a, $b) {
+            $actual = strtotime($a['pubDate']);
+            $next = strtotime($b['pubDate']);
+            return $actual - $next;
+        });
+
+        return array_reverse($allNews);
     }
 
-    private function getImageFromUrl($item, $domain)
+    private function getImageFromUrl($item)
     {
         $imageBlackListWaspo = [
             'logo-neu.jpg',
@@ -113,7 +119,5 @@ class GrabberService
         }
 
         return $contentImage;
-
     }
-
 }

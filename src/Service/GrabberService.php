@@ -28,7 +28,7 @@ class GrabberService
         $this->tmpFolder = $this->appKernel->getProjectDir() . '/public/tmp/photos/';
 
         if (!$this->fileSystem->exists($this->tmpFolder)) {
-            $this->fileSystem->mkdir($this->tmpFolder, 0700);
+            $this->fileSystem->mkdir($this->tmpFolder, 0777);
         }
     }
 

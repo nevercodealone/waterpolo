@@ -1,46 +1,100 @@
 <?php
 
-
 namespace App\Service;
 
-
-use phpDocumentor\Reflection\Types\Mixed_;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class GrabberService
 {
-    public function getItems(): array
+    /** @var Filesystem */
+    private $fileSystem;
+
+    /** @var KernelInterface */
+    private $appKernel;
+
+    private $tmpFolder;
+
+    private $sourceDomains = [
+        'spandau04',
+        'waspo98'
+    ];
+
+    public function __construct(KernelInterface $appKernel, Filesystem $fileSystem)
     {
-        $url = 'https://waspo98.de/feed/';
-        $content = file_get_contents($url);
-        $xml = simplexml_load_string($content);
-        $json = json_encode($xml);
-        $news = json_decode($json,true)['channel']['item'];
+        $this->appKernel = $appKernel;
+        $this->fileSystem = $fileSystem;
 
-        foreach ($news as $key => $item) {
-            $image = $this->getImageFromUrl($item['guid']);
+        $this->tmpFolder = $this->appKernel->getProjectDir() . '/public/tmp/photos/';
 
-            if(!$image) {
-                unset($news[$key]);
-                continue;
-            }
-
-            $news[$key]['image'] = $image;
+        if (!$this->fileSystem->exists($this->tmpFolder)) {
+            $this->fileSystem->mkdir($this->tmpFolder, 0700);
         }
-
-        return $news;
     }
 
-    private function getImageFromUrl($url)
+    public function getItems(): array
     {
-        $imageBlackList = [
+
+        $allNews = [];
+
+        foreach ($this->sourceDomains as $sourceDomain) {
+            $content = file_get_contents('https://www.' . $sourceDomain . '.de/feed/');
+
+            if ('spandau04' === $sourceDomain) {
+                $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>'], '', $content);
+            }
+
+            $xml = simplexml_load_string($content);
+            $json = json_encode($xml);
+            $news = json_decode($json,true)['channel']['item'];
+
+            foreach ($news as $key => $item) {
+                if ('spandau04' === $sourceDomain) {
+                    if (!is_array($item['category']) || !in_array('Wasserball', $item['category'])) {
+                        unset($news[$key]);
+                        continue;
+                    }
+                }
+
+                $image = $this->getImageFromUrl($item, $sourceDomain);
+
+                if(!$image) {
+                    unset($news[$key]);
+                    continue;
+                }
+
+                $filename = basename($image);
+                $this->fileSystem->copy($image, $this->tmpFolder . $filename);
+
+                $news[$key]['image'] = $filename;
+                $news[$key]['url'] = $sourceDomain;
+            }
+
+            $allNews = array_merge($allNews, $news);
+        }
+
+        return $allNews;
+    }
+
+    private function getImageFromUrl($item, $domain)
+    {
+        $imageBlackListWaspo = [
             'logo-neu.jpg',
             'youtube.png',
             'instagram.png',
             'facebook.png'
         ];
 
+        $imageBlackListSpandau = [
+            'logo-spandau',
+            '80x80',
+            'plugins'
+        ];
+
+        $imageBlackList = array_merge($imageBlackListWaspo, $imageBlackListSpandau);
+
         $contentImage = false;
-        $content = file_get_contents($url);
+        $content = file_get_contents($item['guid']);
         libxml_use_internal_errors(true);
         $dom = new \DOMDocument();
         $dom->loadHTML($content);
@@ -49,15 +103,17 @@ class GrabberService
 
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
-
             foreach ($imageBlackList as $needle) {
-                if (strpos($src, $needle) !== false) {
+                if (strpos(strtolower($src), $needle) !== false) {
                     continue 2;
                 }
             }
             $contentImage = $src;
+            break;
         }
 
         return $contentImage;
+
     }
+
 }

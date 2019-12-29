@@ -48,6 +48,8 @@ class GrabberService
             $json = json_encode($xml);
             $news = json_decode($json,true)['channel']['item'];
 
+            $news = array_slice($news, 0, 6);
+
             foreach ($news as $key => $item) {
                 if ('spandau04' === $sourceDomain) {
                     if (!is_array($item['category']) || !in_array('Wasserball', $item['category'])) {

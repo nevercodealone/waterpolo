@@ -3,7 +3,6 @@
 
 namespace App\Command;
 
-
 use App\Service\GrabberService;
 use App\Service\NewsService;
 use App\Service\YouTubeService;
@@ -28,8 +27,12 @@ class ImportContentCommand extends Command
     /** @var GrabberService */
     private $grabberService;
 
-    public function __construct(YouTubeService $youTubeService, NewsService $newsService, CacheItemPoolInterface $cache, GrabberService $grabberService)
-    {
+    public function __construct(
+        YouTubeService $youTubeService,
+        NewsService $newsService,
+        CacheItemPoolInterface $cache,
+        GrabberService $grabberService
+    ) {
         $this->cache = $cache;
         $this->newsService = $newsService;
         $this->youTubeService = $youTubeService;

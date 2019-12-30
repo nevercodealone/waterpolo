@@ -49,7 +49,8 @@ class NewsService
     public function getNewsFromApi(): array
     {
         $client = HttpClient::create();
-        $response = $client->request('GET', 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=' . $_ENV['NEWSAPI']);
+        $newsApiUrl = 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=';
+        $response = $client->request('GET', $newsApiUrl . $_ENV['NEWSAPI']);
 
         $statusCode = $response->getStatusCode();
         $contentType = $response->getHeaders()['content-type'][0];
@@ -80,9 +81,6 @@ class NewsService
         return $articles;
     }
 
-    /**
-     * @param $article
-     */
     private function storeTempFileWithImage($article): void
     {
         if (!$this->fileSystem->exists("tmp/photos")) {

@@ -62,7 +62,7 @@ class YouTubeService
             $dates[] = $item['snippet']['publishedAt'];
         }
 
-        array_multisort($dates,SORT_DESC,SORT_STRING,$videos);
+        array_multisort($dates, SORT_DESC, SORT_STRING, $videos);
 
         return [
             'videos' => $videos,
@@ -80,7 +80,7 @@ class YouTubeService
         $cacheItem = $this->cache->getItem('videos');
 
         if (!$cacheItem->isHit()) {
-            $videoList = $this->playlistItemsListByPlaylistId('snippet',$params);
+            $videoList = $this->playlistItemsListByPlaylistId('snippet', $params);
             $videos = array_reverse($videoList['items']);
             $videos = array_slice($videos, 0, 9);
 
@@ -89,11 +89,12 @@ class YouTubeService
         }
 
         return $cacheItem->get();
-
     }
 
-    private function playlistItemsListByPlaylistId(string $part, array $params): \Google_Service_YouTube_PlaylistItemListResponse
-    {
+    private function playlistItemsListByPlaylistId(
+        string $part,
+        array $params
+    ): \Google_Service_YouTube_PlaylistItemListResponse {
         $params = array_filter($params);
 
         return $this->youtubeService->playlistItems->listPlaylistItems(

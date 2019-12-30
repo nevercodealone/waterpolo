@@ -46,7 +46,7 @@ class GrabberService
 
             $xml = simplexml_load_string($content);
             $json = json_encode($xml);
-            $news = json_decode($json,true)['channel']['item'];
+            $news = json_decode($json, true)['channel']['item'];
 
             $news = array_slice($news, 0, 6);
 
@@ -60,7 +60,7 @@ class GrabberService
 
                 $image = $this->getImageFromUrl($item);
 
-                if(!$image) {
+                if (!$image) {
                     unset($news[$key]);
                     continue;
                 }
@@ -75,7 +75,7 @@ class GrabberService
             $allNews = array_merge($allNews, $news);
         }
 
-        usort($allNews, function($a, $b) {
+        usort($allNews, function ($a, $b) {
             $actual = strtotime($a['pubDate']);
             $next = strtotime($b['pubDate']);
             return $actual - $next;

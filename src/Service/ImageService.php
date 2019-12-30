@@ -3,7 +3,6 @@
 
 namespace App\Service;
 
-
 use Google\Cloud\Vision\VisionClient;
 use http\Exception;
 
@@ -28,7 +27,6 @@ class ImageService
                 fopen($path, 'r'),
                 ['WEB_DETECTION']
             );
-
         } catch (\Exception $exception) {
             throw new \Exception('Wrong argument');
         }

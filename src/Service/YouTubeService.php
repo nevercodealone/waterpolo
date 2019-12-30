@@ -70,11 +70,6 @@ class YouTubeService
         ];
     }
 
-    public function getVideoByKeywords(array $keywords): array
-    {
-
-    }
-
     public function getItemsFromChannel(): array
     {
         $params = [

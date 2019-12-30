@@ -58,7 +58,7 @@ class GrabberService
                     }
                 }
 
-                $image = $this->getImageFromUrl($item, $sourceDomain);
+                $image = $this->getImageFromUrl($item);
 
                 if(!$image) {
                     unset($news[$key]);

@@ -80,9 +80,6 @@ class NewsService
         return $articles;
     }
 
-    /**
-     * @param $article
-     */
     private function storeTempFileWithImage($article): void
     {
         if (!$this->fileSystem->exists("tmp/photos")) {

@@ -16,8 +16,9 @@ class GrabberService
     private $tmpFolder;
 
     private $sourceDomains = [
-        'spandau04',
-        'waspo98'
+        'total-waterpolo.com',
+        'spandau04.de',
+        'waspo98.de'
     ];
 
     public function __construct(KernelInterface $appKernel, Filesystem $fileSystem)
@@ -38,7 +39,7 @@ class GrabberService
         $allNews = [];
 
         foreach ($this->sourceDomains as $sourceDomain) {
-            $content = file_get_contents('https://www.' . $sourceDomain . '.de/feed/');
+            $content = file_get_contents('https://www.' . $sourceDomain . '/feed/');
 
             if ('spandau04' === $sourceDomain) {
                 $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>'], '', $content);
@@ -81,7 +82,12 @@ class GrabberService
             return $actual - $next;
         });
 
-        return array_reverse($allNews);
+        $array_reverse = array_reverse($allNews);
+
+        return [
+            'news' => $array_reverse,
+            'sourceDomains' => $this->sourceDomains
+        ];
     }
 
     private function getImageFromUrl($item)
@@ -99,7 +105,17 @@ class GrabberService
             'plugins'
         ];
 
-        $imageBlackList = array_merge($imageBlackListWaspo, $imageBlackListSpandau);
+        $imageBlackListTotalWaterpolo = [
+            'facebook.com',
+            'w3.org',
+            'water-polo-community.png'
+        ];
+
+        $imageBlackList = array_merge(
+            $imageBlackListWaspo,
+            $imageBlackListSpandau,
+            $imageBlackListTotalWaterpolo
+        );
 
         $contentImage = false;
         $content = file_get_contents($item['guid']);
@@ -112,7 +128,7 @@ class GrabberService
         foreach ($images as $image) {
             $src = $image->getAttribute('src');
             foreach ($imageBlackList as $needle) {
-                if (strpos(strtolower($src), $needle) !== false) {
+                if (strpos(strtolower($src), strtolower($needle)) !== false) {
                     continue 2;
                 }
             }

@@ -31,7 +31,7 @@ class IndexController extends AbstractController
      */
     public function index(): Response
     {
-        return $this->redirectToRoute('videos');
+        return $this->redirectToRoute('news');
     }
 
     /**

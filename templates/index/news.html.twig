@@ -8,25 +8,22 @@
         <ul class="nav nav-tabs">
             <li class="nav-item">
                 <button class="nav-link active filter-button" role="tab" data-toggle="tab" data-filter="all">
-                    Alle ({{ news|length }})
+                    Alle
                 </button>
             </li>
-            <li class="nav-item">
-                <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="waspo98">
-                    waspo98.de
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="spandau04">
-                    spandau04.de
-                </a>
-            </li>
+            {% for sourceDomain in news.sourceDomains %}
+                <li class="nav-item">
+                    <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="{{ sourceDomain|replace({'.': ''}) }}">
+                        {{ sourceDomain }}
+                    </a>
+                </li>
+            {% endfor %}
         </ul>
     {% endif %}
     <div class="row">
-        {% if news %}
-            {% for key,newsItem in news %}
-                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter {{ newsItem.url }} ">
+        {% if news.news %}
+            {% for key,newsItem in news.news %}
+                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter {{ newsItem.url|replace({'.': ''})}} ">
                         <a href="{{ newsItem.link }}" target="_blank">
                             <img class="img-fluid size-news-startpage" src="/tmp/photos/{{ newsItem.image }}" alt="Responsive image">
                         </a>
@@ -49,7 +46,7 @@
                                         <strong>Published:</strong> {{ newsItem.pubDate | date("F jS \\a\\t g:ia") }}
                                     </li>
                                     <li class="list-group-item-dark">
-                                        <strong>Url:</strong> {{ newsItem.url }}.de
+                                        <strong>Url:</strong> {{ newsItem.url }}
                                     </li>
                                 </ul>
                             </div>

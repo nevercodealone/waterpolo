@@ -65,7 +65,7 @@ class ImportContentCommand extends Command
         $content['news'] = $this->grabberService->getItems();
 
         $output->writeln([
-            'Count:' . count($content['news']),
+            'Count:' . count($content['news']['news']),
             '============',
             '',
         ]);

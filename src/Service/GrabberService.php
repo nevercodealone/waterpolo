@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -16,6 +17,7 @@ class GrabberService
     private $tmpFolder;
 
     private $sourceDomains = [
+        'wasserballecke.de',
         'total-waterpolo.com',
         'spandau04.de',
         'waspo98.de'
@@ -108,34 +110,51 @@ class GrabberService
         $imageBlackListTotalWaterpolo = [
             'facebook.com',
             'w3.org',
-            'water-polo-community.png'
+            'water-polo-community.png',
+            'Screen-Shot'
+        ];
+
+        $imageBlackListWasserballecke = [
+            'wasserballecke_',
+            'banner',
+            'gravatar',
+            '.gif',
+            'image3',
+            'ios_splasscreen',
+            'appack',
+            'googleplay',
+            'data:image'
         ];
 
         $imageBlackList = array_merge(
             $imageBlackListWaspo,
             $imageBlackListSpandau,
-            $imageBlackListTotalWaterpolo
+            $imageBlackListTotalWaterpolo,
+            $imageBlackListWasserballecke
         );
 
-        $contentImage = false;
         $content = file_get_contents($item['guid']);
-        libxml_use_internal_errors(true);
-        $dom = new \DOMDocument();
-        $dom->loadHTML($content);
-        libxml_use_internal_errors(false);
-        $images = $dom->getElementsByTagName('img');
+        $crawler = new Crawler($content);
+        $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {
+            $node = $crawler->getNode(0);
+            $node->parentNode->removeChild($node);
+        });
+        $images = $crawler->filter('img');
 
         foreach ($images as $image) {
+            if (!method_exists($image, 'getAttribute')) {
+                continue;
+            }
+
             $src = $image->getAttribute('src');
             foreach ($imageBlackList as $needle) {
                 if (strpos(strtolower($src), strtolower($needle)) !== false) {
                     continue 2;
                 }
             }
-            $contentImage = $src;
-            break;
+            return $src;
         }
 
-        return $contentImage;
+        return false;
     }
 }

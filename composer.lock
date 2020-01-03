@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ccb346bb83c2fd3c4c93f9e5593f9b9",
+    "content-hash": "17cff53a9eaebc51c980899953f8cf4a",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -3353,6 +3353,67 @@
             "description": "Symfony Doctrine Bridge",
             "homepage": "https://symfony.com",
             "time": "2019-12-01T11:14:36+00:00"
+        },
+        {
+            "name": "symfony/dom-crawler",
+            "version": "v5.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/dom-crawler.git",
+                "reference": "0a0a73a0836926898b6fcd6817fe697487a73d97"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/0a0a73a0836926898b6fcd6817fe697487a73d97",
+                "reference": "0a0a73a0836926898b6fcd6817fe697487a73d97",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.2.5",
+                "symfony/polyfill-ctype": "~1.8",
+                "symfony/polyfill-mbstring": "~1.0"
+            },
+            "conflict": {
+                "masterminds/html5": "<2.6"
+            },
+            "require-dev": {
+                "masterminds/html5": "^2.6",
+                "symfony/css-selector": "^4.4|^5.0"
+            },
+            "suggest": {
+                "symfony/css-selector": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\DomCrawler\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony DomCrawler Component",
+            "homepage": "https://symfony.com",
+            "time": "2019-11-18T17:27:11+00:00"
         },
         {
             "name": "symfony/dotenv",
@@ -7036,6 +7097,7 @@
                 "code",
                 "zf"
             ],
+            "abandoned": "laminas/laminas-code",
             "time": "2019-12-10T19:21:15+00:00"
         },
         {
@@ -7090,6 +7152,7 @@
                 "events",
                 "zf2"
             ],
+            "abandoned": "laminas/laminas-eventmanager",
             "time": "2018-04-25T15:33:34+00:00"
         }
     ],
@@ -7494,67 +7557,6 @@
             ],
             "description": "A debug pack for Symfony projects",
             "time": "2018-12-10T12:11:11+00:00"
-        },
-        {
-            "name": "symfony/dom-crawler",
-            "version": "v5.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/dom-crawler.git",
-                "reference": "0a0a73a0836926898b6fcd6817fe697487a73d97"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dom-crawler/zipball/0a0a73a0836926898b6fcd6817fe697487a73d97",
-                "reference": "0a0a73a0836926898b6fcd6817fe697487a73d97",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2.5",
-                "symfony/polyfill-ctype": "~1.8",
-                "symfony/polyfill-mbstring": "~1.0"
-            },
-            "conflict": {
-                "masterminds/html5": "<2.6"
-            },
-            "require-dev": {
-                "masterminds/html5": "^2.6",
-                "symfony/css-selector": "^4.4|^5.0"
-            },
-            "suggest": {
-                "symfony/css-selector": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "5.0-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\DomCrawler\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony DomCrawler Component",
-            "homepage": "https://symfony.com",
-            "time": "2019-11-18T17:27:11+00:00"
         },
         {
             "name": "symfony/maker-bundle",

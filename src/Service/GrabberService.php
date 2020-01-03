@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -132,11 +133,8 @@ class GrabberService
         );
 
         $content = file_get_contents($item['guid']);
-        libxml_use_internal_errors(true);
-        $dom = new \DOMDocument();
-        $dom->loadHTML($content);
-        libxml_use_internal_errors(false);
-        $images = $dom->getElementsByTagName('img');
+        $crawler = new Crawler($content);
+        $images = $crawler->filter('img');
 
         foreach ($images as $image) {
             $src = $image->getAttribute('src');

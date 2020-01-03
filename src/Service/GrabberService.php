@@ -110,7 +110,8 @@ class GrabberService
         $imageBlackListTotalWaterpolo = [
             'facebook.com',
             'w3.org',
-            'water-polo-community.png'
+            'water-polo-community.png',
+            'Screen-Shot'
         ];
 
         $imageBlackListWasserballecke = [
@@ -134,12 +135,10 @@ class GrabberService
 
         $content = file_get_contents($item['guid']);
         $crawler = new Crawler($content);
-        $crawler = $crawler
-            ->filter('.section-related-ul')
-            ->reduce(function (Crawler $node, $i) {
-                // filters every other node
-                return ($i % 2) == 0;
-            });
+        $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {
+            $node = $crawler->getNode(0);
+            $node->parentNode->removeChild($node);
+        });
         $images = $crawler->filter('img');
 
         foreach ($images as $image) {

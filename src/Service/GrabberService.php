@@ -16,6 +16,7 @@ class GrabberService
     private $tmpFolder;
 
     private $sourceDomains = [
+        'wasserballecke.de',
         'total-waterpolo.com',
         'spandau04.de',
         'waspo98.de'
@@ -111,13 +112,25 @@ class GrabberService
             'water-polo-community.png'
         ];
 
+        $imageBlackListWasserballecke = [
+            'wasserballecke_',
+            'banner',
+            'gravatar',
+            '.gif',
+            'image3',
+            'ios_splasscreen',
+            'appack',
+            'googleplay',
+            'data:image'
+        ];
+
         $imageBlackList = array_merge(
             $imageBlackListWaspo,
             $imageBlackListSpandau,
-            $imageBlackListTotalWaterpolo
+            $imageBlackListTotalWaterpolo,
+            $imageBlackListWasserballecke
         );
 
-        $contentImage = false;
         $content = file_get_contents($item['guid']);
         libxml_use_internal_errors(true);
         $dom = new \DOMDocument();
@@ -132,10 +145,9 @@ class GrabberService
                     continue 2;
                 }
             }
-            $contentImage = $src;
-            break;
+            return $src;
         }
 
-        return $contentImage;
+        return false;
     }
 }

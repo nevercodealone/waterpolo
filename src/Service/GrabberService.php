@@ -142,6 +142,10 @@ class GrabberService
         $images = $crawler->filter('img');
 
         foreach ($images as $image) {
+            if (!method_exists($image, 'getAttribute')) {
+                continue;
+            }
+
             $src = $image->getAttribute('src');
             foreach ($imageBlackList as $needle) {
                 if (strpos(strtolower($src), strtolower($needle)) !== false) {

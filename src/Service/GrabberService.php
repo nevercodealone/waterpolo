@@ -134,6 +134,12 @@ class GrabberService
 
         $content = file_get_contents($item['guid']);
         $crawler = new Crawler($content);
+        $crawler = $crawler
+            ->filter('.section-related-ul')
+            ->reduce(function (Crawler $node, $i) {
+                // filters every other node
+                return ($i % 2) == 0;
+            });
         $images = $crawler->filter('img');
 
         foreach ($images as $image) {

@@ -46,8 +46,8 @@ class GrabberService
         foreach ($this->sourceDomains as $sourceDomain => $specials) {
             $content = file_get_contents('https://www.' . $sourceDomain . '/feed/');
 
-            if (isset($specials['category'])) {
-                $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>'], '', $content);
+            if (isset($specials) && in_array('category', $specials)) {
+                $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>', '&nbsp;', '<br>'], '', $content);
             }
 
             $xml = simplexml_load_string($content);
@@ -57,8 +57,14 @@ class GrabberService
             $news = array_slice($news, 0, 6);
 
             foreach ($news as $key => $item) {
-                if (isset($specials['category'])) {
-                    if (!is_array($item['category']) || !in_array('Wasserball', $item['category'])) {
+                if (isset($specials) && in_array('category', $specials)) {
+                    if (!isset($item['category']) || !is_array($item['category'])) {
+                        unset($news[$key]);
+                        continue;
+                    }
+
+                    $category = array_map('strtolower', $item['category']);
+                    if (!in_array('wasserball', $category)) {
                         unset($news[$key]);
                         continue;
                     }
@@ -147,6 +153,14 @@ class GrabberService
             $node = $crawler->getNode(0);
             $node->parentNode->removeChild($node);
         });
+
+        if (strpos($item['guid'], 'ssv-esslingen.de') !== false) {
+            $crawler->filter('.page-img')->each(function (Crawler $crawler) {
+                $node = $crawler->getNode(0);
+                $node->parentNode->removeChild($node);
+            });
+        }
+
         $images = $crawler->filter('img');
 
         foreach ($images as $image) {

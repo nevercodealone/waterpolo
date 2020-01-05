@@ -11,7 +11,7 @@
                     Alle
                 </button>
             </li>
-            {% for sourceDomain in news.sourceDomains %}
+            {% for sourceDomain, specials in news.sourceDomains %}
                 <li class="nav-item">
                     <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="{{ sourceDomain|replace({'.': ''}) }}">
                         {{ sourceDomain }}

@@ -129,11 +129,16 @@ class GrabberService
             'data:image'
         ];
 
+        $imageBlackListSsvEsslingen = [
+            'logo.png'
+        ];
+
         $imageBlackList = array_merge(
             $imageBlackListWaspo,
             $imageBlackListSpandau,
             $imageBlackListTotalWaterpolo,
-            $imageBlackListWasserballecke
+            $imageBlackListWasserballecke,
+            $imageBlackListSsvEsslingen
         );
 
         $content = file_get_contents($item['guid']);

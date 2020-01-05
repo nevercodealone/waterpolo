@@ -17,10 +17,11 @@ class GrabberService
     private $tmpFolder;
 
     private $sourceDomains = [
-        'wasserballecke.de',
-        'total-waterpolo.com',
-        'spandau04.de',
-        'waspo98.de'
+        'ssv-esslingen.de' => ['category'],
+        'wasserballecke.de' => [],
+        'total-waterpolo.com' => [],
+        'spandau04.de' => ['category'],
+        'waspo98.de' => []
     ];
 
     public function __construct(KernelInterface $appKernel, Filesystem $fileSystem)
@@ -35,15 +36,17 @@ class GrabberService
         }
     }
 
-    public function getItems(): array
+    public function getItems($debug = false): array
     {
+        if ($debug === 'firstDomain') {
+            $this->sourceDomains = array_slice($this->sourceDomains, 0, 1);
+        }
 
         $allNews = [];
-
-        foreach ($this->sourceDomains as $sourceDomain) {
+        foreach ($this->sourceDomains as $sourceDomain => $specials) {
             $content = file_get_contents('https://www.' . $sourceDomain . '/feed/');
 
-            if ('spandau04' === $sourceDomain) {
+            if (isset($specials['category'])) {
                 $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>'], '', $content);
             }
 
@@ -54,7 +57,7 @@ class GrabberService
             $news = array_slice($news, 0, 6);
 
             foreach ($news as $key => $item) {
-                if ('spandau04' === $sourceDomain) {
+                if (isset($specials['category'])) {
                     if (!is_array($item['category']) || !in_array('Wasserball', $item['category'])) {
                         unset($news[$key]);
                         continue;

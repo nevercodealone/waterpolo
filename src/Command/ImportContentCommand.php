@@ -8,7 +8,9 @@ use App\Service\NewsService;
 use App\Service\YouTubeService;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportContentCommand extends Command
@@ -31,7 +33,8 @@ class ImportContentCommand extends Command
         YouTubeService $youTubeService,
         NewsService $newsService,
         CacheItemPoolInterface $cache,
-        GrabberService $grabberService
+        GrabberService $grabberService,
+        bool $debug = false
     ) {
         $this->cache = $cache;
         $this->newsService = $newsService;
@@ -45,11 +48,20 @@ class ImportContentCommand extends Command
     {
         $this
             ->setDescription('Import from APIs')
-            ->setHelp('This command will get all new content, clear the cache and fill it');
+            ->addArgument(
+                'debug',
+                InputArgument::OPTIONAL,
+                'Only run firstDomain',
+                false
+            )
+            ->setHelp('This command will get all new content, clear the cache and fill it')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $debug = $input->getArgument('debug');
+
         $content = [];
 
         $output->writeln([
@@ -62,7 +74,7 @@ class ImportContentCommand extends Command
             '',
         ]);
 
-        $content['news'] = $this->grabberService->getItems();
+        $content['news'] = $this->grabberService->getItems($debug);
 
         $output->writeln([
             'Count:' . count($content['news']['news']),

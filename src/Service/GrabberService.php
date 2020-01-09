@@ -115,7 +115,7 @@ class GrabberService
         ];
     }
 
-    private function getImageFromUrl($url, $all = false)
+    private function getImageFromUrl($url)
     {
         $imageBlackListWaspo = [
             'logo-neu.jpg',
@@ -173,8 +173,6 @@ class GrabberService
         $this->removeWordpressContentRelations($url, $crawler);
         $images = $this->getFilterBySelector($crawler, 'img');
 
-        $imagesAll = [];
-
         foreach ($images as $image) {
             if (!method_exists($image, 'getAttribute')) {
                 continue;
@@ -187,16 +185,10 @@ class GrabberService
                 }
             }
 
-            if ($all) {
-                $imagesAll[] = $src;
-                continue;
-            }
-
             return $src;
         }
 
-        $return = $all === true ? $imagesAll : $src;
-        return $return;
+        return false;
     }
 
     /**

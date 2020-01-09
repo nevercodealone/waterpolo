@@ -17,6 +17,7 @@ class GrabberService
     private $tmpFolder;
 
     private $sourceDomains = [
+        'deutsche-wasserball-liga.de' => [],
         'ssv-esslingen.de' => ['category'],
         'wasserballecke.de' => [],
         'total-waterpolo.com' => [],
@@ -44,15 +45,23 @@ class GrabberService
 
         $allNews = [];
         foreach ($this->sourceDomains as $sourceDomain => $specials) {
-            $content = file_get_contents('https://www.' . $sourceDomain . '/feed/');
+            if ($sourceDomain === 'deutsche-wasserball-liga.de') {
+                $news = $this->getNewsItemsFromUrl('https://www.' . $sourceDomain, true);
+            } else {
+                try {
+                    $content = file_get_contents('https://' . $sourceDomain . '/feed/');
+                } catch (\Exception $exception) {
+                    throw new \Exception($exception);
+                }
 
-            if (isset($specials) && in_array('category', $specials)) {
-                $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>', '&nbsp;', '<br>'], '', $content);
+                if (isset($specials) && in_array('category', $specials)) {
+                    $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>', '&nbsp;', '<br>'], '', $content);
+                }
+
+                $xml = simplexml_load_string($content);
+                $json = json_encode($xml);
+                $news = json_decode($json, true)['channel']['item'];
             }
-
-            $xml = simplexml_load_string($content);
-            $json = json_encode($xml);
-            $news = json_decode($json, true)['channel']['item'];
 
             $news = array_slice($news, 0, 6);
 
@@ -70,7 +79,12 @@ class GrabberService
                     }
                 }
 
-                $image = $this->getImageFromUrl($item);
+                if ($sourceDomain === 'deutsche-wasserball-liga.de') {
+                    $image = $item['image'];
+                } else {
+                    $url = $item['guid'];
+                    $image = $this->getImageFromUrl($url);
+                }
 
                 if (!$image) {
                     unset($news[$key]);
@@ -101,7 +115,7 @@ class GrabberService
         ];
     }
 
-    private function getImageFromUrl($item)
+    private function getImageFromUrl($url, $all = false)
     {
         $imageBlackListWaspo = [
             'logo-neu.jpg',
@@ -139,29 +153,27 @@ class GrabberService
             'logo.png'
         ];
 
+        $imageBlackListDeutscheWasserballLiga = [
+            'sportmuck',
+            'logo',
+        ];
+
         $imageBlackList = array_merge(
             $imageBlackListWaspo,
             $imageBlackListSpandau,
             $imageBlackListTotalWaterpolo,
             $imageBlackListWasserballecke,
-            $imageBlackListSsvEsslingen
+            $imageBlackListSsvEsslingen,
+            $imageBlackListDeutscheWasserballLiga
         );
 
-        $content = file_get_contents($item['guid']);
+        $content = file_get_contents($url);
         $crawler = new Crawler($content);
-        $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {
-            $node = $crawler->getNode(0);
-            $node->parentNode->removeChild($node);
-        });
 
-        if (strpos($item['guid'], 'ssv-esslingen.de') !== false) {
-            $crawler->filter('.page-img')->each(function (Crawler $crawler) {
-                $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
-            });
-        }
+        $this->removeWordpressContentRelations($url, $crawler);
+        $images = $this->getFilterBySelector($crawler, 'img');
 
-        $images = $crawler->filter('img');
+        $imagesAll = [];
 
         foreach ($images as $image) {
             if (!method_exists($image, 'getAttribute')) {
@@ -174,9 +186,93 @@ class GrabberService
                     continue 2;
                 }
             }
+
+            if ($all) {
+                $imagesAll[] = $src;
+                continue;
+            }
+
             return $src;
         }
 
-        return false;
+        $return = $all === true ? $imagesAll : $src;
+        return $return;
     }
+
+    /**
+     * @param Crawler $crawler
+     * @param $selector
+     * @return Crawler
+     */
+    private function getFilterBySelector(Crawler $crawler, $selector): Crawler
+    {
+        return $crawler->filter($selector);
+    }
+
+    /**
+     * @param $url
+     * @param Crawler $crawler
+     */
+    private function removeWordpressContentRelations($url, Crawler $crawler): void
+    {
+        $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {
+            $node = $crawler->getNode(0);
+            $node->parentNode->removeChild($node);
+        });
+
+        if (strpos($url, 'ssv-esslingen.de') !== false) {
+            $crawler->filter('.page-img')->each(function (Crawler $crawler) {
+                $node = $crawler->getNode(0);
+                $node->parentNode->removeChild($node);
+            });
+        }
+
+        if (strpos($url, 'deutsche-wasserball-liga.de') !== false) {
+            $crawler->filter('#carousel-eyecatcher')->each(function (Crawler $crawler) {
+                $node = $crawler->getNode(0);
+                $node->parentNode->removeChild($node);
+            });
+
+            $crawler->filter('.content-header')->each(function (Crawler $crawler) {
+                $node = $crawler->getNode(0);
+                $node->parentNode->removeChild($node);
+            });
+        }
+    }
+
+    public function getNewsItemsFromUrl($url): array
+    {
+        $feed = $content = file_get_contents($url . '/feed/');
+        $xml = simplexml_load_string($content);
+        $json = json_encode($xml);
+        $newsFeed = json_decode($json, true)['channel']['item'];
+
+        $content = file_get_contents($url);
+        $crawler = new Crawler($content);
+
+        $this->removeWordpressContentRelations($url, $crawler);
+        $images = $this->getFilterBySelector($crawler, 'img');
+        $titles = $this->getFilterBySelector($crawler, 'h1');
+        $links = $this->getFilterBySelector($crawler, '.btn-more');
+
+        $news = [];
+        foreach ($titles as $key => $title) {
+            $title = $title->textContent;
+
+            $feedKey = array_search($title, array_column($newsFeed, 'title'));
+
+            $src = $images->eq($key)->attr('src');
+            $link = $links->eq($key)->attr('href');
+            $properties = [
+                'title' => $title,
+                'image' => $src,
+                'link' => $link,
+                'pubDate' => $newsFeed[$feedKey]['pubDate']
+            ];
+            $news[] = $properties;
+        }
+
+        return $news;
+    }
+
 }

@@ -257,5 +257,4 @@ class GrabberService
 
         return $news;
     }
-
 }

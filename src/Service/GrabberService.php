@@ -46,7 +46,7 @@ class GrabberService
         $allNews = [];
         foreach ($this->sourceDomains as $sourceDomain => $specials) {
             if ($sourceDomain === 'deutsche-wasserball-liga.de') {
-                $news = $this->getNewsItemsFromUrl('https://www.' . $sourceDomain, true);
+                $news = $this->getNewsItemsFromUrl('https://www.' . $sourceDomain);
             } else {
                 try {
                     $content = file_get_contents('https://' . $sourceDomain . '/feed/');
@@ -191,20 +191,11 @@ class GrabberService
         return false;
     }
 
-    /**
-     * @param Crawler $crawler
-     * @param $selector
-     * @return Crawler
-     */
     private function getFilterBySelector(Crawler $crawler, $selector): Crawler
     {
         return $crawler->filter($selector);
     }
 
-    /**
-     * @param $url
-     * @param Crawler $crawler
-     */
     private function removeWordpressContentRelations($url, Crawler $crawler): void
     {
         $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {

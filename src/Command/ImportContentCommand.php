@@ -17,6 +17,11 @@ class ImportContentCommand extends Command
 {
     protected static $defaultName = 'app:import:content';
 
+    /**
+     * @var bool
+     */
+    private $debug;
+
     /** @var CacheItemPoolInterface */
     private $cache;
 
@@ -40,6 +45,7 @@ class ImportContentCommand extends Command
         $this->newsService = $newsService;
         $this->youTubeService = $youTubeService;
         $this->grabberService = $grabberService;
+        $this->debug = $debug;
 
         parent::__construct();
     }

@@ -11,3 +11,10 @@ A Never Code Alone Playground
 ```bash
 $ yarn run encore dev --watch
 ```
+
+### Import commands
+```bash
+$ bin/console app:import:content firstDomain
+```
+
+firstDomain is a debug parameter for only running the first domain

@@ -17,6 +17,7 @@ class GrabberService
     private $tmpFolder;
 
     private $sourceDomains = [
+        'www.prorecco.it' => ['http'],
         'deutsche-wasserball-liga.de' => [],
         'ssv-esslingen.de' => ['category'],
         'wasserballecke.de' => [],
@@ -45,11 +46,17 @@ class GrabberService
 
         $allNews = [];
         foreach ($this->sourceDomains as $sourceDomain => $specials) {
+            $protocol = 'https';
+
+            if (isset($specials) && in_array('http', $specials)) {
+                $protocol = 'http';
+            }
+
             if ($sourceDomain === 'deutsche-wasserball-liga.de') {
-                $news = $this->getNewsItemsFromUrl('https://www.' . $sourceDomain);
+                $news = $this->getNewsItemsFromUrl($protocol . '://www.' . $sourceDomain);
             } else {
                 try {
-                    $content = file_get_contents('https://' . $sourceDomain . '/feed/');
+                    $content = file_get_contents($protocol . '://' . $sourceDomain . '/feed/');
                 } catch (\Exception $exception) {
                     throw new \Exception($exception);
                 }
@@ -158,13 +165,24 @@ class GrabberService
             'logo',
         ];
 
+        $imageBlackListProRecco = [
+            'lutto.jpg',
+            'WA0005',
+            'contattaci.jpg',
+            'INTELS.png',
+            'turbo.png',
+            'tossini.png',
+            'video_prorecco.jpg'
+        ];
+
         $imageBlackList = array_merge(
             $imageBlackListWaspo,
             $imageBlackListSpandau,
             $imageBlackListTotalWaterpolo,
             $imageBlackListWasserballecke,
             $imageBlackListSsvEsslingen,
-            $imageBlackListDeutscheWasserballLiga
+            $imageBlackListDeutscheWasserballLiga,
+            $imageBlackListProRecco
         );
 
         $content = file_get_contents($url);
@@ -217,6 +235,18 @@ class GrabberService
             });
 
             $crawler->filter('.content-header')->each(function (Crawler $crawler) {
+                $node = $crawler->getNode(0);
+                $node->parentNode->removeChild($node);
+            });
+        }
+
+        if (strpos($url, 'www.prorecco.it') !== false) {
+            $crawler->filter('.wpls-logo-showcase-slider-wrp')->each(function (Crawler $crawler) {
+                $node = $crawler->getNode(0);
+                $node->parentNode->removeChild($node);
+            });
+
+            $crawler->filter('.blog_slider_ul')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
             });

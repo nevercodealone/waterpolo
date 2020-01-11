@@ -253,6 +253,13 @@ class GrabberService
                 $node->parentNode->removeChild($node);
             });
         }
+
+        if (strpos($url, 'total-waterpolo.com') !== false) {
+            $crawler->filter('.hustle-ui')->each(function (Crawler $crawler) {
+                $node = $crawler->getNode(0);
+                $node->parentNode->removeChild($node);
+            });
+        }
     }
 
     public function getNewsItemsFromUrl($url): array

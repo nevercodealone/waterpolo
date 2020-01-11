@@ -141,7 +141,8 @@ class GrabberService
             'facebook.com',
             'w3.org',
             'water-polo-community.png',
-            'Screen-Shot'
+            'Screen-Shot',
+            'Award-Badge'
         ];
 
         $imageBlackListWasserballecke = [
@@ -153,7 +154,8 @@ class GrabberService
             'ios_splasscreen',
             'appack',
             'googleplay',
-            'data:image'
+            'data:image',
+            'IMG_2165-1200x480.jpg' // Sharks logo
         ];
 
         $imageBlackListSsvEsslingen = [
@@ -255,7 +257,7 @@ class GrabberService
 
     public function getNewsItemsFromUrl($url): array
     {
-        $feed = $content = file_get_contents($url . '/feed/');
+        $content = file_get_contents($url . '/feed/');
         $xml = simplexml_load_string($content);
         $json = json_encode($xml);
         $newsFeed = json_decode($json, true)['channel']['item'];

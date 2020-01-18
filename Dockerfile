@@ -16,7 +16,7 @@ FROM composer AS composer-dev
 RUN composer install --apcu-autoloader -o --no-scripts --ignore-platform-reqs
 
 # Build actual image
-FROM php:7.4-apache AS webserver
+FROM php:7.3-apache AS webserver
 
 WORKDIR /var/www/html/
 
@@ -36,7 +36,8 @@ RUN docker-php-ext-configure intl && docker-php-ext-install -j$(nproc) \
         pdo \
         pdo_mysql \
         opcache \
-        zip
+        zip \
+        php7.3-gd
 
 RUN pecl install imagick redis apcu && docker-php-ext-enable imagick redis apcu
 

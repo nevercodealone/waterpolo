@@ -36,7 +36,8 @@ RUN docker-php-ext-configure intl && docker-php-ext-install -j$(nproc) \
         pdo \
         pdo_mysql \
         opcache \
-        zip
+        zip \
+        gd
 
 RUN pecl install imagick redis apcu && docker-php-ext-enable imagick redis apcu
 

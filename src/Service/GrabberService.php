@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Google\Service\Logging\Resource\Exclusions;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -17,6 +18,7 @@ class GrabberService
     private $tmpFolder;
 
     private $sourceDomains = [
+        'h2o-polo.de' => [],
         'www.prorecco.it' => ['http'],
         'deutsche-wasserball-liga.de' => [],
         'ssv-esslingen.de' => ['category'],
@@ -55,10 +57,12 @@ class GrabberService
             if ($sourceDomain === 'deutsche-wasserball-liga.de') {
                 $news = $this->getNewsItemsFromUrl($protocol . '://www.' . $sourceDomain);
             } else {
+                $feedUrl = $protocol . '://' . $sourceDomain . '/feed/';
                 try {
-                    $content = file_get_contents($protocol . '://' . $sourceDomain . '/feed/');
+                    $content = file_get_contents($feedUrl);
                 } catch (\Exception $exception) {
-                    throw new \Exception($exception);
+                    $msg = $feedUrl . '|' . $exception->getMessage();
+                    throw new \Exception($msg);
                 }
 
                 if (isset($specials) && in_array('category', $specials)) {
@@ -264,7 +268,12 @@ class GrabberService
 
     public function getNewsItemsFromUrl($url): array
     {
-        $content = file_get_contents($url . '/feed/');
+        try {
+            $content = file_get_contents($url . '/feed/');
+        } catch (\Exception $exception) {
+            throw new \Exception($exception);
+        }
+
         $xml = simplexml_load_string($content);
         $json = json_encode($xml);
         $newsFeed = json_decode($json, true)['channel']['item'];

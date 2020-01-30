@@ -9,7 +9,7 @@ COPY composer.* /var/www/html/
 FROM composer AS composer-web
 
 # Application docker
-RUN composer install --apcu-autoloader -o --no-scripts --ignore-platform-reqs
+RUN composer install --apcu-autoloader -o --no-scripts --ignore-platform-reqs --no-dev
 
 FROM composer AS composer-dev
 
@@ -77,4 +77,8 @@ RUN curl -sSL "$RANCHER_CLI_URL" | tar -xzp -C /usr/local/bin/ --strip-component
 
 ENTRYPOINT []
 CMD []
+
+FROM toolbox AS dev
+
+CMD ["/usr/sbin/apachectl", "-DFOREGROUND"]
 

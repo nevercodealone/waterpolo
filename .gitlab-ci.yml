@@ -104,8 +104,6 @@ deploy_production_image_to_prod:
     HTTP_URL: waterpolo.nevercodealone.de
   script:
     - rancher up -s waterpolo-nevercodealone-de -f docker-compose.rancher.yml -d --pull --prune --upgrade
-  after_script:
-    - rancher exec -t waterpolo-nevercodealone-de/web /bin/bash -c 'rm -rf /var/www/html/var/cache' || true
   tags:
     - docker-executor
   only:
@@ -138,6 +136,8 @@ confirm_upgrade:
   image: $TOOLBOX_IMAGE
   script:
     - rancher up -s $RANCHER_PROJECT_NAME -f docker-compose.rancher.yml -d $RANCHER_OPTIONS
+  after_script:
+    - rancher exec -t hi-plan-net/web /bin/bash -c 'rm -rf /var/www/html/var/cache' || true
   tags:
     - docker-executor
   stage: postrollout

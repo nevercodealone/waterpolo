@@ -27,9 +27,10 @@
         {% if youTubeVideos %}
             {% for key,video in youTubeVideos.videos %}
                 {% if video.id.videoId %}
+                    {% set url = 'https://www.youtube.com/watch?v=%s'|format(video.id.videoId) %}
                     <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter {{ video.keyword }}">
                         <div class="video-container">
-                            <img src="{{ video['snippet']['thumbnails']['medium']['url'] }}" alt="{{ video['snippet']['title'] }}">
+                            <a href="{{ url }}" target="_blank" rel="nofollow"><img src="{{ video['snippet']['thumbnails']['medium']['url'] }}" alt="{{ video['snippet']['title'] }}"></a>
                         </div>
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs">

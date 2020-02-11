@@ -53,6 +53,10 @@ Encore
         corejs: 3
     })
 
+    .configureTerserPlugin(function (options) {
+        // options already has our default values
+    })
+
     // enables Sass/SCSS support
     //.enableSassLoader()
 

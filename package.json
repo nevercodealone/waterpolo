@@ -10,6 +10,7 @@
         "jquery": "^3.4.1",
         "popper.js": "^1.16.0",
         "regenerator-runtime": "^0.13.2",
+        "terser-webpack-plugin": "^2.3.4",
         "webpack-notifier": "^1.6.0"
     },
     "license": "UNLICENSED",

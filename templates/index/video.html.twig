@@ -29,7 +29,7 @@
                 {% if video.id.videoId %}
                     <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter {{ video.keyword }}">
                         <div class="video-container">
-                            <iframe title="{{ video['snippet']['title'] }}" width="560" height="315" src="https://www.youtube.com/embed/{{ video['id']['videoId'] }}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                            <img src="{{ video['snippet']['thumbnails']['medium']['url'] }}" alt="{{ video['snippet']['title'] }}">
                         </div>
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs">

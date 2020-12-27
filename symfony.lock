@@ -75,6 +75,9 @@
     "doctrine/reflection": {
         "version": "v1.0.0"
     },
+    "doctrine/sql-formatter": {
+        "version": "1.1.1"
+    },
     "easycorp/easy-log-handler": {
         "version": "1.0",
         "recipe": {
@@ -92,6 +95,9 @@
     },
     "firebase/php-jwt": {
         "version": "v5.0.0"
+    },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.0"
     },
     "google/apiclient": {
         "version": "2.0",
@@ -192,6 +198,9 @@
     "psr/event-dispatcher": {
         "version": "1.0.0"
     },
+    "psr/http-client": {
+        "version": "1.0.1"
+    },
     "psr/http-message": {
         "version": "1.0.1"
     },
@@ -279,6 +288,9 @@
     },
     "symfony/dependency-injection": {
         "version": "v5.0.0"
+    },
+    "symfony/deprecation-contracts": {
+        "version": "v2.2.0"
     },
     "symfony/doctrine-bridge": {
         "version": "v5.0.0"
@@ -454,6 +466,9 @@
     "symfony/polyfill-php73": {
         "version": "v1.13.0"
     },
+    "symfony/polyfill-php80": {
+        "version": "v1.20.0"
+    },
     "symfony/process": {
         "version": "v5.0.0"
     },
@@ -465,6 +480,9 @@
     },
     "symfony/property-info": {
         "version": "v5.0.0"
+    },
+    "symfony/proxy-manager-bridge": {
+        "version": "v5.2.1"
     },
     "symfony/routing": {
         "version": "4.2",

@@ -66,7 +66,27 @@ class GrabberService
                 }
 
                 if (isset($specials) && in_array('category', $specials)) {
-                    $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>', '&nbsp;', '<br>'], '', $content);
+                    $content = str_replace(
+                        [
+                            '<![CDATA[',
+                            ']]>',
+                            '<p>&nbsp;</p>',
+                            '&nbsp;',
+                            '<br>'
+                        ],
+                        '',
+                        $content
+                    );
+
+                    $content = str_replace(
+                        [
+                            ' & '
+                        ],
+                        [
+                            ' &amp; '
+                        ],
+                        $content
+                    );
                 }
 
                 $xml = simplexml_load_string($content);

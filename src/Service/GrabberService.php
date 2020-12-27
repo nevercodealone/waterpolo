@@ -65,11 +65,7 @@ class GrabberService
                     throw new \Exception($msg);
                 }
 
-                if (isset($specials) && in_array('category', $specials)) {
-                    $content = str_replace(['<![CDATA[', ']]>', '<p>&nbsp;</p>', '&nbsp;', '<br>'], '', $content);
-                }
-
-                $xml = simplexml_load_string($content);
+                $xml = simplexml_load_string($content, null, LIBXML_NOCDATA);
                 $json = json_encode($xml);
                 $news = json_decode($json, true)['channel']['item'];
             }

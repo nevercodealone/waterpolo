@@ -122,16 +122,6 @@ phpstan_run_code_analyses:
   except:
     - master
 
-phpcs_run_code_analyses:
-  stage: codeanalyse
-  image: $TOOLBOX_IMAGE
-  script:
-    - /var/www/html/vendor/bin/phpcs
-  tags:
-    - docker-executor
-  except:
-    - master
-
 confirm_upgrade:
   image: $TOOLBOX_IMAGE
   script:

@@ -100,7 +100,9 @@
     "extra": {
         "symfony": {
             "allow-contrib": true,
-            "require": "5.0.*"
+            "require": "5.2.*"
         }
-    }
+    },
+    "name": "nevercodealone/waterpolo",
+    "description": "Open source project to improve developer skills"
 }

@@ -25,7 +25,8 @@ class GrabberService
         'wasserballecke.de' => [],
         'total-waterpolo.com' => [],
         'spandau04.de' => ['category'],
-        'waspo98.de' => []
+        'waspo98.de' => [],
+        'www.dance.hr' => []
     ];
 
     public function __construct(KernelInterface $appKernel, Filesystem $fileSystem)
@@ -60,52 +61,46 @@ class GrabberService
                 $feedUrl = $protocol . '://' . $sourceDomain . '/feed/';
                 try {
                     $content = file_get_contents($feedUrl);
+                    $xml = simplexml_load_string($content, null, LIBXML_NOCDATA);
+                    $json = json_encode($xml, JSON_THROW_ON_ERROR);
+                    $news = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
+                    $news = array_slice($news, 0, 6);
+
+                    foreach ($news as $key => $item) {
+                        if (isset($specials) && in_array('category', $specials, true)) {
+                            if (!isset($item['category']) || !is_array($item['category'])) {
+                                unset($news[$key]);
+                                continue;
+                            }
+
+                            $category = array_map('strtolower', $item['category']);
+                            if (!in_array('wasserball', $category)) {
+                                unset($news[$key]);
+                                continue;
+                            }
+                        }
+
+                        $url = $item['guid'];
+                        $image = $this->getImageFromUrl($url);
+
+                        if (!$image) {
+                            unset($news[$key]);
+                            continue;
+                        }
+
+                        $filename = basename($image);
+                        $this->fileSystem->copy($image, $this->tmpFolder . $filename);
+
+                        $news[$key]['image'] = $filename;
+                        $news[$key]['url'] = $sourceDomain;
+                    }
+
+                    $allNews = [...$allNews, ...$news];
                 } catch (\Exception $exception) {
                     $msg = $feedUrl . '|' . $exception->getMessage();
-                    throw new \Exception($msg);
+                    print_r($msg) ;
                 }
-
-                $xml = simplexml_load_string($content, null, LIBXML_NOCDATA);
-                $json = json_encode($xml);
-                $news = json_decode($json, true)['channel']['item'];
             }
-
-            $news = array_slice($news, 0, 6);
-
-            foreach ($news as $key => $item) {
-                if (isset($specials) && in_array('category', $specials)) {
-                    if (!isset($item['category']) || !is_array($item['category'])) {
-                        unset($news[$key]);
-                        continue;
-                    }
-
-                    $category = array_map('strtolower', $item['category']);
-                    if (!in_array('wasserball', $category)) {
-                        unset($news[$key]);
-                        continue;
-                    }
-                }
-
-                if ($sourceDomain === 'deutsche-wasserball-liga.de') {
-                    $image = $item['image'];
-                } else {
-                    $url = $item['guid'];
-                    $image = $this->getImageFromUrl($url);
-                }
-
-                if (!$image) {
-                    unset($news[$key]);
-                    continue;
-                }
-
-                $filename = basename($image);
-                $this->fileSystem->copy($image, $this->tmpFolder . $filename);
-
-                $news[$key]['image'] = $filename;
-                $news[$key]['url'] = $sourceDomain;
-            }
-
-            $allNews = array_merge($allNews, $news);
         }
 
         usort($allNews, function ($a, $b) {
@@ -177,6 +172,10 @@ class GrabberService
             'video_prorecco.jpg'
         ];
 
+        $imageBlackListDanceHr = [
+            'grb-udruga-opt.png'
+        ];
+
         $imageBlackList = array_merge(
             $imageBlackListWaspo,
             $imageBlackListSpandau,
@@ -184,7 +183,8 @@ class GrabberService
             $imageBlackListWasserballecke,
             $imageBlackListSsvEsslingen,
             $imageBlackListDeutscheWasserballLiga,
-            $imageBlackListProRecco
+            $imageBlackListProRecco,
+            $imageBlackListDanceHr
         );
 
         $content = file_get_contents($url);

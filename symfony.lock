@@ -171,6 +171,9 @@
     "ocramius/proxy-manager": {
         "version": "2.2.3"
     },
+    "paragonie/constant_time_encoding": {
+        "version": "v2.4.0"
+    },
     "php": {
         "version": "7.4"
     },

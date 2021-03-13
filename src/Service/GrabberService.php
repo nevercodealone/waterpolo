@@ -19,7 +19,6 @@ class GrabberService
 
     private $sourceDomains = [
         'h2o-polo.de' => [],
-        'www.prorecco.it' => ['http'],
         'deutsche-wasserball-liga.de' => [],
         'ssv-esslingen.de' => ['category'],
         'wasserballecke.de' => [],

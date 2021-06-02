@@ -42,7 +42,7 @@ class IndexController extends AbstractController
         $news = $this->newsService->getNews();
 
         return $this->render('index/news.html.twig', [
-            'news' => $news
+            'news' => $news,
         ]);
     }
 
@@ -52,8 +52,9 @@ class IndexController extends AbstractController
     public function videoAction(): Response
     {
         $youTubeVideos = $this->youTubeService->getVideos();
+
         return $this->render('index/video.html.twig', [
-            'youTubeVideos' => $youTubeVideos
+            'youTubeVideos' => $youTubeVideos,
         ]);
     }
 }

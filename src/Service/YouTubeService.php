@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use Psr\Cache\CacheItemPoolInterface;
@@ -41,7 +42,7 @@ class YouTubeService
             $params = [
                 'q' => $keyword,
                 'order' => 'date',
-                'maxResults' => 10
+                'maxResults' => 10,
             ];
 
             $videoList = $this->youtubeService->search->listSearch('snippet', $params);
@@ -66,7 +67,7 @@ class YouTubeService
 
         return [
             'videos' => $videos,
-            'counts' => $counts
+            'counts' => $counts,
         ];
     }
 
@@ -74,7 +75,7 @@ class YouTubeService
     {
         $params = [
             'maxResults' => 10,
-            'playlistId' => 'PLf9rhfhnyGJ-l6WlrMdy-0fZNcSEqjb4y'
+            'playlistId' => 'PLf9rhfhnyGJ-l6WlrMdy-0fZNcSEqjb4y',
         ];
 
         $cacheItem = $this->cache->getItem('videos');

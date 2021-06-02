@@ -59,7 +59,7 @@ class GrabberService
                 $feedUrl = $protocol.'://'.$sourceDomain.'/feed/';
                 try {
                     $content = file_get_contents($feedUrl);
-                    $xml = simplexml_load_string($content, null, LIBXML_NOCDATA);
+                    $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA);
                     $json = json_encode($xml, JSON_THROW_ON_ERROR);
                     $news = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
                     $news = array_slice($news, 0, 6);

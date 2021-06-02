@@ -55,8 +55,7 @@ class ImportContentCommand extends Command
             ->addArgument(
                 'debug',
                 InputArgument::OPTIONAL,
-                'Only run firstDomain',
-                false
+                'Only run firstDomain'
             )
             ->setHelp('This command will get all new content, clear the cache and fill it')
         ;
@@ -116,9 +115,6 @@ class ImportContentCommand extends Command
             'Cache handling',
         ]);
 
-        if ($this->cache->getItem('content')) {
-            $this->cache->deleteItem('content');
-        }
         $cacheItem = $this->cache->getItem('content');
 
         $cacheItem->set($content);

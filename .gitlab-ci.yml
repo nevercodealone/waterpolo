@@ -116,7 +116,7 @@ phpstan_run_code_analyses:
   stage: codeanalyse
   image: $TOOLBOX_IMAGE
   script:
-    - /var/www/html/vendor/bin/phpstan analyse src --level 2
+    - /var/www/html/vendor/bin/phpstan analyse src
   tags:
     - docker-executor
   except:

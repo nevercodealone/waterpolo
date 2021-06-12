@@ -16,7 +16,7 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class ImportContentCommandTest extends KernelTestCase
 {
-    public function testExecute()
+    public function testExecuteWillOutputEndJobWhenRunSuccessfull()
     {
         $kernel = self::bootKernel();
 

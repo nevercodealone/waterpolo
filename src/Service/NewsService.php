@@ -50,7 +50,7 @@ class NewsService
     {
         $client = HttpClient::create();
         $newsApiUrl = 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=';
-        $response = $client->request('GET', $newsApiUrl . $_ENV['NEWSAPI']);
+        $response = $client->request('GET', $newsApiUrl.$_ENV['NEWSAPI']);
 
         $statusCode = $response->getStatusCode();
         $contentType = $response->getHeaders()['content-type'][0];
@@ -59,7 +59,7 @@ class NewsService
         $articles = $content['articles'];
 
         foreach ($articles as $key => $news) {
-            if ($news['source']['name'] === 'Sueddeutsche.de') {
+            if ('Sueddeutsche.de' === $news['source']['name']) {
                 unset($articles[$key]);
                 continue;
             }
@@ -83,7 +83,7 @@ class NewsService
 
     private function storeTempFileWithImage($article): void
     {
-        if (!$this->fileSystem->exists("tmp/photos")) {
+        if (!$this->fileSystem->exists('tmp/photos')) {
             $this->fileSystem->mkdir('/tmp/photos', 0700);
         }
 
@@ -100,7 +100,7 @@ class NewsService
             'wasserfreunde',
             'swimming',
             'water polo cap',
-            'marko stamm'
+            'marko stamm',
         ];
 
         foreach ($webEntities as $webEntity) {

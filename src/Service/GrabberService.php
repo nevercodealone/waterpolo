@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use Google\Service\Logging\Resource\Exclusions;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -25,7 +24,7 @@ class GrabberService
         'total-waterpolo.com' => [],
         'spandau04.de' => ['category'],
         'waspo98.de' => [],
-        'www.dance.hr' => []
+        'www.dance.hr' => [],
     ];
 
     public function __construct(KernelInterface $appKernel, Filesystem $fileSystem)
@@ -33,7 +32,7 @@ class GrabberService
         $this->appKernel = $appKernel;
         $this->fileSystem = $fileSystem;
 
-        $this->tmpFolder = $this->appKernel->getProjectDir() . '/public/tmp/photos/';
+        $this->tmpFolder = $this->appKernel->getProjectDir().'/public/tmp/photos/';
 
         if (!$this->fileSystem->exists($this->tmpFolder)) {
             $this->fileSystem->mkdir($this->tmpFolder, 0777);
@@ -42,7 +41,7 @@ class GrabberService
 
     public function getItems($debug = false): array
     {
-        if ($debug === 'firstDomain') {
+        if ('firstDomain' === $debug) {
             $this->sourceDomains = array_slice($this->sourceDomains, 0, 1);
         }
 
@@ -54,13 +53,13 @@ class GrabberService
                 $protocol = 'http';
             }
 
-            if ($sourceDomain === 'deutsche-wasserball-liga.de') {
-                $news = $this->getNewsItemsFromUrl($protocol . '://www.' . $sourceDomain);
+            if ('deutsche-wasserball-liga.de' === $sourceDomain) {
+                $news = $this->getNewsItemsFromUrl($protocol.'://www.'.$sourceDomain);
             } else {
-                $feedUrl = $protocol . '://' . $sourceDomain . '/feed/';
+                $feedUrl = $protocol.'://'.$sourceDomain.'/feed/';
                 try {
                     $content = file_get_contents($feedUrl);
-                    $xml = simplexml_load_string($content, null, LIBXML_NOCDATA);
+                    $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA);
                     $json = json_encode($xml, JSON_THROW_ON_ERROR);
                     $news = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
                     $news = array_slice($news, 0, 6);
@@ -88,7 +87,7 @@ class GrabberService
                         }
 
                         $filename = basename($image);
-                        $this->fileSystem->copy($image, $this->tmpFolder . $filename);
+                        $this->fileSystem->copy($image, $this->tmpFolder.$filename);
 
                         $news[$key]['image'] = $filename;
                         $news[$key]['url'] = $sourceDomain;
@@ -96,8 +95,8 @@ class GrabberService
 
                     $allNews = [...$allNews, ...$news];
                 } catch (\Exception $exception) {
-                    $msg = $feedUrl . '|' . $exception->getMessage();
-                    print_r($msg) ;
+                    $msg = $feedUrl.'|'.$exception->getMessage();
+                    print_r($msg);
                 }
             }
         }
@@ -105,6 +104,7 @@ class GrabberService
         usort($allNews, function ($a, $b) {
             $actual = strtotime($a['pubDate']);
             $next = strtotime($b['pubDate']);
+
             return $actual - $next;
         });
 
@@ -112,7 +112,7 @@ class GrabberService
 
         return [
             'news' => $array_reverse,
-            'sourceDomains' => $this->sourceDomains
+            'sourceDomains' => $this->sourceDomains,
         ];
     }
 
@@ -122,13 +122,13 @@ class GrabberService
             'logo-neu.jpg',
             'youtube.png',
             'instagram.png',
-            'facebook.png'
+            'facebook.png',
         ];
 
         $imageBlackListSpandau = [
             'logo-spandau',
             '80x80',
-            'plugins'
+            'plugins',
         ];
 
         $imageBlackListTotalWaterpolo = [
@@ -136,7 +136,7 @@ class GrabberService
             'w3.org',
             'water-polo-community.png',
             'Screen-Shot',
-            'Award-Badge'
+            'Award-Badge',
         ];
 
         $imageBlackListWasserballecke = [
@@ -149,11 +149,11 @@ class GrabberService
             'appack',
             'googleplay',
             'data:image',
-            'IMG_2165-1200x480.jpg' // Sharks logo
+            'IMG_2165-1200x480.jpg', // Sharks logo
         ];
 
         $imageBlackListSsvEsslingen = [
-            'logo.png'
+            'logo.png',
         ];
 
         $imageBlackListDeutscheWasserballLiga = [
@@ -168,11 +168,11 @@ class GrabberService
             'INTELS.png',
             'turbo.png',
             'tossini.png',
-            'video_prorecco.jpg'
+            'video_prorecco.jpg',
         ];
 
         $imageBlackListDanceHr = [
-            'grb-udruga-opt.png'
+            'grb-udruga-opt.png',
         ];
 
         $imageBlackList = array_merge(
@@ -199,7 +199,7 @@ class GrabberService
 
             $src = $image->getAttribute('src');
             foreach ($imageBlackList as $needle) {
-                if (strpos(strtolower($src), strtolower($needle)) !== false) {
+                if (false !== strpos(strtolower($src), strtolower($needle))) {
                     continue 2;
                 }
             }
@@ -222,14 +222,14 @@ class GrabberService
             $node->parentNode->removeChild($node);
         });
 
-        if (strpos($url, 'ssv-esslingen.de') !== false) {
+        if (false !== strpos($url, 'ssv-esslingen.de')) {
             $crawler->filter('.page-img')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
             });
         }
 
-        if (strpos($url, 'deutsche-wasserball-liga.de') !== false) {
+        if (false !== strpos($url, 'deutsche-wasserball-liga.de')) {
             $crawler->filter('#carousel-eyecatcher')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
@@ -241,7 +241,7 @@ class GrabberService
             });
         }
 
-        if (strpos($url, 'www.prorecco.it') !== false) {
+        if (false !== strpos($url, 'www.prorecco.it')) {
             $crawler->filter('.wpls-logo-showcase-slider-wrp')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
@@ -253,7 +253,7 @@ class GrabberService
             });
         }
 
-        if (strpos($url, 'total-waterpolo.com') !== false) {
+        if (false !== strpos($url, 'total-waterpolo.com')) {
             $crawler->filter('.hustle-ui')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
@@ -264,7 +264,7 @@ class GrabberService
     public function getNewsItemsFromUrl($url): array
     {
         try {
-            $content = file_get_contents($url . '/feed/');
+            $content = file_get_contents($url.'/feed/');
         } catch (\Exception $exception) {
             throw new \Exception($exception);
         }
@@ -293,7 +293,7 @@ class GrabberService
                 'title' => $title,
                 'image' => $src,
                 'link' => $link,
-                'pubDate' => $newsFeed[$feedKey]['pubDate']
+                'pubDate' => $newsFeed[$feedKey]['pubDate'],
             ];
             $news[] = $properties;
         }

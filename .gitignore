@@ -22,7 +22,12 @@ yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 /public/tmp/
 
-###> squizlabs/php_codesniffer ###
-/.phpcs-cache
-###< squizlabs/php_codesniffer ###
-Never-Code-Alone-Page-b3030ac27acc.json
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+###< friendsofphp/php-cs-fixer ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###

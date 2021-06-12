@@ -1,10 +1,8 @@
 <?php
 
-
 namespace App\Service;
 
 use Google\Cloud\Vision\VisionClient;
-use http\Exception;
 
 class ImageService
 {
@@ -16,7 +14,7 @@ class ImageService
     public function __construct()
     {
         $this->vision = new VisionClient([
-            'keyFile' => json_decode(file_get_contents($_ENV['GOOGLE_JSON']), true)
+            'keyFile' => json_decode(file_get_contents($_ENV['GOOGLE_JSON']), true),
         ]);
     }
 
@@ -36,7 +34,7 @@ class ImageService
         $info = $annotation->info();
         $webEntities = $info['webDetection']['webEntities'];
 
-        if ($entity === 'description') {
+        if ('description' === $entity) {
             $descriptions = [];
 
             foreach ($webEntities as $webEntity) {

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Command;
 
 use App\Service\GrabberService;
@@ -10,7 +9,6 @@ use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportContentCommand extends Command
@@ -57,8 +55,7 @@ class ImportContentCommand extends Command
             ->addArgument(
                 'debug',
                 InputArgument::OPTIONAL,
-                'Only run firstDomain',
-                false
+                'Only run firstDomain'
             )
             ->setHelp('This command will get all new content, clear the cache and fill it')
         ;
@@ -83,7 +80,7 @@ class ImportContentCommand extends Command
         $content['news'] = $this->grabberService->getItems($debug);
 
         $output->writeln([
-            'Count:' . count($content['news']['news']),
+            'Count:'.count($content['news']['news']),
             '============',
             '',
         ]);
@@ -100,11 +97,10 @@ class ImportContentCommand extends Command
             '',
         ]);
 
-
         $content['videos'] = $this->youTubeService->getVideoByKeywordsFromApi(['wasserball', 'waterpolo']);
 
         $output->writeln([
-            'Count:' . count($content['videos']['videos']),
+            'Count:'.count($content['videos']['videos']),
             '============',
             '',
         ]);
@@ -119,9 +115,6 @@ class ImportContentCommand extends Command
             'Cache handling',
         ]);
 
-        if ($this->cache->getItem('content')) {
-            $this->cache->deleteItem('content');
-        }
         $cacheItem = $this->cache->getItem('content');
 
         $cacheItem->set($content);

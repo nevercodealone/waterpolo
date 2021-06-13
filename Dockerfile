@@ -37,7 +37,7 @@ RUN docker-php-ext-configure intl && docker-php-ext-install -j$(nproc) \
         zip \
         gd
 
-RUN pecl install imagick apcu && docker-php-ext-enable imagick apcu
+RUN pecl install imagick redis apcu && docker-php-ext-enable imagick redis apcu
 
 # apache config
 RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod expires

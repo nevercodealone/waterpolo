@@ -1,13 +1,5 @@
 <?php
-define('BASE_PATH', realpath(dirname(__DIR__)));
-$_SERVER['DOCUMENT_ROOT'] = BASE_PATH;
 
-use Symfony\Component\Dotenv\Dotenv;
+require '/var/www/html/vendor/autoload.php';
 
-require dirname(__DIR__).'/vendor/autoload.php';
-
-if (file_exists(dirname(__DIR__).'/config/bootstrap.php')) {
-    require dirname(__DIR__).'/config/bootstrap.php';
-} elseif (method_exists(Dotenv::class, 'bootEnv')) {
-    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
-}
+require '/var/www/html/config/bootstrap.php';

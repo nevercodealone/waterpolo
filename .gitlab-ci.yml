@@ -126,8 +126,6 @@ phpstan_run_phpunit:
   stage: codeanalyse
   image: $TOOLBOX_IMAGE
   script:
-    - cp /var/www/html/.env.test /var/www/html/.env
-    - chown www-data:www-data /var/www/html/.env
     - /var/www/html/vendor/bin/phpunit --testdox tests
   tags:
     - docker-executor

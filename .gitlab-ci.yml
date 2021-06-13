@@ -111,16 +111,26 @@ deploy_production_image_to_prod:
   when: manual
 
 
-# Stage: test
+# Stage: codeanalyse
 phpstan_run_code_analyses:
   stage: codeanalyse
   image: $TOOLBOX_IMAGE
   script:
-    - /var/www/html/vendor/bin/phpstan analyse src --level 2
+    - /var/www/html/vendor/bin/phpstan analyse src
   tags:
     - docker-executor
   except:
     - master
+
+#phpstan_run_phpunit:
+#  stage: codeanalyse
+#  image: $TOOLBOX_IMAGE
+#  script:
+#    - /var/www/html/vendor/bin/phpunit --testdox tests
+#  tags:
+#    - docker-executor
+#  except:
+#    - master
 
 confirm_upgrade:
   image: $TOOLBOX_IMAGE

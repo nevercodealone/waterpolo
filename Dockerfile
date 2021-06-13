@@ -37,7 +37,7 @@ RUN docker-php-ext-configure intl && docker-php-ext-install -j$(nproc) \
         zip \
         gd
 
-RUN pecl install imagick redis apcu && docker-php-ext-enable imagick redis apcu
+RUN pecl install imagick apcu && docker-php-ext-enable imagick apcu
 
 # apache config
 RUN /usr/sbin/a2enmod rewrite && /usr/sbin/a2enmod headers && /usr/sbin/a2enmod expires
@@ -52,7 +52,6 @@ ADD ./deploy/config/msmtprc /etc/msmtprc
 # copy needed files from build containers
 COPY --from=composer-web /var/www/html/vendor/ /var/www/html/vendor/
 
-COPY --chown=www-data:www-data . /var/www/html/
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
 
@@ -64,6 +63,7 @@ FROM webserver AS toolbox
 LABEL description="Shipped toolboximage for nevercodealone.de."
 
 COPY --from=composer-dev /var/www/html/vendor/ /var/www/html/vendor/
+COPY --from=composer-dev /var/www/html/.env.test /var/www/html/.env
 
 ARG RANCHER_CLI_VERSION=0.6.13
 ARG RANCHER_CLI_URL=https://github.com/rancher/cli/releases/download/v$RANCHER_CLI_VERSION/rancher-linux-amd64-v$RANCHER_CLI_VERSION.tar.gz

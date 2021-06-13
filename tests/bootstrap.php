@@ -1,4 +1,5 @@
 <?php
+$_SERVER['DOCUMENT_ROOT'] = '/var/www/html';
 
 use Symfony\Component\Dotenv\Dotenv;
 

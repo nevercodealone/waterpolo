@@ -9,5 +9,7 @@ require '/var/www/html/vendor/autoload.php';
 if (file_exists('/var/www/html//config/bootstrap.php')) {
     require '/var/www/html/config/bootstrap.php';
 } elseif (method_exists(Dotenv::class, 'bootEnv')) {
-    (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+    if(file_exists(dirname(__DIR__).'/.env')) {
+        (new Dotenv())->bootEnv(dirname(__DIR__).'/.env');
+    }
 }

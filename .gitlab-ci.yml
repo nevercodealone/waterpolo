@@ -122,15 +122,15 @@ phpstan_run_code_analyses:
   except:
     - master
 
-phpstan_run_phpunit:
-  stage: codeanalyse
-  image: $TOOLBOX_IMAGE
-  script:
-    - /var/www/html/vendor/bin/phpunit --testdox tests
-  tags:
-    - docker-executor
-  except:
-    - master
+#phpstan_run_phpunit:
+#  stage: codeanalyse
+#  image: $TOOLBOX_IMAGE
+#  script:
+#    - /var/www/html/vendor/bin/phpunit --testdox tests
+#  tags:
+#    - docker-executor
+#  except:
+#    - master
 
 confirm_upgrade:
   image: $TOOLBOX_IMAGE

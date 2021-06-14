@@ -16,10 +16,29 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class ImportContentCommandTest extends KernelTestCase
 {
+    /**
+     * @var Application
+     */
+    private $application;
 
-    private Application $application;
-    private youTubeService $youTubeService;
-    private NewsService $newsService;
+    /**
+     * @var YouTubeService|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $youTubeService;
+
+    /**
+     * @var NewsService|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $newsService;
+
+    /**
+     * @var GrabberService|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $grabberService;
+
+    /**
+     * @var \PHPUnit\Framework\MockObject\MockObject|CacheItemPoolInterface
+     */
     private $cacheItem;
 
     protected function setUp(): void
@@ -64,7 +83,6 @@ final class ImportContentCommandTest extends KernelTestCase
                 'news' => [],
                 'sourceDomains' => [],
                 ]);
-
 
         $command = $this->application->find('app:import:content');
         $commandTester = new CommandTester($command);

@@ -88,7 +88,7 @@ final class ImportContentCommandTest extends KernelTestCase
         $this->assertStringContainsString('End job.', $output);
     }
 
-    public function testVideoCountValueWorksInDisplay()
+    public function testNewsCountValueWorksInDisplay()
     {
         $this->youTubeService->expects($this->once())
             ->method('getVideoByKeywordsFromApi')
@@ -113,7 +113,7 @@ final class ImportContentCommandTest extends KernelTestCase
             ]);
 
         $output = $this->executeCommandAndReturnOutput();
-        $this->assertStringContainsString('Count:5', $output);
+        $this->assertStringContainsString('Count news: 5', $output);
     }
 
     private function executeCommandAndReturnOutput(): string

@@ -1,22 +1,26 @@
 security:
-    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
-    providers:
-        in_memory: { memory: null }
+    # a new authentication system is available since Symfony 5.1 to make
+    # Symfony security more extensible and easier to understand
+    # https://symfony.com/doc/current/security/experimental_authenticators.html
+    enable_authenticator_manager: true
+
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
         main:
-            anonymous: lazy
+            # this firewall applies to all URLs
+            pattern: ^/
 
-            # activate different ways to authenticate
-            # https://symfony.com/doc/current/security.html#firewalls-authentication
+            lazy: true
 
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
+            # The user provider to use.
 
-    # Easy way to control access for large sections of your site
-    # Note: Only the *first* access control that matches will be used
-    access_control:
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+when@test:
+    # this configuration simplifies testing URLs protected by the security mechanism
+    # See https://symfony.com/doc/current/testing/http_authentication.html
+    security:
+        firewalls:
+            main:
+                http_basic: ~

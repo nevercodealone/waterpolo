@@ -269,6 +269,9 @@
     "psr/http-client": {
         "version": "1.0.1"
     },
+    "psr/http-factory": {
+        "version": "1.0.1"
+    },
     "psr/http-message": {
         "version": "1.0.1"
     },
@@ -545,8 +548,8 @@
     "symfony/options-resolver": {
         "version": "v5.0.0"
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.7"
+    "symfony/password-hasher": {
+        "version": "v5.3.8"
     },
     "symfony/phpunit-bridge": {
         "version": "4.3",
@@ -643,9 +646,6 @@
     },
     "symfony/serializer": {
         "version": "v5.0.0"
-    },
-    "symfony/serializer-pack": {
-        "version": "v1.0.2"
     },
     "symfony/service-contracts": {
         "version": "v2.0.0"

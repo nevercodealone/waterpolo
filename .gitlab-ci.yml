@@ -112,7 +112,7 @@ deploy_production_image_to_prod:
 
 
 # Stage: codeanalyse
-phpstan_run_code_analyses:
+phpstan_run:
   stage: codeanalyse
   image: $TOOLBOX_IMAGE
   script:
@@ -122,7 +122,7 @@ phpstan_run_code_analyses:
   except:
     - master
 
-phpstan_run_phpunit:
+phpunit_run:
   stage: codeanalyse
   image: $TOOLBOX_IMAGE
   script:

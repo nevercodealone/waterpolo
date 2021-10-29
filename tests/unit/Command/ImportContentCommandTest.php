@@ -82,16 +82,42 @@ final class ImportContentCommandTest extends KernelTestCase
             ->willReturn([
                 'news' => [],
                 'sourceDomains' => [],
-                ]);
+            ]);
 
         $output = $this->executeCommandAndReturnOutput();
         $this->assertStringContainsString('End job.', $output);
     }
 
+    public function testVideoCountValueWorksInDisplay()
+    {
+        $this->youTubeService->expects($this->once())->method('getVideoByKeywordsFromApi')
+            ->willReturn([
+                'videos' => [1, 2, 3, 4, 5],
+                'counts' => 5,
+            ]);
+        $item = $this->createMock(CacheItemInterface::class);
+        $item->expects($this->any())
+            ->method('set')
+            ->willReturn(true);
+
+        $this->cacheItem->expects($this->once())
+            ->method('getItem')
+            ->willReturn($item);
+
+        $this->grabberService->expects($this->once())
+            ->method('getItems')
+            ->willReturn([
+                'news' => ['1', '2', '3', '4', '5'],
+                'sourceDomains' => [],
+            ]);
+
+        $output = $this->executeCommandAndReturnOutput();
+        $this->assertStringContainsString('Count:5', $output);
+    }
+
     public function testNewsCountValueWorksInDisplay()
     {
-        $this->youTubeService->expects($this->once())
-            ->method('getVideoByKeywordsFromApi')
+        $this->youTubeService->expects($this->once())->method('getVideoByKeywordsFromApi')
             ->willReturn([
                 'videos' => [],
             ]);
@@ -115,6 +141,8 @@ final class ImportContentCommandTest extends KernelTestCase
         $output = $this->executeCommandAndReturnOutput();
         $this->assertStringContainsString('Count news: 5', $output);
     }
+
+
 
     private function executeCommandAndReturnOutput(): string
     {

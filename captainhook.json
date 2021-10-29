@@ -27,7 +27,14 @@
             {
                 "action": "vendor/bin/phpstan analyze --memory-limit=8G",
                 "options": [],
-                "conditions": []
+                "conditions": [
+                    {
+                        "exec": "\\CaptainHook\\App\\Hook\\Condition\\FileStaged\\OfType",
+                        "args": [
+                            "php"
+                        ]
+                    }
+                ]
             }
         ]
     },

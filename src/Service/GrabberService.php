@@ -39,7 +39,6 @@ class GrabberService
     }
 
     /**
-     * @param null|string $debug
      * @return array<string, array>
      * @throws \Exception
      */

@@ -15,11 +15,7 @@ class ImportContentCommand extends Command
 {
     protected static $defaultName = 'app:import:content';
 
-    private bool $debug;
-
     private CacheItemPoolInterface $cache;
-
-    private NewsService $newsService;
 
     private YouTubeService $youTubeService;
 
@@ -27,17 +23,13 @@ class ImportContentCommand extends Command
 
     public function __construct(
         YouTubeService         $youTubeService,
-        NewsService            $newsService,
         CacheItemPoolInterface $cache,
-        GrabberService         $grabberService,
-        bool                   $debug = false
+        GrabberService         $grabberService
     )
     {
         $this->cache = $cache;
-        $this->newsService = $newsService;
         $this->youTubeService = $youTubeService;
         $this->grabberService = $grabberService;
-        $this->debug = $debug;
 
         parent::__construct();
     }

@@ -19,8 +19,6 @@ class ImageService
     }
 
     /**
-     * @param string $path
-     * @param string $entity
      * @return array<string>
      * @throws \Exception
      */

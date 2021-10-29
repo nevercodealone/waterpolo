@@ -54,7 +54,6 @@ final class ImportContentCommandTest extends KernelTestCase
 
         $this->application->add(new ImportContentCommand(
             $this->youTubeService,
-            $this->newsService,
             $this->cacheItem,
             $this->grabberService
         ));

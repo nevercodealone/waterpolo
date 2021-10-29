@@ -31,11 +31,6 @@ class NewsService
      */
     private string $tmpImg = '/tmp/photos/waterpolo.jpg';
 
-    /**
-     * @param CacheItemPoolInterface $cache
-     * @param ImageService $imageService
-     * @param Filesystem $fileSystem
-     */
     public function __construct(CacheItemPoolInterface $cache, ImageService $imageService, Filesystem $fileSystem)
     {
         $this->cache = $cache;
@@ -69,8 +64,7 @@ class NewsService
         $newsApiUrl = 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=';
         $response = $client->request('GET', $newsApiUrl . $_ENV['NEWSAPI']);
 
-        $statusCode = $response->getStatusCode();
-        $contentType = $response->getHeaders()['content-type'][0];
+        $response->getStatusCode();
         // $content = $response->getContent();
         $content = $response->toArray();
         $articles = $content['articles'];
@@ -114,7 +108,6 @@ class NewsService
 
     /**
      * @param array<string> $webEntities
-     * @return bool
      */
     private function isDetected(array $webEntities): bool
     {

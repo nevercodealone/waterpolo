@@ -15,30 +15,24 @@ class ImportContentCommand extends Command
 {
     protected static $defaultName = 'app:import:content';
 
-    /**
-     * @var bool
-     */
-    private $debug;
+    private bool $debug;
 
-    /** @var CacheItemPoolInterface */
-    private $cache;
+    private CacheItemPoolInterface $cache;
 
-    /** @var NewsService */
-    private $newsService;
+    private NewsService $newsService;
 
-    /** @var YouTubeService */
-    private $youTubeService;
+    private YouTubeService $youTubeService;
 
-    /** @var GrabberService */
-    private $grabberService;
+    private GrabberService $grabberService;
 
     public function __construct(
-        YouTubeService $youTubeService,
-        NewsService $newsService,
+        YouTubeService         $youTubeService,
+        NewsService            $newsService,
         CacheItemPoolInterface $cache,
-        GrabberService $grabberService,
-        bool $debug = false
-    ) {
+        GrabberService         $grabberService,
+        bool                   $debug = false
+    )
+    {
         $this->cache = $cache;
         $this->newsService = $newsService;
         $this->youTubeService = $youTubeService;
@@ -48,7 +42,7 @@ class ImportContentCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Import from APIs')
@@ -57,13 +51,12 @@ class ImportContentCommand extends Command
                 InputArgument::OPTIONAL,
                 'Only run firstDomain'
             )
-            ->setHelp('This command will get all new content, clear the cache and fill it')
-        ;
+            ->setHelp('This command will get all new content, clear the cache and fill it');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $debug = $input->getArgument('debug');
+        $debug = $input->getArgument('debug') ?: null;
 
         $content = [];
 
@@ -100,7 +93,7 @@ class ImportContentCommand extends Command
         $content['videos'] = $this->youTubeService->getVideoByKeywordsFromApi(['wasserball', 'waterpolo']);
 
         $output->writeln([
-            'Count:'.count($content['videos']['videos']),
+            'Count:' . count($content['videos']['videos']),
             '============',
             '',
         ]);

@@ -6,25 +6,36 @@ use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\HttpClient;
 
+/**
+ *
+ */
 class NewsService
 {
     /**
      * @var CacheItemPoolInterface
      */
-    private $cache;
+    private CacheItemPoolInterface $cache;
 
     /**
      * @var ImageService
      */
-    private $imageService;
+    private ImageService $imageService;
 
     /**
      * @var Filesystem
      */
-    private $fileSystem;
+    private Filesystem $fileSystem;
 
-    private $tmpImg = '/tmp/photos/waterpolo.jpg';
+    /**
+     * @var string
+     */
+    private string $tmpImg = '/tmp/photos/waterpolo.jpg';
 
+    /**
+     * @param CacheItemPoolInterface $cache
+     * @param ImageService $imageService
+     * @param Filesystem $fileSystem
+     */
     public function __construct(CacheItemPoolInterface $cache, ImageService $imageService, Filesystem $fileSystem)
     {
         $this->cache = $cache;
@@ -32,7 +43,10 @@ class NewsService
         $this->fileSystem = $fileSystem;
     }
 
-    public function getNews()
+    /**
+     * @return array<string>
+     */
+    public function getNews(): array
     {
         $cacheItem = $this->cache->getItem('content');
 
@@ -46,15 +60,18 @@ class NewsService
         return $content;
     }
 
+    /**
+     * @return array<string>
+     */
     public function getNewsFromApi(): array
     {
         $client = HttpClient::create();
         $newsApiUrl = 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=';
-        $response = $client->request('GET', $newsApiUrl.$_ENV['NEWSAPI']);
+        $response = $client->request('GET', $newsApiUrl . $_ENV['NEWSAPI']);
 
         $statusCode = $response->getStatusCode();
         $contentType = $response->getHeaders()['content-type'][0];
-        $content = $response->getContent();
+        // $content = $response->getContent();
         $content = $response->toArray();
         $articles = $content['articles'];
 
@@ -81,7 +98,10 @@ class NewsService
         return $articles;
     }
 
-    private function storeTempFileWithImage($article): void
+    /**
+     * @param array<string> $article
+     */
+    private function storeTempFileWithImage(array $article): void
     {
         if (!$this->fileSystem->exists('tmp/photos')) {
             $this->fileSystem->mkdir('/tmp/photos', 0700);
@@ -92,6 +112,10 @@ class NewsService
         $this->fileSystem->copy($filename, $this->tmpImg);
     }
 
+    /**
+     * @param array<string> $webEntities
+     * @return bool
+     */
     private function isDetected(array $webEntities): bool
     {
         $keywords = [

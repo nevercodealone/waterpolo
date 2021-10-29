@@ -23,6 +23,11 @@
                 "action": "vendor/bin/phpunit --testdox",
                 "options": [],
                 "conditions": []
+            },
+            {
+                "action": "vendor/bin/phpstan analyze --memory-limit=8G",
+                "options": [],
+                "conditions": []
             }
         ]
     },

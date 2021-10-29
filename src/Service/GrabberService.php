@@ -8,15 +8,14 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class GrabberService
 {
-    /** @var Filesystem */
-    private $fileSystem;
+    private Filesystem $fileSystem;
 
-    /** @var KernelInterface */
-    private $appKernel;
+    private KernelInterface $appKernel;
 
-    private $tmpFolder;
+    private string $tmpFolder;
 
-    private $sourceDomains = [
+    /** @var array<string,array> */
+    private array $sourceDomains = [
         'h2o-polo.de' => [],
         'deutsche-wasserball-liga.de' => [],
         'ssv-esslingen.de' => ['category'],
@@ -39,7 +38,12 @@ class GrabberService
         }
     }
 
-    public function getItems($debug = false): array
+    /**
+     * @param null|string $debug
+     * @return array<string, array>
+     * @throws \Exception
+     */
+    public function getItems(?string $debug): array
     {
         if ('firstDomain' === $debug) {
             $this->sourceDomains = array_slice($this->sourceDomains, 0, 1);
@@ -49,7 +53,7 @@ class GrabberService
         foreach ($this->sourceDomains as $sourceDomain => $specials) {
             $protocol = 'https';
 
-            if (isset($specials) && in_array('http', $specials)) {
+            if ($specials !== null && in_array('http', $specials)) {
                 $protocol = 'http';
             }
 
@@ -65,7 +69,7 @@ class GrabberService
                     $news = array_slice($news, 0, 6);
 
                     foreach ($news as $key => $item) {
-                        if (isset($specials) && in_array('category', $specials, true)) {
+                        if ($specials !== null && in_array('category', $specials, true)) {
                             if (!isset($item['category']) || !is_array($item['category'])) {
                                 unset($news[$key]);
                                 continue;
@@ -116,7 +120,7 @@ class GrabberService
         ];
     }
 
-    private function getImageFromUrl($url)
+    private function getImageFromUrl(string $url): ?string
     {
         $imageBlackListWaspo = [
             'logo-neu.jpg',
@@ -207,15 +211,15 @@ class GrabberService
             return $src;
         }
 
-        return false;
+        return null;
     }
 
-    private function getFilterBySelector(Crawler $crawler, $selector): Crawler
+    private function getFilterBySelector(Crawler $crawler, string $selector): Crawler
     {
         return $crawler->filter($selector);
     }
 
-    private function removeWordpressContentRelations($url, Crawler $crawler): void
+    private function removeWordpressContentRelations(string $url, Crawler $crawler): void
     {
         $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {
             $node = $crawler->getNode(0);
@@ -261,7 +265,11 @@ class GrabberService
         }
     }
 
-    public function getNewsItemsFromUrl($url): array
+    /**
+     * @return array<array>
+     * @throws \Exception
+     */
+    public function getNewsItemsFromUrl(string $url): array
     {
         try {
             $content = file_get_contents($url.'/feed/');

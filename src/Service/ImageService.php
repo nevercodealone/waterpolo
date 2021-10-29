@@ -9,7 +9,7 @@ class ImageService
     /**
      * @var VisionClient
      */
-    private $vision;
+    private VisionClient $vision;
 
     public function __construct()
     {
@@ -18,6 +18,12 @@ class ImageService
         ]);
     }
 
+    /**
+     * @param string $path
+     * @param string $entity
+     * @return array<string>
+     * @throws \Exception
+     */
     public function getWebEntities(string $path, string $entity = 'description'): array
     {
         try {

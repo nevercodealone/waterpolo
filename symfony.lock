@@ -1,4 +1,7 @@
 {
+    "captainhook/captainhook": {
+        "version": "5.10.4"
+    },
     "composer/semver": {
         "version": "3.2.5"
     },
@@ -334,6 +337,15 @@
     },
     "sebastian/version": {
         "version": "3.0.2"
+    },
+    "sebastianfeldmann/camino": {
+        "version": "0.9.4"
+    },
+    "sebastianfeldmann/cli": {
+        "version": "3.4.0"
+    },
+    "sebastianfeldmann/git": {
+        "version": "3.7.2"
     },
     "sensio/framework-extra-bundle": {
         "version": "5.2",

@@ -1,0 +1,19 @@
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver
+        - Asserts
+    config:
+        WebDriver:
+            browser: chrome
+            window_size: 1600x1000
+            connection_timeout: 5
+            request_timeout: 30
+            capabilities:
+                unexpectedAlertBehaviour: 'ignore'
+env:
+    firefox:
+        modules:
+            config:
+                WebDriver:
+                    browser: 'firefox'

@@ -12,30 +12,12 @@ use Symfony\Component\HttpClient\HttpClient;
 class NewsService
 {
     /**
-     * @var CacheItemPoolInterface
-     */
-    private CacheItemPoolInterface $cache;
-
-    /**
-     * @var ImageService
-     */
-    private ImageService $imageService;
-
-    /**
-     * @var Filesystem
-     */
-    private Filesystem $fileSystem;
-
-    /**
      * @var string
      */
     private string $tmpImg = '/tmp/photos/waterpolo.jpg';
 
-    public function __construct(CacheItemPoolInterface $cache, ImageService $imageService, Filesystem $fileSystem)
+    public function __construct(private CacheItemPoolInterface $cache, private ImageService $imageService, private Filesystem $fileSystem)
     {
-        $this->cache = $cache;
-        $this->imageService = $imageService;
-        $this->fileSystem = $fileSystem;
     }
 
     /**

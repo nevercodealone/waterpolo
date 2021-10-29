@@ -8,10 +8,6 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class GrabberService
 {
-    private Filesystem $fileSystem;
-
-    private KernelInterface $appKernel;
-
     private string $tmpFolder;
 
     /** @var array<string,array> */
@@ -26,11 +22,8 @@ class GrabberService
         'www.dance.hr' => [],
     ];
 
-    public function __construct(KernelInterface $appKernel, Filesystem $fileSystem)
+    public function __construct(private KernelInterface $appKernel, private Filesystem $fileSystem)
     {
-        $this->appKernel = $appKernel;
-        $this->fileSystem = $fileSystem;
-
         $this->tmpFolder = $this->appKernel->getProjectDir().'/public/tmp/photos/';
 
         if (!$this->fileSystem->exists($this->tmpFolder)) {
@@ -202,7 +195,7 @@ class GrabberService
 
             $src = $image->getAttribute('src');
             foreach ($imageBlackList as $needle) {
-                if (false !== strpos(strtolower($src), strtolower($needle))) {
+                if (str_contains(strtolower($src), strtolower($needle))) {
                     continue 2;
                 }
             }
@@ -225,14 +218,14 @@ class GrabberService
             $node->parentNode->removeChild($node);
         });
 
-        if (false !== strpos($url, 'ssv-esslingen.de')) {
+        if (str_contains($url, 'ssv-esslingen.de')) {
             $crawler->filter('.page-img')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
             });
         }
 
-        if (false !== strpos($url, 'deutsche-wasserball-liga.de')) {
+        if (str_contains($url, 'deutsche-wasserball-liga.de')) {
             $crawler->filter('#carousel-eyecatcher')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
@@ -244,7 +237,7 @@ class GrabberService
             });
         }
 
-        if (false !== strpos($url, 'www.prorecco.it')) {
+        if (str_contains($url, 'www.prorecco.it')) {
             $crawler->filter('.wpls-logo-showcase-slider-wrp')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
@@ -256,7 +249,7 @@ class GrabberService
             });
         }
 
-        if (false !== strpos($url, 'total-waterpolo.com')) {
+        if (str_contains($url, 'total-waterpolo.com')) {
             $crawler->filter('.hustle-ui')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);

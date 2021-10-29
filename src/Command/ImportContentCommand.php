@@ -15,22 +15,12 @@ class ImportContentCommand extends Command
 {
     protected static $defaultName = 'app:import:content';
 
-    private CacheItemPoolInterface $cache;
-
-    private YouTubeService $youTubeService;
-
-    private GrabberService $grabberService;
-
     public function __construct(
-        YouTubeService         $youTubeService,
-        CacheItemPoolInterface $cache,
-        GrabberService         $grabberService
+        private YouTubeService         $youTubeService,
+        private CacheItemPoolInterface $cache,
+        private GrabberService         $grabberService
     )
     {
-        $this->cache = $cache;
-        $this->youTubeService = $youTubeService;
-        $this->grabberService = $grabberService;
-
         parent::__construct();
     }
 

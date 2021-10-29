@@ -48,7 +48,6 @@ final class ImportContentCommandTest extends KernelTestCase
         $this->application = new Application($kernel);
 
         $this->youTubeService = $this->createMock(YouTubeService::class);
-        $this->newsService = $this->createMock(NewsService::class);
         $this->cacheItem = $this->createMock(CacheItemPoolInterface::class);
         $this->grabberService = $this->createMock(GrabberService::class);
 

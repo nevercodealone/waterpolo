@@ -19,8 +19,6 @@ class ImageService
     }
 
     /**
-     * @param string $path
-     * @param string $entity
      * @return array<string>
      * @throws \Exception
      */
@@ -31,7 +29,7 @@ class ImageService
                 fopen($path, 'r'),
                 ['WEB_DETECTION']
             );
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             throw new \Exception('Wrong argument');
         }
 

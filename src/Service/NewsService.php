@@ -12,35 +12,12 @@ use Symfony\Component\HttpClient\HttpClient;
 class NewsService
 {
     /**
-     * @var CacheItemPoolInterface
-     */
-    private CacheItemPoolInterface $cache;
-
-    /**
-     * @var ImageService
-     */
-    private ImageService $imageService;
-
-    /**
-     * @var Filesystem
-     */
-    private Filesystem $fileSystem;
-
-    /**
      * @var string
      */
     private string $tmpImg = '/tmp/photos/waterpolo.jpg';
 
-    /**
-     * @param CacheItemPoolInterface $cache
-     * @param ImageService $imageService
-     * @param Filesystem $fileSystem
-     */
-    public function __construct(CacheItemPoolInterface $cache, ImageService $imageService, Filesystem $fileSystem)
+    public function __construct(private CacheItemPoolInterface $cache, private ImageService $imageService, private Filesystem $fileSystem)
     {
-        $this->cache = $cache;
-        $this->imageService = $imageService;
-        $this->fileSystem = $fileSystem;
     }
 
     /**
@@ -69,8 +46,7 @@ class NewsService
         $newsApiUrl = 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=';
         $response = $client->request('GET', $newsApiUrl . $_ENV['NEWSAPI']);
 
-        $statusCode = $response->getStatusCode();
-        $contentType = $response->getHeaders()['content-type'][0];
+        $response->getStatusCode();
         // $content = $response->getContent();
         $content = $response->toArray();
         $articles = $content['articles'];
@@ -114,7 +90,6 @@ class NewsService
 
     /**
      * @param array<string> $webEntities
-     * @return bool
      */
     private function isDetected(array $webEntities): bool
     {

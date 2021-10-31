@@ -287,6 +287,9 @@
     "ralouphie/getallheaders": {
         "version": "3.0.3"
     },
+    "rector/rector": {
+        "version": "0.11.60"
+    },
     "rize/uri-template": {
         "version": "0.3.2"
     },

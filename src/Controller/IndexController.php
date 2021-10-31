@@ -10,20 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    /**
-     * @var NewsService
-     */
-    private $newsService;
-
-    /**
-     * @var YouTubeService
-     */
-    private $youTubeService;
-
-    public function __construct(NewsService $newsService, YouTubeService $youTubeService)
+    public function __construct(private NewsService $newsService, private YouTubeService $youTubeService)
     {
-        $this->newsService = $newsService;
-        $this->youTubeService = $youTubeService;
     }
 
     /**

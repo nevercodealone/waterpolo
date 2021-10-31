@@ -11,17 +11,8 @@ use Psr\Cache\CacheItemPoolInterface;
  */
 class YouTubeService
 {
-    /** @var Google_Service_YouTube */
-    private Google_Service_YouTube $youtubeService;
-
-    /** @var CacheItemPoolInterface */
-    private CacheItemPoolInterface $cache;
-
-
-    public function __construct(Google_Service_YouTube $youtubeService, CacheItemPoolInterface $cache)
+    public function __construct(private Google_Service_YouTube $youtubeService, private CacheItemPoolInterface $cache)
     {
-        $this->youtubeService = $youtubeService;
-        $this->cache = $cache;
     }
 
 

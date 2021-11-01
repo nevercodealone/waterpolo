@@ -46,34 +46,61 @@
 
     </head>
     <body>
-        <header>
-            <!-- Fixed navbar -->
-            <nav class="">
-                <a class="" href="https://github.com/nevercodealone/waterpolo" rel="nofollow">
-                    <img src="{{ asset('img/Octocat.png') }}" alt="GitHub Waterpolo News Project" width="25px">
-                    <span class="text-gray-50">/nevercodealone/waterpolo</span>
-                </a>
-                <button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class=""></span>
-                </button>
-                <div class="" id="navbarCollapse">
-                    <ul class="">
-                        <li class="">
-                            <a class="" href="{{ path('news') }}">News</a>
-                        </li>
-                        <li class="">
-                            <a class="" href="{{ path('videos') }}">Videos</a>
-                        </li>
-                    </ul>
-                    <form class="">
-                        <a href="https://nevercodealone.de">
-                            <img src="{{ asset('img/NCA-Logo-neu.png') }}" alt="Never Code Alone" height="30px">
+{#        <header>#}
+{#            <!-- Fixed navbar -->#}
+{#            <nav class="">#}
+{#                <a class="" href="https://github.com/nevercodealone/waterpolo" rel="nofollow">#}
+{#                    <img src="{{ asset('img/Octocat.png') }}" alt="GitHub Waterpolo News Project" width="25px">#}
+{#                    <span class="text-gray-50">/nevercodealone/waterpolo</span>#}
+{#                </a>#}
+{#                <button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">#}
+{#                    <span class=""></span>#}
+{#                </button>#}
+{#                <div class="" id="navbarCollapse">#}
+{#                    <ul class="">#}
+{#                        <li class="">#}
+{#                            <a class="" href="{{ path('news') }}">News</a>#}
+{#                        </li>#}
+{#                        <li class="">#}
+{#                            <a class="" href="{{ path('videos') }}">Videos</a>#}
+{#                        </li>#}
+{#                    </ul>#}
+{#                    <form class="">#}
+{#                        <a href="https://nevercodealone.de">#}
+{#                            <img src="{{ asset('img/NCA-Logo-neu.png') }}" alt="Never Code Alone" height="30px">#}
+{#                        </a>#}
+{#                    </form>#}
+{#                </div>#}
+{#            </nav>#}
+{#        </header>#}
+        <nav class="bg-gray-100">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div>
+                            <a class="flex items-center py-4 px-3 text-gray-700" href="https://github.com/nevercodealone/waterpolo" rel="nofollow">
+                                <img class="h-6 w-6 mr-1" src="{{ asset('img/Octocat.png') }}" alt="GitHub Waterpolo News Project">
+                                <span>/nca/waterpolo</span>
+                            </a>
+                        </div>
+                        <div class="flex items-center space-x-1">
+                            <a href="#" class="py-4 px-3 text-gray-700">News</a>
+                            <a href="#" class="py-4 px-3 text-gray-700">Videos</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <a class="py-4 px-3" href="#">Blog</a>
+                        <a class="py-3 px-3 bg-green-400 text-green-700 rounded" href="#">Kontakt</a>
+                        <a class="py-4 px-3" href="https://nevercodealone.de">
+                            <img class="h-9 w-9" src="{{ asset('img/NCA-Logo-neu.png') }}" alt="Never Code Alone" height="30px">
                         </a>
-                    </form>
+                    </div>
                 </div>
-            </nav>
-        </header>
-
+            </div>
+        </nav>
+        <div class="py-32 text-center">
+            <h1 class="font-extrabold text-6xl">WP News - Never Code Alone Open Source Projekt</h1>
+        </div>
         <!-- Begin page content -->
         <main role="main" class="">
             {% block content %}{% endblock %}

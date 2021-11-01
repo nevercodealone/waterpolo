@@ -1,5 +1,11 @@
 {
   "entrypoints": {
+    "app": {
+      "js": [
+        "/build/runtime.js",
+        "/build/app.js"
+      ]
+    },
     "tailwind": {
       "js": [
         "/build/runtime.js"

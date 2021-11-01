@@ -77,25 +77,40 @@
             <div class="max-w-7xl mx-auto">
                 <div class="flex justify-between">
                     <div class="flex items-center space-x-4">
+                        <!-- Logo -->
                         <div>
                             <a class="flex items-center py-4 px-3 text-gray-700 hover:text-gray-900" href="https://github.com/nevercodealone/waterpolo" rel="nofollow">
                                 <img class="h-6 w-6 mr-1" src="{{ asset('img/Octocat.png') }}" alt="GitHub Waterpolo News Project">
-                                <span class="font-bold">/nca/waterpolo</span>
+                                <span class="hidden md:block font-bold">/nca/waterpolo</span>
                             </a>
                         </div>
-                        <div class="flex items-center space-x-1">
+                        <!-- Main nav -->
+                        <div class="hidden md:flex items-center space-x-1">
                             <a href="#" class="py-4 px-3 text-gray-700 hover:text-gray-900">News</a>
                             <a href="#" class="py-4 px-3 text-gray-700 hover:text-gray-900">Videos</a>
                         </div>
                     </div>
-                    <div class="flex items-center space-x-1">
-                        <a class="py-4 px-3" href="#">Blog</a>
+                    <!-- Second nav -->
+                    <div class="hidden md:flex items-center space-x-1">
+                        <a class="py-3 px-3" href="#">Blog</a>
                         <a class="py-3 px-3 bg-green-400 hover:bg-green-300 text-green-900 hover:text-green-800 rounded transition duration-300" href="#">Kontakt</a>
-                        <a class="py-4 px-3" href="https://nevercodealone.de">
+                        <a class="py-3 px-3" href="https://nevercodealone.de">
                             <img class="h-9 w-9" src="{{ asset('img/NCA-Logo-neu.png') }}" alt="Never Code Alone" height="30px">
                         </a>
                     </div>
+
+                    <!-- Mobile button -->
+                    <div class="md:hidden flex items-center px-4">
+                        <button class="mobile-menu-button">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                        </button>
+                    </div>
                 </div>
+            </div>
+            <!-- mobile menu -->
+            <div class="mobile-menu hidden md:hidden">
+                <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">News</a>
+                <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-200">Videos</a>
             </div>
         </nav>
         <div class="py-32 text-center">
@@ -116,6 +131,7 @@
             </div>
         </footer>
         {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
 
             <!-- Renders app.js & a webpack runtime.js file
                 <script src="/build/runtime.js"></script>

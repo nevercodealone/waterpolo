@@ -19,6 +19,7 @@
 
         {% block stylesheets %}
             {# 'app' must match the first argument to addEntry() in webpack.config.js #}
+            {{ encore_entry_link_tags('tailwind') }}
             {{ encore_entry_link_tags('app') }}
 
             <!-- Renders a link tag (if your module requires any CSS)
@@ -51,7 +52,7 @@
             <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
                 <a class="navbar-brand" href="https://github.com/nevercodealone/waterpolo" rel="nofollow">
                     <img src="{{ asset('img/Octocat.png') }}" alt="GitHub Waterpolo News Project" width="25px">
-                    /nevercodealone/waterpolo
+                    <span class="text-gray-50">/nevercodealone/waterpolo</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

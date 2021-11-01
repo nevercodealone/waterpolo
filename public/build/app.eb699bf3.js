@@ -1,0 +1,1 @@
+(self.webpackChunk=self.webpackChunk||[]).push([[143],{177:()=>{var e=document.querySelector("button.mobile-menu-button"),n=document.querySelector(".mobile-menu");e.addEventListener("click",(function(){n.classList.toggle("hidden")}))}},e=>{var n;n=177,e(e.s=n)}]);

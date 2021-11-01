@@ -5,47 +5,47 @@
 <div class="example-wrapper">
     <h1>WP News - Never Code Alone Open Source Projekt</h1>
     {% if news %}
-        <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <button class="nav-link active filter-button" role="tab" data-toggle="tab" data-filter="all">
+        <ul class="">
+            <li class="">
+                <button class="" role="tab" data-toggle="tab" data-filter="all">
                     Alle
                 </button>
             </li>
             {% for sourceDomain, specials in news.sourceDomains %}
-                <li class="nav-item">
-                    <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="{{ sourceDomain|replace({'.': ''}) }}">
+                <li class="">
+                    <a class="" role="tab" data-toggle="tab" data-filter="{{ sourceDomain|replace({'.': ''}) }}">
                         {{ sourceDomain }}
                     </a>
                 </li>
             {% endfor %}
         </ul>
     {% endif %}
-    <div class="row">
+    <div class="">
         {% if news.news %}
             {% for key,newsItem in news.news %}
-                    <div class="gallery_product col-lg-4 col-md-4 col-sm-4 col-xs-6 filter {{ newsItem.url|replace({'.': ''})}} ">
+                    <div class="{{ newsItem.url|replace({'.': ''})}} ">
                         <a href="{{ newsItem.link }}" target="_blank">
-                            <img class="img-fluid size-news-startpage" src="/tmp/photos/{{ newsItem.image }}" alt="Responsive image">
+                            <img class="" src="/tmp/photos/{{ newsItem.image }}" alt="Responsive image">
                         </a>
                         <!-- Nav tabs -->
-                        <ul class="nav nav-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#info-{{ key }}" aria-controls="info-{{ key }}" role="tab" data-toggle="tab">
+                        <ul class="">
+                            <li class="">
+                                <a class="" href="#info-{{ key }}" aria-controls="info-{{ key }}" role="tab" data-toggle="tab">
                                     Infos:
                                 </a>
                             </li>
                         </ul>
                         <!-- Tab panes -->
-                        <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="info-{{ key }}">
-                                <ul class="list-group list-group-flush">
-                                    <li class="list-group-item-dark">
+                        <div class="">
+                            <div role="tabpanel" class="" id="info-{{ key }}">
+                                <ul class="">
+                                    <li class="">
                                         <strong>Title:</strong> {{ newsItem.title }}
                                     </li>
-                                    <li class="list-group-item-dark">
+                                    <li class="">
                                         <strong>Published:</strong> {{ newsItem.pubDate | date("F jS \\a\\t g:ia") }}
                                     </li>
-                                    <li class="list-group-item-dark text-blue-400">
+                                    <li class="">
                                         <strong>Url:</strong> {{ newsItem.url }}
                                     </li>
                                 </ul>

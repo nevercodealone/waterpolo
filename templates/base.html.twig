@@ -20,7 +20,6 @@
         {% block stylesheets %}
             {# 'app' must match the first argument to addEntry() in webpack.config.js #}
             {{ encore_entry_link_tags('tailwind') }}
-            {{ encore_entry_link_tags('app') }}
 
             <!-- Renders a link tag (if your module requires any CSS)
                  <link rel="stylesheet" href="/build/app.css"> -->
@@ -49,24 +48,24 @@
     <body>
         <header>
             <!-- Fixed navbar -->
-            <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-                <a class="navbar-brand" href="https://github.com/nevercodealone/waterpolo" rel="nofollow">
+            <nav class="">
+                <a class="" href="https://github.com/nevercodealone/waterpolo" rel="nofollow">
                     <img src="{{ asset('img/Octocat.png') }}" alt="GitHub Waterpolo News Project" width="25px">
                     <span class="text-gray-50">/nevercodealone/waterpolo</span>
                 </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                <button type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class=""></span>
                 </button>
-                <div class="collapse navbar-collapse" id="navbarCollapse">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ path('news') }}">News</a>
+                <div class="" id="navbarCollapse">
+                    <ul class="">
+                        <li class="">
+                            <a class="" href="{{ path('news') }}">News</a>
                         </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ path('videos') }}">Videos</a>
+                        <li class="">
+                            <a class="" href="{{ path('videos') }}">Videos</a>
                         </li>
                     </ul>
-                    <form class="form-inline mt-2 mt-md-0">
+                    <form class="">
                         <a href="https://nevercodealone.de">
                             <img src="{{ asset('img/NCA-Logo-neu.png') }}" alt="Never Code Alone" height="30px">
                         </a>
@@ -76,13 +75,13 @@
         </header>
 
         <!-- Begin page content -->
-        <main role="main" class="container">
+        <main role="main" class="">
             {% block content %}{% endblock %}
         </main>
 
-        <footer class="footer">
-            <div class="container">
-                <span class="text-muted">
+        <footer class="">
+            <div class="">
+                <span class="">
                     <a href="https://nevercodealone.de/impressum/" target="_blank" rel="nofollow">
                         Impressum
                     </a>
@@ -90,7 +89,6 @@
             </div>
         </footer>
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
 
             <!-- Renders app.js & a webpack runtime.js file
                 <script src="/build/runtime.js"></script>

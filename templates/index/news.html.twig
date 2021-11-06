@@ -1,61 +1,25 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-
-<div class="example-wrapper">
-    <h1>WP News - Never Code Alone Open Source Projekt</h1>
-    {% if news %}
-        <ul class="">
-            <li class="">
-                <button class="" role="tab" data-toggle="tab" data-filter="all">
-                    Alle
-                </button>
-            </li>
-            {% for sourceDomain, specials in news.sourceDomains %}
-                <li class="">
-                    <a class="" role="tab" data-toggle="tab" data-filter="{{ sourceDomain|replace({'.': ''}) }}">
-                        {{ sourceDomain }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    <div class="">
-        {% if news.news %}
-            {% for key,newsItem in news.news %}
-                    <div class="{{ newsItem.url|replace({'.': ''})}} ">
-                        <a href="{{ newsItem.link }}" target="_blank">
-                            <img class="" src="/tmp/photos/{{ newsItem.image }}" alt="Responsive image">
-                        </a>
-                        <!-- Nav tabs -->
-                        <ul class="">
-                            <li class="">
-                                <a class="" href="#info-{{ key }}" aria-controls="info-{{ key }}" role="tab" data-toggle="tab">
-                                    Infos:
-                                </a>
-                            </li>
-                        </ul>
-                        <!-- Tab panes -->
-                        <div class="">
-                            <div role="tabpanel" class="" id="info-{{ key }}">
-                                <ul class="">
-                                    <li class="">
-                                        <strong>Title:</strong> {{ newsItem.title }}
-                                    </li>
-                                    <li class="">
-                                        <strong>Published:</strong> {{ newsItem.pubDate | date("F jS \\a\\t g:ia") }}
-                                    </li>
-                                    <li class="">
-                                        <strong>Url:</strong> {{ newsItem.url }}
-                                    </li>
-                                </ul>
+    <div class="bg-white">
+        <div class="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+            <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                {% if news.news %}
+                    {% for key,newsItem in news.news %}
+                        <a href="{{ newsItem.url }}" class="group">
+                            <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden xl:aspect-w-7 xl:aspect-h-8">
+                                <img src="/tmp/photos/{{ newsItem.image }}" alt="{{ newsItem.title }}" class="w-full h-full object-center object-cover group-hover:opacity-75">
                             </div>
-                        </div>
-                    </div>
-            {% endfor %}
-        {% else %}
-            <p>Please come back later!!</p>
-        {% endif %}
+                            <h3 class="mt-4 text-sm text-gray-700">
+                                {{ newsItem.pubDate | date("F jS \\a\\t g:ia") }}
+                            </h3>
+                            <p class="mt-1 text-lg font-medium text-gray-900">
+                                {{ newsItem.title }}
+                            </p>
+                        </a>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}

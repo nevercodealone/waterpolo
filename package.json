@@ -19,6 +19,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@tailwindcss/aspect-ratio": "^0.3.0"
+        "@tailwindcss/aspect-ratio": "^0.3.0",
+        "core-js": "^3.19.1"
     }
 }

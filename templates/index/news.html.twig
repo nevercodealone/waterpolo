@@ -4,6 +4,31 @@
     <div class="bg-white">
         <div class="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
             <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Wasserball News</h2>
+            <div class="sm:hidden relative w-11/12 mx-auto rounded">
+                <div class="absolute inset-0 m-auto mr-4 z-0 w-6 h-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-selector" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#A0AEC0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <polyline points="8 9 12 5 16 9" />
+                        <polyline points="16 15 12 19 8 15" />
+                    </svg>
+                </div>
+                <select aria-label="Selected tab" class="form-select block w-full p-3 border border-gray-300 rounded text-gray-600 appearance-none bg-transparent relative z-10">
+                    <option class="text-sm text-gray-600">inactive</option>
+                    <option class="text-sm text-gray-600">inactive</option>
+                    <option selected class="text-sm text-gray-600">Active</option>
+                    <option class="text-sm text-gray-600">inactive</option>
+                    <option class="text-sm text-gray-600">inactive</option>
+                </select>
+            </div>
+            <div class="justify-between flex-wrap hidden sm:block">
+                <div class="xl:w-full xl:mx-0 rounded bg-gray-200 h-12 shadow">
+                    <ul class="flex items-center h-full">
+                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-white flex items-center h-full px-5 bg-indigo-700 py-4 rounded-md mr-10 font-normal cursor-pointer">Active</li>
+                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-gray-600 h-full flex items-center py-4 px-5 mr-10 rounded font-normal hover:text-gray-700 cursor-pointer">inactive</li>
+                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-gray-600 h-full flex items-center py-4 px-5 mr-10 rounded font-normal hover:text-gray-700 cursor-pointer">inactive</li>
+                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-gray-600 h-full flex items-center py-4 px-5 mr-10 rounded font-normal hover:text-gray-700 cursor-pointer">inacti
+                </div>
+            </div>
             <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
                 {% if news.news %}
                     {% for key,newsItem in news.news %}

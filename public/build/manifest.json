@@ -1,5 +1,6 @@
 {
-  "build/app.js": "/build/app.eb699bf3.js",
-  "build/tailwind.css": "/build/tailwind.e9090714.css",
-  "build/runtime.js": "/build/runtime.7be3cc2a.js"
+  "build/app.js": "/build/app.js",
+  "build/tailwind.css": "/build/tailwind.css",
+  "build/runtime.js": "/build/runtime.js",
+  "build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-280a4a.js": "/build/vendors-node_modules_core-js_modules_es_array_from_js-node_modules_core-js_modules_es_array_i-280a4a.js"
 }

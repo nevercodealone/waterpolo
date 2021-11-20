@@ -14,11 +14,22 @@ function activeTab(element) {
         item.classList.add("text-gray-600");
         item.classList.remove("text-white");
         item.classList.remove("bg-indigo-700");
-        item.innerHTML = "Inactive";
     }
     element.classList.remove("text-gray-600");
     element.classList.add("bg-indigo-700");
     element.classList.add("text-white");
-    element.innerHTML = "Active";
+
+    let dataDomain = (element.getAttribute('data-domain'));
+    let allItems = document.querySelectorAll('.group');
+    if (dataDomain === 'all') {
+        for(let item of allItems) {
+            item.hidden = false;
+        }
+    }else{
+        for(let item of allItems) {
+            let dataDomainItem = item.getAttribute('data-domain');
+            item.hidden = dataDomainItem !== dataDomain;
+        }
+    }
 }
 window.activeTab = activeTab;

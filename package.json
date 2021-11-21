@@ -1,15 +1,12 @@
 {
     "devDependencies": {
-        "@fortawesome/fontawesome-free": "^5.11.2",
-        "@fortawesome/free-brands-svg-icons": "^5.11.2",
-        "@fortawesome/free-regular-svg-icons": "^5.11.2",
-        "@fortawesome/free-solid-svg-icons": "^5.11.2",
-        "@symfony/webpack-encore": "^0.28.0",
-        "bootstrap": "^4.4.1",
-        "core-js": "^3.0.0",
-        "jquery": "^3.4.1",
-        "popper.js": "^1.16.0",
+        "@symfony/webpack-encore": "^1.6.1",
+        "autoprefixer": "^10.4.0",
+        "postcss": "^8.3.11",
+        "postcss-import": "^14.0.2",
+        "postcss-loader": "^6.2.0",
         "regenerator-runtime": "^0.13.2",
+        "tailwindcss": "^2.2.19",
         "terser-webpack-plugin": "^2.3.4",
         "webpack-notifier": "^1.6.0"
     },
@@ -20,5 +17,9 @@
         "dev": "encore dev",
         "watch": "encore dev --watch",
         "build": "encore production --progress"
+    },
+    "dependencies": {
+        "@tailwindcss/aspect-ratio": "^0.3.0",
+        "core-js": "^3.19.1"
     }
 }

@@ -10,6 +10,8 @@ A Never Code Alone Playground
 ### Run commands
 ```bash
 $ yarn run encore dev --watch
+$ yarn run dev
+$ yarn run build
 ```
 
 ### Import commands

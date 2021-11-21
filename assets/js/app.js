@@ -1,39 +1,35 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
 
-// any CSS you require will output into a single css file (app.css in this case)
-require('../css/app.css');
-import 'bootstrap/dist/css/bootstrap.min.css';
+// grab everything we need
+const btn = document.querySelector('button.mobile-menu-button');
+const menu = document.querySelector('.mobile-menu');
 
-const $ = require('jquery');
-// this "modifies" the jquery module: adding behavior to it
-// the bootstrap module doesn't export/return anything
-require('bootstrap');
+// add event listeners
+btn.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+})
 
-$(document).ready(function(){
-
-    $(".filter-button").click(function(){
-        var value = $(this).attr('data-filter');
-
-        if(value == "all")
-        {
-            $('.filter').show('1000');
-        }
-        else
-        {
-            $(".filter").not('.'+value).hide('3000');
-            $('.filter').filter('.'+value).show('3000');
-
-        }
-    });
-
-    if ($(".filter-button").removeClass("active")) {
-        $(this).removeClass("active");
+function activeTab(element) {
+    let siblings = element.parentNode.querySelectorAll("li");
+    for (let item of siblings) {
+        item.classList.add("text-gray-600");
+        item.classList.remove("text-white");
+        item.classList.remove("bg-indigo-700");
     }
-    $(this).addClass("active");
+    element.classList.remove("text-gray-600");
+    element.classList.add("bg-indigo-700");
+    element.classList.add("text-white");
 
-});
+    let dataDomain = (element.getAttribute('data-domain'));
+    let allItems = document.querySelectorAll('.group');
+    if (dataDomain === 'all') {
+        for(let item of allItems) {
+            item.hidden = false;
+        }
+    }else{
+        for(let item of allItems) {
+            let dataDomainItem = item.getAttribute('data-domain');
+            item.hidden = dataDomainItem !== dataDomain;
+        }
+    }
+}
+window.activeTab = activeTab;

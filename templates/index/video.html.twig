@@ -1,83 +1,41 @@
 {% extends 'base.html.twig' %}
 
 {% block content %}
-
-<div class="">
-    <h1>WP News - Never Code Alone Open Source Projekt</h1>
-    {% if youTubeVideos %}
-        <ul class="">
-            <li class="">
-                <button class="nav-link active filter-button" role="tab" data-toggle="tab" data-filter="all">
-                    Alle ({{ youTubeVideos.videos|length }})
-                </button>
-            </li>
-            <li class="">
-                <a class="nav-link filter-button" role="tab" data-toggle="tab" data-filter="wasserball">
-                    Wasserball ({{ youTubeVideos.counts.wasserball }})
-                </a>
-            </li>
-            <li class="">
-                <a class="" role="tab" data-toggle="tab" data-filter="waterpolo">
-                    Waterpolo ({{ youTubeVideos.counts.waterpolo }})
-                </a>
-            </li>
-        </ul>
-    {% endif %}
-    <div class="">
-        {% if youTubeVideos %}
-            {% for key,video in youTubeVideos.videos %}
-                {% if video.id.videoId %}
-                    {% set url = 'https://www.youtube.com/watch?v=%s'|format(video.id.videoId) %}
-                    <div class="{{ video.keyword }}">
-                        <div class="">
-                            <a href="{{ url }}" target="_blank" rel="nofollow"><img src="{{ video['snippet']['thumbnails']['medium']['url'] }}" alt="{{ video['snippet']['title'] }}"></a>
-                        </div>
-                        <!-- Nav tabs -->
-                        <ul class="">
-                            <li class="">
-                                <a class="" href="#info-{{ key }}" aria-controls="info-{{ key }}" role="tab" data-toggle="tab">
-                                    Infos:
-                                </a>
-                            </li>
-                            {% if video['snippet']['description'] != '' %}
-                                <li class="">
-                                    <a class="" href="#description-{{ key }}" aria-controls="profile" role="tab" data-toggle="tab">Description:</a>
-                                </li>
-                            {% endif %}
-                        </ul>
-                        <!-- Tab panes -->
-                        <div class="">
-                            <div role="tabpanel" class="" id="info-{{ key }}">
-                                <ul class="">
-                                    <li class="">
-                                        <strong>Title:</strong> {{ video['snippet']['title'] }}
-                                    </li>
-                                    <li class="">
-                                        <strong>Channel:</strong> {{ video['snippet']['channelTitle'] }}
-                                    </li>
-                                    <li class="">
-                                        <strong>Published: </strong> {{ video['snippet']['publishedAt'] | date("F jS \\a\\t g:ia") }}
-                                    </li>
-                                </ul>
-                            </div>
-                            {% if video['snippet']['description'] != '' %}
-                                <div role="tabpanel" class="" id="description-{{ key }}">
-                                    <ul class="">
-                                        <li class="">
-                                            {{ video['snippet']['description'] }}
-                                        </li>
-                                    </ul>
+    <div class="bg-white">
+        <div class="max-w-2xl mx-auto py-8 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+            <h2 class="text-2xl font-extrabold tracking-tight text-gray-900">Wasserball Videos</h2>
+            <div class="sm:hidden relative w-11/12 mx-auto rounded">
+                <div class="absolute inset-0 m-auto mr-4 z-0 w-6 h-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-selector" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="#A0AEC0" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" />
+                        <polyline points="8 9 12 5 16 9" />
+                        <polyline points="16 15 12 19 8 15" />
+                    </svg>
+                </div>
+            </div>
+            <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                {% if youTubeVideos %}
+                    {% for key,video in youTubeVideos.videos %}
+                        {% if video.id.videoId %}
+                            {% set url = 'https://www.youtube.com/watch?v=%s'|format(video.id.videoId) %}
+                            <a href="{{ url }}" target="_blank" class="group">
+                                <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
+                                    <img src="{{ video['snippet']['thumbnails']['medium']['url'] }}" alt="{{ video['snippet']['title'] }}" class="w-full h-full object-center object-cover group-hover:opacity-75">
                                 </div>
-                            {% endif %}
-                        </div>
-                    </div>
+                                <p class="mt-1 text-lg font-medium text-gray-900">
+                                    {{ video['snippet']['title'] }}
+                                </p>
+                                <p class="py-2">
+                                    <strong>Channel:</strong> {{ video['snippet']['channelTitle'] }}
+                                </p>
+                                <p class="py-2">
+                                    <strong>Published:</strong> {{ video['snippet']['publishedAt'] | date("F jS \\a\\t g:ia") }}
+                                </p>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
                 {% endif %}
-            {% endfor %}
-        {% else %}
-            <p>Please come back later!!</p>
-        {% endif %}
-
-
+            </div>
+        </div>
     </div>
-</div>
 {% endblock %}

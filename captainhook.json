@@ -1,16 +1,7 @@
 {
     "commit-msg": {
-        "enabled": true,
-        "actions": [
-            {
-                "action": "\\CaptainHook\\App\\Hook\\Message\\Action\\Beams",
-                "options": {
-                    "subjectLength": 50,
-                    "bodyLineLength": 72
-                },
-                "conditions": []
-            }
-        ]
+        "enabled": false,
+        "actions": []
     },
     "pre-push": {
         "enabled": false,

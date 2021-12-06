@@ -50,7 +50,8 @@ class GrabberService
             }
 
             if ('deutsche-wasserball-liga.de' === $sourceDomain) {
-                $news = $this->getNewsItemsFromUrl($protocol.'://www.'.$sourceDomain);
+                $news = $this->getNewsItemsFromUrl($protocol.'://www.'.$sourceDomain, $sourceDomain);
+                $allNews = [...$allNews, ...$news];
             } else {
                 $feedUrl = $protocol.'://'.$sourceDomain.'/feed/';
                 try {
@@ -261,7 +262,7 @@ class GrabberService
      * @return array<array>
      * @throws \Exception
      */
-    public function getNewsItemsFromUrl(string $url): array
+    public function getNewsItemsFromUrl(string $url, string $sourceDomain): array
     {
         try {
             $content = file_get_contents($url.'/feed/');
@@ -287,12 +288,23 @@ class GrabberService
 
             $feedKey = array_search($title, array_column($newsFeed, 'title'));
 
-            $src = $images->eq($key)->attr('src');
+            $image = $images->eq($key)->attr('src');
+
+            if (!$image) {
+                unset($news[$key]);
+                continue;
+            }
+
+            $filename = basename($image);
+            $this->fileSystem->copy($image, $this->tmpFolder.$filename);
+
             $link = $links->eq($key)->attr('href');
+
             $properties = [
                 'title' => $title,
-                'image' => $src,
+                'image' => $filename,
                 'link' => $link,
+                'url' => $sourceDomain,
                 'pubDate' => $newsFeed[$feedKey]['pubDate'],
             ];
             $news[] = $properties;

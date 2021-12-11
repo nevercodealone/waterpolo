@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Grabber\WordpressGrabber;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
@@ -22,7 +23,11 @@ class GrabberService
         'www.dance.hr' => [],
     ];
 
-    public function __construct(private KernelInterface $appKernel, private Filesystem $fileSystem)
+    public function __construct(
+        private KernelInterface $appKernel,
+        private Filesystem $fileSystem,
+        private WordpressGrabber $wordpressGrabber
+    )
     {
         $this->tmpFolder = $this->appKernel->getProjectDir().'/public/tmp/photos/';
 
@@ -55,11 +60,7 @@ class GrabberService
             } else {
                 $feedUrl = $protocol.'://'.$sourceDomain.'/feed/';
                 try {
-                    $content = file_get_contents($feedUrl);
-                    $xml = simplexml_load_string($content, 'SimpleXMLElement', LIBXML_NOCDATA);
-                    $json = json_encode($xml, JSON_THROW_ON_ERROR);
-                    $news = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
-                    $news = array_slice($news, 0, 6);
+                    $news = $this->wordpressGrabber->getItemsFromFeedUrl($feedUrl);
 
                     foreach ($news as $key => $item) {
                         if ($specials !== null && in_array('category', $specials, true)) {

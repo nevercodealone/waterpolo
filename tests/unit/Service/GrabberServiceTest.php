@@ -2,6 +2,7 @@
 
 namespace App\Tests\unit\Service;
 
+use App\Grabber\WordpressGrabber;
 use App\Kernel;
 use App\Service\GrabberService;
 use Symfony\Component\Filesystem\Filesystem;
@@ -13,8 +14,9 @@ class GrabberServiceTest extends TestCase
     {
         $appKernel = $this->createMock(Kernel::class);
         $fileSystem = $this->createMock(Filesystem::class);
+        $wordpressGrabber = $this->createMock(WordpressGrabber::class);
 
-        $grabberService = new GrabberService($appKernel, $fileSystem);
+        $grabberService = new GrabberService($appKernel, $fileSystem, $wordpressGrabber);
         $sourceDomains = $grabberService->getItems('firstDomain')['sourceDomains'];
 
         $this->assertCount(1, $sourceDomains);

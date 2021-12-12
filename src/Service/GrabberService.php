@@ -271,9 +271,12 @@ class GrabberService
             throw new \Exception($exception);
         }
 
-        $xml = simplexml_load_string($content);
-        $json = json_encode($xml);
-        $newsFeed = json_decode($json, true)['channel']['item'];
+        $newsFeed = [];
+        if($content !== false) {
+            $xml = simplexml_load_string($content);
+            $json = json_encode($xml);
+            $newsFeed = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
+        }
 
         $content = file_get_contents($url);
         $crawler = new Crawler($content);

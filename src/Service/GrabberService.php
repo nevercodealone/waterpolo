@@ -21,6 +21,7 @@ class GrabberService
         'spandau04.de' => ['category'],
         'waspo98.de' => [],
         'www.dance.hr' => [],
+        'potsdam-orcas.de' => [],
     ];
 
     public function __construct(

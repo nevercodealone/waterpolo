@@ -80,7 +80,9 @@ class GrabberService
         foreach ($this->sourceDomains as $properties) {
             if ($properties['page-type'] === 'website') {
                 $news = $this->websiteGrabber->getNewsItemsFromUrl('https://'.$properties['domain'], $properties);
-                $allNews = [...$allNews, ...$news];
+                if($news) {
+                    $allNews = [...$allNews, ...$news];
+                }
             } else {
                 $feedUrl = 'https://'.$properties['domain'].'/feed/';
                 try {
@@ -103,7 +105,7 @@ class GrabberService
 
                         $src = $this->getImageFromUrl($link);
 
-                        if ($src === null) {
+                        if (!$src) {
                             unset($news[$key]);
                             continue;
                         }
@@ -143,7 +145,7 @@ class GrabberService
         ];
     }
 
-    private function getImageFromUrl(string $url): ?string
+    private function getImageFromUrl(string $url): string|false
     {
         $imageBlackListWaspo = [
             'logo-neu.jpg',
@@ -214,6 +216,9 @@ class GrabberService
         );
 
         $content = file_get_contents($url);
+        if(!$content){
+            return false;
+        }
         $crawler = new Crawler($content);
 
         $this->removeWordpressContentRelations($url, $crawler);
@@ -234,7 +239,7 @@ class GrabberService
             return $src;
         }
 
-        return null;
+        return false;
     }
 
     private function getFilterBySelector(Crawler $crawler, string $selector): Crawler

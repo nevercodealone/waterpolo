@@ -13,21 +13,28 @@ class WebsiteGrabber
     {}
 
     /**
-     * @return array<array>
-     * @throws \Exception
+     * @param string $url
+     * @param array<string, string> $properties
+     * @return array<array>|false
+     * @throws \JsonException
      */
-    public function getNewsItemsFromUrl(string $url, array $properties): array
+    public function getNewsItemsFromUrl(string $url, array $properties): array|false
     {
+        $content = file_get_contents($url);
+        if(!$content) {
+            return false;
+        }
+        $crawler = new Crawler($content);
+
         $newsFeed = [];
         if($properties['domain'] === 'www.deutsche-wasserball-liga.de') {
-            $content = file_get_contents($url.'/feed/');
-            $xml = simplexml_load_string($content);
-            $json = json_encode($xml, JSON_THROW_ON_ERROR);
-            $newsFeed = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
+            $contentFeed = file_get_contents($url.'/feed/');
+            if($contentFeed) {
+                $xml = simplexml_load_string($contentFeed);
+                $json = json_encode($xml, JSON_THROW_ON_ERROR);
+                $newsFeed = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
+            }
         }
-
-        $content = file_get_contents($url);
-        $crawler = new Crawler($content);
 
         $this->removeContentRelations($url, $crawler);
         $images = $crawler->filter($properties['image']);
@@ -74,7 +81,6 @@ class WebsiteGrabber
             ];
             $news[] = $newsProperties;
         }
-
 
         return $news;
     }

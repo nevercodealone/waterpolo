@@ -16,8 +16,8 @@
             <div class="xl:w-full rounded bg-gray-200 shadow">
                 <ul class="flex flex-wrap justify-center h-full">
                     <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-white flex items-center h-full px-5 bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="all">Alle</li>
-                    {% for sourceDomain, specials in news.sourceDomains %}
-                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none hover:text-white focus:text-white text-sm text-gray-600 flex items-center h-full px-5 hover:bg-indigo-700 focus:bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="{{ sourceDomain|replace({'.': ''}) }}">{{ sourceDomain }}</li>
+                    {% for sourceDomain in news.sourceDomains %}
+                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none hover:text-white focus:text-white text-sm text-gray-600 flex items-center h-full px-5 hover:bg-indigo-700 focus:bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="{{ sourceDomain.domain|replace({'.': ''}) }}">{{ sourceDomain.domain }}</li>
                     {% endfor %}
                 </ul>
             </div>

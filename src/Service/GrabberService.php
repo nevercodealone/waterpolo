@@ -2,40 +2,69 @@
 
 namespace App\Service;
 
+use App\Grabber\WebsiteGrabber;
 use App\Grabber\WordpressGrabber;
+use App\Handler\ImageHandler;
 use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\HttpKernel\KernelInterface;
 
 class GrabberService
 {
     private string $tmpFolder;
 
-    /** @var array<string,array> */
+    /** @var array<array> */
     private array $sourceDomains = [
-        'h2o-polo.de' => [],
-        'deutsche-wasserball-liga.de' => [],
-        'ssv-esslingen.de' => ['category'],
-        'wasserballecke.de' => [],
-        'total-waterpolo.com' => [],
-        'spandau04.de' => ['category'],
-        'waspo98.de' => [],
-        'www.dance.hr' => [],
-        'potsdam-orcas.de' => [],
+        [
+            'domain' => 'ssv-esslingen.de',
+            'page-type' => 'wordpress',
+            'tags' => ['category']
+        ],
+        [
+            'domain' => 'h2o-polo.de',
+            'page-type' => 'wordpress'
+        ],
+        [
+            'domain' => 'www.deutsche-wasserball-liga.de',
+            'page-type' => 'website',
+            'image' => 'img',
+            'title' => 'h1',
+            'more-link' => '.btn-more'
+        ],
+        [
+            'domain' => 'homepage.svl08.com',
+            'page-type' => 'website',
+            'image' => '#newscontainer > div > p:nth-child(3) > img',
+            'title' => '.news_title',
+            'more-link' => '#newscontainer > div > p:nth-child(3) > a'
+        ],
+        [
+            'domain' => 'spandau04.de',
+            'page-type' => 'wordpress',
+            'tags' => ['category']
+        ],
+        [
+            'domain' => 'wasserballecke.de',
+            'page-type' => 'wordpress'
+        ],
+        [
+            'domain' => 'total-waterpolo.com',
+            'page-type' => 'wordpress'
+        ],
+        [
+            'domain' => 'waspo98.de',
+            'page-type' => 'wordpress'
+        ],
+        [
+            'domain' => 'www.dance.hr',
+            'page-type' => 'wordpress'
+        ]
     ];
 
     public function __construct(
-        private KernelInterface $appKernel,
-        private Filesystem $fileSystem,
-        private WordpressGrabber $wordpressGrabber
+        private WordpressGrabber $wordpressGrabber,
+        private WebsiteGrabber $websiteGrabber,
+        private ImageHandler $imageHandler
     )
-    {
-        $this->tmpFolder = $this->appKernel->getProjectDir().'/public/tmp/photos/';
-
-        if (!$this->fileSystem->exists($this->tmpFolder)) {
-            $this->fileSystem->mkdir($this->tmpFolder, 0777);
-        }
-    }
+    {}
 
     /**
      * @return array<string, array>
@@ -48,48 +77,49 @@ class GrabberService
         }
 
         $allNews = [];
-        foreach ($this->sourceDomains as $sourceDomain => $specials) {
-            $protocol = 'https';
-
-            if ($specials !== null && in_array('http', $specials)) {
-                $protocol = 'http';
-            }
-
-            if ('deutsche-wasserball-liga.de' === $sourceDomain) {
-                $news = $this->getNewsItemsFromUrl($protocol.'://www.'.$sourceDomain, $sourceDomain);
-                $allNews = [...$allNews, ...$news];
+        foreach ($this->sourceDomains as $properties) {
+            if ($properties['page-type'] === 'website') {
+                $news = $this->websiteGrabber->getNewsItemsFromUrl('https://'.$properties['domain'], $properties);
+                if($news) {
+                    $allNews = [...$allNews, ...$news];
+                }
             } else {
-                $feedUrl = $protocol.'://'.$sourceDomain.'/feed/';
+                $feedUrl = 'https://'.$properties['domain'].'/feed/';
                 try {
                     $news = $this->wordpressGrabber->getItemsFromFeedUrl($feedUrl);
 
                     foreach ($news as $key => $item) {
-                        if ($specials !== null && in_array('category', $specials, true)) {
-                            if (!isset($item['category']) || !is_array($item['category'])) {
+                        if (in_array('tags', $properties, true)) {
+                            if (!isset($item[$properties['tags']]) || !is_array($item[$properties['tags']])) {
                                 unset($news[$key]);
                                 continue;
                             }
 
                             $category = array_map('strtolower', $item['category']);
-                            if (!in_array('wasserball', $category)) {
+                            if (!in_array('wasserball', $category, true)) {
                                 unset($news[$key]);
                                 continue;
                             }
                         }
+                        $link = $item['guid'];
 
-                        $url = $item['guid'];
-                        $image = $this->getImageFromUrl($url);
+                        $src = $this->getImageFromUrl($link);
 
-                        if (!$image) {
+                        if (!$src) {
                             unset($news[$key]);
                             continue;
                         }
 
-                        $filename = basename($image);
-                        $this->fileSystem->copy($image, $this->tmpFolder.$filename);
+                        $filename = $this->imageHandler->saveFileFromUrl($src);
+
+                        if ($filename === '') {
+                            unset($news[$key]);
+                            continue;
+                        }
 
                         $news[$key]['image'] = $filename;
-                        $news[$key]['url'] = $sourceDomain;
+                        $news[$key]['link'] = $link;
+                        $news[$key]['url'] = $properties['domain'];
                     }
 
                     $allNews = [...$allNews, ...$news];
@@ -115,7 +145,7 @@ class GrabberService
         ];
     }
 
-    private function getImageFromUrl(string $url): ?string
+    private function getImageFromUrl(string $url): string|false
     {
         $imageBlackListWaspo = [
             'logo-neu.jpg',
@@ -186,6 +216,9 @@ class GrabberService
         );
 
         $content = file_get_contents($url);
+        if(!$content){
+            return false;
+        }
         $crawler = new Crawler($content);
 
         $this->removeWordpressContentRelations($url, $crawler);
@@ -206,7 +239,7 @@ class GrabberService
             return $src;
         }
 
-        return null;
+        return false;
     }
 
     private function getFilterBySelector(Crawler $crawler, string $selector): Crawler
@@ -223,18 +256,6 @@ class GrabberService
 
         if (str_contains($url, 'ssv-esslingen.de')) {
             $crawler->filter('.page-img')->each(function (Crawler $crawler) {
-                $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
-            });
-        }
-
-        if (str_contains($url, 'deutsche-wasserball-liga.de')) {
-            $crawler->filter('#carousel-eyecatcher')->each(function (Crawler $crawler) {
-                $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
-            });
-
-            $crawler->filter('.content-header')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
                 $node->parentNode->removeChild($node);
             });
@@ -258,63 +279,5 @@ class GrabberService
                 $node->parentNode->removeChild($node);
             });
         }
-    }
-
-    /**
-     * @return array<array>
-     * @throws \Exception
-     */
-    public function getNewsItemsFromUrl(string $url, string $sourceDomain): array
-    {
-        try {
-            $content = file_get_contents($url.'/feed/');
-        } catch (\Exception $exception) {
-            throw new \Exception($exception);
-        }
-
-        $newsFeed = [];
-        if($content !== false) {
-            $xml = simplexml_load_string($content);
-            $json = json_encode($xml);
-            $newsFeed = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
-        }
-
-        $content = file_get_contents($url);
-        $crawler = new Crawler($content);
-
-        $this->removeWordpressContentRelations($url, $crawler);
-        $images = $this->getFilterBySelector($crawler, 'img');
-        $titles = $this->getFilterBySelector($crawler, 'h1');
-        $links = $this->getFilterBySelector($crawler, '.btn-more');
-
-        $news = [];
-        foreach ($titles as $key => $title) {
-            $title = $title->textContent;
-
-            $feedKey = array_search($title, array_column($newsFeed, 'title'));
-
-            $image = $images->eq($key)->attr('src');
-
-            if (!$image) {
-                unset($news[$key]);
-                continue;
-            }
-
-            $filename = basename($image);
-            $this->fileSystem->copy($image, $this->tmpFolder.$filename);
-
-            $link = $links->eq($key)->attr('href');
-
-            $properties = [
-                'title' => $title,
-                'image' => $filename,
-                'link' => $link,
-                'url' => $sourceDomain,
-                'pubDate' => $newsFeed[$feedKey]['pubDate'],
-            ];
-            $news[] = $properties;
-        }
-
-        return $news;
     }
 }

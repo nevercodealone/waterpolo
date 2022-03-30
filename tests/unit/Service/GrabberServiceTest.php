@@ -11,18 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class GrabberServiceTest extends TestCase
 {
-    public function testGetItemsReduceSourceDomainsOnDebugFirstDomain()
-    {
-        $wordpressGrabber = $this->createMock(WordpressGrabber::class);
-        $websiteGrabber = $this->createMock(WebsiteGrabber::class);
-        $imageHandler = $this->createMock(ImageHandler::class);
-
-        $grabberService = new GrabberService($wordpressGrabber, $websiteGrabber, $imageHandler);
-        $sourceDomains = $grabberService->getItems('firstDomain')['sourceDomains'];
-
-        $this->assertCount(1, $sourceDomains);
-    }
-
     public function testGetNewsByFirstDomainWhenPageTypeIsWebsite()
     {
         $wordpressGrabber = $this->createMock(WordpressGrabber::class);
@@ -36,8 +24,17 @@ class GrabberServiceTest extends TestCase
         };
         $imageHandler = $this->createMock(ImageHandler::class);
 
-        $grabberService = new GrabberService($wordpressGrabber, $websiteGrabber, $imageHandler);
-        $items = $grabberService->getItems('firstDomain');
+        $sourceDomains = [
+            [
+                'domain' => "www.deutsche-wasserball-liga.de",
+                'page-type' => "website",
+                'image' => 'img',
+                'title' => 'h1',
+                'more-link' => '.btn-more',
+            ]
+        ];
+        $grabberService = new GrabberService($wordpressGrabber, $websiteGrabber, $imageHandler, $sourceDomains);
+        $items = $grabberService->getItems();
 
         self::assertCount(1, $items['news']);
         self::assertSame('test', $items['news'][0]);

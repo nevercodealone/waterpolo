@@ -42,3 +42,8 @@ services:
         class: \Google_Service_YouTube
         arguments:
             - '@Google_Client'
+
+    App\Service\GrabberService:
+        arguments:
+            $sourceDomains: '%waterpolo%'
+            $removeSelectors: '%remove-links-selector%'

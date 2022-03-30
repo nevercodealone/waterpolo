@@ -5,6 +5,26 @@ on:
   pull_request:
 
 jobs:
+  php:
+    name: "PHP ${{ matrix.php-version }} (${{ matrix.database }}, ${{ matrix.phpcr-transport }}, ${{ matrix.dependency-versions }})"
+    runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: test
+      APP_SECRET: a448d1dfcaa563fce56c2fd9981f662b
+      MAILER_URL: null://localhost
+      SULU_ADMIN_EMAIL:
+      PHPCR_TRANSPORT: ${{ matrix.phpcr-transport }}
+      COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - php-version: '7.2'
+            tools: 'composer:v2'
+            env:
+              SYMFONY_DEPRECATIONS_HELPER: disabled
   test-run:
     runs-on: ubuntu-latest
     steps:

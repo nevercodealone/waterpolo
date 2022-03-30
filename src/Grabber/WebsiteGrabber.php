@@ -5,7 +5,7 @@ namespace App\Grabber;
 use App\Handler\ImageHandler;
 use Symfony\Component\DomCrawler\Crawler;
 
-class WebsiteGrabber
+class WebsiteGrabber implements WebsiteGrabberInterface
 {
     public function __construct(
         private ImageHandler $imageHandler

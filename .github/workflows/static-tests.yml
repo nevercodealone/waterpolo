@@ -3,17 +3,14 @@ name: Static Tests
 on: 
   push:
   pull_request:
-    branches: [master]
-  pull_request_target:
-    types: [assigned, opened, synchronize, reopened]
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 
 jobs:
   test-run:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout project
+        uses: actions/checkout@v2  
       - name: PHPStan
-        uses: bin/phpstan analyse src
+        run: bin/phpstan analyse src
       - name: PHPUnit
-        uses: bin/phpunit --testdox tests
+        run: bin/phpunit --testdox tests

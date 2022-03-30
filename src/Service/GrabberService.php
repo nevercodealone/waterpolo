@@ -2,7 +2,7 @@
 
 namespace App\Service;
 
-use App\Grabber\WebsiteGrabber;
+use App\Grabber\WebsiteGrabberInterface;
 use App\Grabber\WordpressGrabber;
 use App\Handler\ImageHandler;
 use Symfony\Component\DomCrawler\Crawler;
@@ -13,6 +13,13 @@ class GrabberService
     /** @var array<array> */
     private array $sourceDomains = [
         [
+            'domain' => 'www.deutsche-wasserball-liga.de',
+            'page-type' => 'website',
+            'image' => 'img',
+            'title' => 'h1',
+            'more-link' => '.btn-more'
+        ],
+        [
             'domain' => 'ssv-esslingen.de',
             'page-type' => 'wordpress',
             'tags' => ['category']
@@ -21,13 +28,7 @@ class GrabberService
             'domain' => 'h2o-polo.de',
             'page-type' => 'wordpress'
         ],
-        [
-            'domain' => 'www.deutsche-wasserball-liga.de',
-            'page-type' => 'website',
-            'image' => 'img',
-            'title' => 'h1',
-            'more-link' => '.btn-more'
-        ],
+
         [
             'domain' => 'homepage.svl08.com',
             'page-type' => 'website',
@@ -60,7 +61,7 @@ class GrabberService
 
     public function __construct(
         private WordpressGrabber $wordpressGrabber,
-        private WebsiteGrabber $websiteGrabber,
+        private WebsiteGrabberInterface $websiteGrabber,
         private ImageHandler $imageHandler
     )
     {}

@@ -1,0 +1,46 @@
+parameters:
+  remove-links-selector:
+    - '.section-related-ul'
+  waterpolo:
+    1:
+      domain: "www.deutsche-wasserball-liga.de"
+      page-type: "website"
+      image: 'img'
+      title: 'h1'
+      more-link: '.btn-more'
+    2:
+      domain: 'ssv-esslingen.de'
+      page-type: 'wordpress'
+      tags:
+        - 'category'
+      remove-links-selector:
+        - '.page-img'
+    3:
+      domain: 'h2o-polo.de'
+      page-type: 'wordpress'
+    4:
+      domain: 'homepage.svl08.com'
+      page-type: 'website'
+      image: '#newscontainer > div > p:nth-child(3) > img'
+      title: '.news_title'
+      more-link: '#newscontainer > div > p:nth-child(3) > a'
+    5:
+      domain: 'spandau04.de'
+      page-type: 'wordpress'
+      tags:
+        - 'category'
+    6:
+      domain: 'wasserballecke.de'
+      page-type: 'wordpress'
+    7:
+      domain: 'total-waterpolo.com'
+      page-type: 'wordpress'
+
+      remove-links-selector:
+        - '.hustle-ui'
+    8:
+      domain: 'waspo98.de'
+      page-type: 'wordpress'
+    9:
+      domain: 'www.dance.hr'
+      page-type: 'wordpress'

@@ -6,76 +6,36 @@ use App\Grabber\WebsiteGrabberInterface;
 use App\Grabber\WordpressGrabber;
 use App\Handler\ImageHandler;
 use Symfony\Component\DomCrawler\Crawler;
+use function array_merge;
 
 class GrabberService
 {
-
-    /** @var array<array> */
-    private array $sourceDomains = [
-        [
-            'domain' => 'www.deutsche-wasserball-liga.de',
-            'page-type' => 'website',
-            'image' => 'img',
-            'title' => 'h1',
-            'more-link' => '.btn-more'
-        ],
-        [
-            'domain' => 'ssv-esslingen.de',
-            'page-type' => 'wordpress',
-            'tags' => ['category']
-        ],
-        [
-            'domain' => 'h2o-polo.de',
-            'page-type' => 'wordpress'
-        ],
-
-        [
-            'domain' => 'homepage.svl08.com',
-            'page-type' => 'website',
-            'image' => '#newscontainer > div > p:nth-child(3) > img',
-            'title' => '.news_title',
-            'more-link' => '#newscontainer > div > p:nth-child(3) > a'
-        ],
-        [
-            'domain' => 'spandau04.de',
-            'page-type' => 'wordpress',
-            'tags' => ['category']
-        ],
-        [
-            'domain' => 'wasserballecke.de',
-            'page-type' => 'wordpress'
-        ],
-        [
-            'domain' => 'total-waterpolo.com',
-            'page-type' => 'wordpress'
-        ],
-        [
-            'domain' => 'waspo98.de',
-            'page-type' => 'wordpress'
-        ],
-        [
-            'domain' => 'www.dance.hr',
-            'page-type' => 'wordpress'
-        ]
-    ];
-
+    /**
+     * @param array<array{
+     *     domain: string,
+     *     page-type: "website"|"wordpress",
+     *     image?: string,
+     *     title?: string,
+     *     more-link?: string,
+     *     remove-links-selector?: string[]
+     *     tags?: string[]
+     * }> $sourceDomains
+     * @param string[] $removeSelectors
+     */
     public function __construct(
         private WordpressGrabber $wordpressGrabber,
         private WebsiteGrabberInterface $websiteGrabber,
-        private ImageHandler $imageHandler
-    )
-    {}
+        private ImageHandler $imageHandler,
+        private array $sourceDomains,
+        private array $removeSelectors,
+    ) {}
 
     /**
      * @return array<string, array>
      * @throws \Exception
      */
-    public function getItems(?string $debug): array
+    public function getItems(): array
     {
-        if ('firstDomain' === $debug) {
-            $this->sourceDomains = array_slice($this->sourceDomains, 0, 1);
-        }
-
         $allNews = [];
         foreach ($this->sourceDomains as $properties) {
             if ($properties['page-type'] === 'website') {
@@ -103,7 +63,7 @@ class GrabberService
                         }
                         $link = $item['guid'];
 
-                        $src = $this->getImageFromUrl($link);
+                        $src = $this->getImageFromUrl($link, $properties['remove-links-selector'] ?? []);
 
                         if (!$src) {
                             unset($news[$key]);
@@ -145,75 +105,9 @@ class GrabberService
         ];
     }
 
-    private function getImageFromUrl(string $url): string|false
+    private function getImageFromUrl(string $url, array $removeLinkSelector): string|false
     {
-        $imageBlackListWaspo = [
-            'logo-neu.jpg',
-            'youtube.png',
-            'instagram.png',
-            'facebook.png',
-        ];
-
-        $imageBlackListSpandau = [
-            'logo-spandau',
-            '80x80',
-            'plugins',
-        ];
-
-        $imageBlackListTotalWaterpolo = [
-            'facebook.com',
-            'w3.org',
-            'water-polo-community.png',
-            'Screen-Shot',
-            'Award-Badge',
-        ];
-
-        $imageBlackListWasserballecke = [
-            'wasserballecke_',
-            'banner',
-            'gravatar',
-            '.gif',
-            'image3',
-            'ios_splasscreen',
-            'appack',
-            'googleplay',
-            'data:image',
-            'IMG_2165-1200x480.jpg', // Sharks logo
-        ];
-
-        $imageBlackListSsvEsslingen = [
-            'logo.png',
-        ];
-
-        $imageBlackListDeutscheWasserballLiga = [
-            'sportmuck',
-            'logo',
-        ];
-
-        $imageBlackListProRecco = [
-            'lutto.jpg',
-            'WA0005',
-            'contattaci.jpg',
-            'INTELS.png',
-            'turbo.png',
-            'tossini.png',
-            'video_prorecco.jpg',
-        ];
-
-        $imageBlackListDanceHr = [
-            'grb-udruga-opt.png',
-        ];
-
-        $imageBlackList = array_merge(
-            $imageBlackListWaspo,
-            $imageBlackListSpandau,
-            $imageBlackListTotalWaterpolo,
-            $imageBlackListWasserballecke,
-            $imageBlackListSsvEsslingen,
-            $imageBlackListDeutscheWasserballLiga,
-            $imageBlackListProRecco,
-            $imageBlackListDanceHr
-        );
+        $imageBlackList = require(__DIR__.'/../..config/disallowlist.php');
 
         $content = file_get_contents($url);
         if(!$content){
@@ -221,7 +115,7 @@ class GrabberService
         }
         $crawler = new Crawler($content);
 
-        $this->removeWordpressContentRelations($url, $crawler);
+        $this->removeWordpressContentRelations($removeLinkSelector, $crawler);
         $images = $this->getFilterBySelector($crawler, 'img');
 
         foreach ($images as $image) {
@@ -246,39 +140,17 @@ class GrabberService
     {
         return $crawler->filter($selector);
     }
-    private function removeWordpressContentRelations(string $url, Crawler $crawler): void
+
+    private function removeWordpressContentRelations(array $removeLinkSelector, Crawler $crawler): void
     {
-        $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {
-            $node = $crawler->getNode(0);
-            if (!$node) {
-                return;
-            }
-            $node->parentNode?->removeChild($node);
-        });
-
-        if (str_contains($url, 'ssv-esslingen.de')) {
-            $crawler->filter('.page-img')->each(function (Crawler $crawler) {
+        $removeLinkSelector = array_merge($removeLinkSelector, $this->removeSelectors);
+        foreach ($removeLinkSelector as $removeSelector) {
+            $crawler->filter($removeSelector)->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
-            });
-        }
-
-        if (str_contains($url, 'www.prorecco.it')) {
-            $crawler->filter('.wpls-logo-showcase-slider-wrp')->each(function (Crawler $crawler) {
-                $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
-            });
-
-            $crawler->filter('.blog_slider_ul')->each(function (Crawler $crawler) {
-                $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
-            });
-        }
-
-        if (str_contains($url, 'total-waterpolo.com')) {
-            $crawler->filter('.hustle-ui')->each(function (Crawler $crawler) {
-                $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
+                if (!$node) {
+                    return;
+                }
+                $node->parentNode?->removeChild($node);
             });
         }
     }

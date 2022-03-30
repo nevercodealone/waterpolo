@@ -45,15 +45,16 @@ class WebsiteGrabber
         foreach ($titles as $key => $title) {
             $title = $title->textContent;
             $image = $images->eq($key)->attr('src');
-            $imageUrl = $image;
-            if($properties['domain'] === 'homepage.svl08.com') {
-                $image = str_replace('..', '', $image);
-                $imageUrl = $url . $image;
-            }
 
             if (!$image) {
                 unset($news[$key]);
                 continue;
+            }
+
+            $imageUrl = $image;
+            if($properties['domain'] === 'homepage.svl08.com') {
+                $image = str_replace('..', '', $image);
+                $imageUrl = $url . $image;
             }
 
             $filename = $this->imageHandler->saveFileFromUrl($imageUrl);

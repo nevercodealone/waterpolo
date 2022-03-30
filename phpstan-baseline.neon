@@ -1,12 +1,42 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$image of method Google\\\\Cloud\\\\Vision\\\\VisionClient\\:\\:image\\(\\) expects Google\\\\Cloud\\\\Storage\\\\StorageObject\\|resource\\|string, resource\\|false given\\.$#"
-			count: 1
-			path: src/Service/ImageService.php
+			message: "#^Cannot access property \\$parentNode on DOMNode\\|null\\.$#"
+			count: 2
+			path: src/Grabber/WebsiteGrabber.php
 
 		-
-			message: "#^Parameter \\#1 \\$json of function json_decode expects string, string\\|false given\\.$#"
+			message: "#^Cannot call method removeChild\\(\\) on DOMNode\\|null\\.$#"
+			count: 2
+			path: src/Grabber/WebsiteGrabber.php
+
+		-
+			message: "#^Method App\\\\Grabber\\\\WebsiteGrabber\\:\\:getNewsItemsFromUrl\\(\\) return type has no value type specified in iterable type array\\.$#"
 			count: 1
-			path: src/Service/ImageService.php
+			path: src/Grabber/WebsiteGrabber.php
+
+		-
+			message: "#^Method App\\\\Grabber\\\\WordpressGrabber\\:\\:getItemsFromFeedUrl\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Grabber/WordpressGrabber.php
+
+		-
+			message: "#^Cannot access property \\$parentNode on DOMNode\\|null\\.$#"
+			count: 4
+			path: src/Service/GrabberService.php
+
+		-
+			message: "#^Cannot call method removeChild\\(\\) on DOMNode\\|null\\.$#"
+			count: 4
+			path: src/Service/GrabberService.php
+
+		-
+			message: "#^Method App\\\\Service\\\\GrabberService\\:\\:getItems\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Service/GrabberService.php
+
+		-
+			message: "#^Property App\\\\Service\\\\GrabberService\\:\\:\\$sourceDomains type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Service/GrabberService.php
 

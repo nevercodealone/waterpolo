@@ -13,8 +13,13 @@ class ImageService
 
     public function __construct()
     {
+        $contents = file_get_contents($_ENV['GOOGLE_JSON']);
+        if ($contents === false) {
+            throw new \LogicException('Google JSON file not found');
+        }
+
         $this->vision = new VisionClient([
-            'keyFile' => json_decode(file_get_contents($_ENV['GOOGLE_JSON']), true),
+            'keyFile' => json_decode($contents, true, flags:JSON_THROW_ON_ERROR),
         ]);
     }
 
@@ -26,7 +31,7 @@ class ImageService
     {
         try {
             $image = $this->vision->image(
-                fopen($path, 'r'),
+                fopen($path, 'r') ?: throw new \Exception('File not found'),
                 ['WEB_DETECTION']
             );
         } catch (\Exception) {
@@ -36,6 +41,10 @@ class ImageService
         $annotation = $this->vision->annotate($image);
 
         $info = $annotation->info();
+        if (! $info) {
+            return [];
+        }
+
         $webEntities = $info['webDetection']['webEntities'];
 
         if ('description' === $entity) {

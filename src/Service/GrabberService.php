@@ -9,7 +9,6 @@ use Symfony\Component\DomCrawler\Crawler;
 
 class GrabberService
 {
-    private string $tmpFolder;
 
     /** @var array<array> */
     private array $sourceDomains = [
@@ -246,12 +245,14 @@ class GrabberService
     {
         return $crawler->filter($selector);
     }
-
     private function removeWordpressContentRelations(string $url, Crawler $crawler): void
     {
         $crawler->filter('.section-related-ul')->each(function (Crawler $crawler) {
             $node = $crawler->getNode(0);
-            $node->parentNode->removeChild($node);
+            if (!$node) {
+                return;
+            }
+            $node->parentNode?->removeChild($node);
         });
 
         if (str_contains($url, 'ssv-esslingen.de')) {

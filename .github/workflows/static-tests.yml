@@ -11,6 +11,6 @@ jobs:
       - name: Checkout project
         uses: actions/checkout@v2  
       - name: PHPStan
-        run: bin/phpstan analyse src
+        run: vendor/bin/phpstan analyse src
       - name: PHPUnit
-        run: bin/phpunit --testdox tests
+        run: vendor/bin/phpunit --testdox tests

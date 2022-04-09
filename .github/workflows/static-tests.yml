@@ -1,13 +1,16 @@
 name: Static Tests
 
-on: 
+on:
   push:
   pull_request:
 
 jobs:
   php:
-    name: "PHP ${{ matrix.php-version }} (${{ matrix.database }}, ${{ matrix.phpcr-transport }}, ${{ matrix.dependency-versions }})"
+    name: "PHP 8"
     runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
 
     env:
       APP_ENV: test
@@ -29,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout project
-        uses: actions/checkout@v2  
+        uses: actions/checkout@v2
       - name: PHPStan
         run: vendor/bin/phpstan analyse src
       - name: PHPUnit

@@ -1,0 +1,31 @@
+name: Static Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  php:
+    name: "PHP 8"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
+
+    env:
+      APP_ENV: test
+      APP_SECRET: a448d1dfcaa563fce56c2fd9981f662b
+      MAILER_URL: null://localhost
+      SULU_ADMIN_EMAIL:
+      PHPCR_TRANSPORT: ${{ matrix.phpcr-transport }}
+      COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test-run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse src
+      - name: PHPUnit
+        run: vendor/bin/phpunit --testdox tests

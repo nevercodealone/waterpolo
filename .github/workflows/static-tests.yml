@@ -8,9 +8,6 @@ jobs:
   php:
     name: "PHP 8"
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: php-actions/composer@v6
 
     env:
       APP_ENV: test
@@ -20,19 +17,11 @@ jobs:
       PHPCR_TRANSPORT: ${{ matrix.phpcr-transport }}
       COMPOSER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - php-version: '7.2'
-            tools: 'composer:v2'
-            env:
-              SYMFONY_DEPRECATIONS_HELPER: disabled
   test-run:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout project
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
+      - uses: php-actions/composer@v6
       - name: PHPStan
         run: vendor/bin/phpstan analyse src
       - name: PHPUnit

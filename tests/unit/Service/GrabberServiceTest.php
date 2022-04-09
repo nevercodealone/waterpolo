@@ -33,7 +33,10 @@ class GrabberServiceTest extends TestCase
                 'more-link' => '.btn-more',
             ]
         ];
-        $grabberService = new GrabberService($wordpressGrabber, $websiteGrabber, $imageHandler, $sourceDomains);
+
+        $removeSelectors = [];
+
+        $grabberService = new GrabberService($wordpressGrabber, $websiteGrabber, $imageHandler, $sourceDomains, $removeSelectors);
         $items = $grabberService->getItems();
 
         self::assertCount(1, $items['news']);

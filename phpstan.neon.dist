@@ -1,10 +1,12 @@
 includes:
 	- phpstan-baseline.neon
 parameters:
-	level: 8 
+	level: 8
 	stubFiles:
 		- stubs/GoogleCloudVisionAnnotation.php
 	typeAliases:
 		Foobar: 'array<class-string<\Symfony\Component\HttpKernel\Bundle\BundleInterface>, array<string, true>>'
 	paths:
 		- src
+	excludePaths:
+	    - src/Kernel.php

@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Service\GrabberService;
-use App\Service\NewsService;
 use App\Service\YouTubeService;
 use Psr\Cache\CacheItemPoolInterface;
 use Symfony\Component\Console\Command\Command;
@@ -16,11 +15,10 @@ class ImportContentCommand extends Command
     protected static $defaultName = 'app:import:content';
 
     public function __construct(
-        private YouTubeService         $youTubeService,
+        private YouTubeService $youTubeService,
         private CacheItemPoolInterface $cache,
-        private GrabberService         $grabberService
-    )
-    {
+        private GrabberService $grabberService
+    ) {
         parent::__construct();
     }
 
@@ -38,7 +36,7 @@ class ImportContentCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $debug = $input->getArgument('debug') ?: null;
+        $input->getArgument('debug') ?: null;
 
         $content = [];
 
@@ -52,10 +50,10 @@ class ImportContentCommand extends Command
             '',
         ]);
 
-        $content['news'] = $this->grabberService->getItems($debug);
+        $content['news'] = $this->grabberService->getItems();
 
         $output->writeln([
-            'Count news: ' . count($content['news']['news']),
+            'Count news: '.count($content['news']['news']),
             '============',
             '',
         ]);
@@ -75,7 +73,7 @@ class ImportContentCommand extends Command
         $content['videos'] = $this->youTubeService->getVideoByKeywordsFromApi(['wasserball', 'waterpolo']);
 
         $output->writeln([
-            'Count:' . count($content['videos']['videos']),
+            'Count:'.count($content['videos']['videos']),
             '============',
             '',
         ]);

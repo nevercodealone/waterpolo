@@ -2,6 +2,8 @@
 
 namespace App\Service;
 
+use LogicException;
+use Exception;
 use Google\Cloud\Vision\VisionClient;
 
 class ImageService
@@ -15,7 +17,7 @@ class ImageService
     {
         $contents = file_get_contents($_ENV['GOOGLE_JSON']);
         if ($contents === false) {
-            throw new \LogicException('Google JSON file not found');
+            throw new LogicException('Google JSON file not found');
         }
 
         $this->vision = new VisionClient([
@@ -25,17 +27,17 @@ class ImageService
 
     /**
      * @return array<string>
-     * @throws \Exception
+     * @throws Exception
      */
     public function getWebEntities(string $path, string $entity = 'description'): array
     {
         try {
             $image = $this->vision->image(
-                fopen($path, 'r') ?: throw new \Exception('File not found'),
+                fopen($path, 'r') ?: throw new Exception('File not found'),
                 ['WEB_DETECTION']
             );
-        } catch (\Exception) {
-            throw new \Exception('Wrong argument');
+        } catch (Exception) {
+            throw new Exception('Wrong argument');
         }
 
         $annotation = $this->vision->annotate($image);

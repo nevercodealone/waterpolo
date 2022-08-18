@@ -2,6 +2,7 @@
 
 namespace App\Grabber;
 
+use JsonException;
 use App\Handler\ImageHandler;
 use Symfony\Component\DomCrawler\Crawler;
 
@@ -9,27 +10,29 @@ class WebsiteGrabber implements WebsiteGrabberInterface
 {
     public function __construct(
         private ImageHandler $imageHandler
-    )
-    {}
+    ) {
+    }
 
     /**
-     * @param string $url
      * @param array<string, string> $properties
+     *
      * @return array<array>|false
-     * @throws \JsonException
+     *
+     * @throws JsonException
      */
     public function getNewsItemsFromUrl(string $url, array $properties): array|false
     {
         $content = file_get_contents($url);
-        if(!$content) {
+        if (!$content) {
             return false;
         }
+
         $crawler = new Crawler($content);
 
         $newsFeed = [];
-        if($properties['domain'] === 'www.deutsche-wasserball-liga.de') {
+        if ('www.deutsche-wasserball-liga.de' === $properties['domain']) {
             $contentFeed = file_get_contents($url.'/feed/');
-            if($contentFeed) {
+            if ($contentFeed) {
                 $xml = simplexml_load_string($contentFeed);
                 $json = json_encode($xml, JSON_THROW_ON_ERROR);
                 $newsFeed = json_decode($json, true, 512, JSON_THROW_ON_ERROR)['channel']['item'];
@@ -52,21 +55,21 @@ class WebsiteGrabber implements WebsiteGrabberInterface
             }
 
             $imageUrl = $image;
-            if($properties['domain'] === 'homepage.svl08.com') {
+            if ('homepage.svl08.com' === $properties['domain']) {
                 $image = str_replace('..', '', $image);
-                $imageUrl = $url . $image;
+                $imageUrl = $url.$image;
             }
 
             $filename = $this->imageHandler->saveFileFromUrl($imageUrl);
 
-            if ($filename === '') {
+            if ('' === $filename) {
                 unset($news[$key]);
                 continue;
             }
 
-            $link = $url . '/' . $links->eq($key)->attr('href');
+            $link = $url.'/'.$links->eq($key)->attr('href');
 
-            if ($properties['domain'] === 'homepage.svl08.com') {
+            if ('homepage.svl08.com' === $properties['domain']) {
                 $pubDate = $this->imageHandler->getdateFromImage($imageUrl);
             } else {
                 $feedKey = array_search($title, array_column($newsFeed, 'title'), true);
@@ -91,12 +94,16 @@ class WebsiteGrabber implements WebsiteGrabberInterface
         if (str_contains($url, 'deutsche-wasserball-liga.de')) {
             $crawler->filter('#carousel-eyecatcher')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
+                if ($node !== null && $node->hasChildNodes()) {
+                    $node->parentNode->removeChild($node);
+                }
             });
 
             $crawler->filter('.content-header')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
-                $node->parentNode->removeChild($node);
+                if ($node) {
+                    $node->parentNode->removeChild($node);
+                }
             });
         }
     }

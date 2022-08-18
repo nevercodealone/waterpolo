@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Exception;
 use App\Grabber\WebsiteGrabberInterface;
 use App\Grabber\WordpressGrabber;
 use App\Handler\ImageHandler;
@@ -32,7 +33,7 @@ class GrabberService
 
     /**
      * @return array<string, array>
-     * @throws \Exception
+     * @throws Exception
      */
     public function getItems(): array
     {
@@ -83,7 +84,7 @@ class GrabberService
                     }
 
                     $allNews = [...$allNews, ...$news];
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     $msg = $feedUrl.'|'.$exception->getMessage();
                     print_r($msg);
                 }

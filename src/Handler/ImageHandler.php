@@ -2,6 +2,7 @@
 
 namespace App\Handler;
 
+use Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -26,7 +27,7 @@ class ImageHandler
         try {
             $filename = basename($urlToFile);
             $this->filesystem->copy($urlToFile, $this->tmpFolder . $filename);
-        } catch (\Exception $exception) {
+        } catch (Exception $exception) {
             return '';
         }
         return $filename;

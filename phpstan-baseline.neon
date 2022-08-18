@@ -1,16 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Method App\\\\Service\\\\GrabberService\\:\\:getItems\\(\\) invoked with 1 parameter, 0 required\\.$#"
-			count: 1
-			path: src/Command/ImportContentCommand.php
-
-		-
-			message: "#^Cannot access property \\$parentNode on DOMNode\\|null\\.$#"
-			count: 2
-			path: src/Grabber/WebsiteGrabber.php
-
-		-
 			message: "#^Cannot call method removeChild\\(\\) on DOMNode\\|null\\.$#"
 			count: 2
 			path: src/Grabber/WebsiteGrabber.php

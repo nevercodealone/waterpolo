@@ -2,13 +2,13 @@
 
 namespace App\Grabber;
 
+use JsonException;
 interface WebsiteGrabberInterface
 {
     /**
-     * @param string $url
      * @param array<string, string> $properties
      *
-     * @throws \JsonException
+     * @throws JsonException
      * @return array<array>|false
      */
     public function getNewsItemsFromUrl(string $url, array $properties): array|false;

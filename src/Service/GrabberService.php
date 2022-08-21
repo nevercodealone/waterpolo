@@ -148,7 +148,7 @@ class GrabberService
         foreach ($removeLinkSelector as $removeSelector) {
             $crawler->filter($removeSelector)->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
-                if (!$node) {
+                if ($node === null) {
                     return;
                 }
                 $node->parentNode?->removeChild($node);

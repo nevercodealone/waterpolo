@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\Core\Configuration\Option;
 use Rector\Set\ValueObject\SetList;
 use Rector\Config\RectorConfig;
@@ -24,7 +25,8 @@ return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->importShortClasses();
 
     // get services (needed for register a single rule)
-    // $services = $containerConfigurator->services();
+    $services = $rectorConfig->services();
+    $services->set(ExplicitBoolCompareRector::class);
 
     // register a single rule
     // $services->set(TypedPropertyRector::class);

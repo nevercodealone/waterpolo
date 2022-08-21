@@ -101,7 +101,7 @@ class WebsiteGrabber implements WebsiteGrabberInterface
 
             $crawler->filter('.content-header')->each(function (Crawler $crawler) {
                 $node = $crawler->getNode(0);
-                if ($node) {
+                if ($node !== null) {
                     $node->parentNode->removeChild($node);
                 }
             });

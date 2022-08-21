@@ -132,6 +132,16 @@ phpunit_run:
   except:
     - master
 
+rector_run:
+  stage: codeanalyse
+  image: $TOOLBOX_IMAGE
+  script:
+    - /var/www/html/vendor/bin/rector process src --dry-run
+  tags:
+    - docker-executor
+  except:
+    - master
+
 confirm_upgrade:
   image: $TOOLBOX_IMAGE
   script:

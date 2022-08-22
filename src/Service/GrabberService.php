@@ -108,7 +108,7 @@ class GrabberService
 
     private function getImageFromUrl(string $url, array $removeLinkSelector): string|false
     {
-        $imageBlackList = require(__DIR__.'/../..config/disallowlist.php');
+        $imageBlackList = require(__DIR__.'/../../config/disallowlist.php');
 
         $content = file_get_contents($url);
         if(!$content){

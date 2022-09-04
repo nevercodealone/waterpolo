@@ -11,7 +11,7 @@ class ImageService
     /**
      * @var VisionClient
      */
-    private VisionClient $vision;
+    private VisionClient $visionClient;
 
     public function __construct()
     {
@@ -20,7 +20,7 @@ class ImageService
             throw new LogicException('Google JSON file not found');
         }
 
-        $this->vision = new VisionClient([
+        $this->visionClient = new VisionClient([
             'keyFile' => json_decode($contents, true, flags:JSON_THROW_ON_ERROR),
         ]);
     }
@@ -32,7 +32,7 @@ class ImageService
     public function getWebEntities(string $path, string $entity = 'description'): array
     {
         try {
-            $image = $this->vision->image(
+            $image = $this->visionClient->image(
                 fopen($path, 'r') ?: throw new Exception('File not found'),
                 ['WEB_DETECTION']
             );
@@ -40,7 +40,7 @@ class ImageService
             throw new Exception('Wrong argument');
         }
 
-        $annotation = $this->vision->annotate($image);
+        $annotation = $this->visionClient->annotate($image);
 
         $info = $annotation->info();
         if (! $info) {

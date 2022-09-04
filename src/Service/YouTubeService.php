@@ -11,7 +11,7 @@ use Psr\Cache\CacheItemPoolInterface;
  */
 class YouTubeService
 {
-    public function __construct(private Google_Service_YouTube $youtubeService, private CacheItemPoolInterface $cache)
+    public function __construct(private Google_Service_YouTube $googleServiceYouTube, private CacheItemPoolInterface $cacheItemPool)
     {
     }
 
@@ -21,7 +21,7 @@ class YouTubeService
      */
     public function getVideos(): array
     {
-        $cacheItem = $this->cache->getItem('content');
+        $cacheItem = $this->cacheItemPool->getItem('content');
 
         if (!$cacheItem->isHit()) {
             $content = [];
@@ -50,7 +50,7 @@ class YouTubeService
                 'maxResults' => 10,
             ];
 
-            $videoList = $this->youtubeService->search->listSearch('snippet', $params);
+            $videoList = $this->googleServiceYouTube->search->listSearch('snippet', $params);
 
             $videosFromApi = $videoList['items'];
 

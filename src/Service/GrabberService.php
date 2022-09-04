@@ -38,20 +38,20 @@ class GrabberService
     public function getItems(): array
     {
         $allNews = [];
-        foreach ($this->sourceDomains as $properties) {
-            if ($properties['page-type'] === 'website') {
-                $news = $this->websiteGrabber->getNewsItemsFromUrl('https://'.$properties['domain'], $properties);
+        foreach ($this->sourceDomains as $sourceDomain) {
+            if ($sourceDomain['page-type'] === 'website') {
+                $news = $this->websiteGrabber->getNewsItemsFromUrl('https://'.$sourceDomain['domain'], $sourceDomain);
                 if($news) {
                     $allNews = [...$allNews, ...$news];
                 }
             } else {
-                $feedUrl = 'https://'.$properties['domain'].'/feed/';
+                $feedUrl = 'https://'.$sourceDomain['domain'].'/feed/';
                 try {
                     $news = $this->wordpressGrabber->getItemsFromFeedUrl($feedUrl);
 
                     foreach ($news as $key => $item) {
-                        if (in_array('tags', $properties, true)) {
-                            if (!isset($item[$properties['tags']]) || !is_array($item[$properties['tags']])) {
+                        if (in_array('tags', $sourceDomain, true)) {
+                            if (!isset($item[$sourceDomain['tags']]) || !is_array($item[$sourceDomain['tags']])) {
                                 unset($news[$key]);
                                 continue;
                             }
@@ -64,7 +64,7 @@ class GrabberService
                         }
                         $link = $item['guid'];
 
-                        $src = $this->getImageFromUrl($link, $properties['remove-links-selector'] ?? []);
+                        $src = $this->getImageFromUrl($link, $sourceDomain['remove-links-selector'] ?? []);
 
                         if (!$src) {
                             unset($news[$key]);
@@ -80,7 +80,7 @@ class GrabberService
 
                         $news[$key]['image'] = $filename;
                         $news[$key]['link'] = $link;
-                        $news[$key]['url'] = $properties['domain'];
+                        $news[$key]['url'] = $sourceDomain['domain'];
                     }
 
                     $allNews = [...$allNews, ...$news];
@@ -125,8 +125,8 @@ class GrabberService
             }
 
             $src = $image->getAttribute('src');
-            foreach ($imageBlackList as $needle) {
-                if (str_contains(strtolower($src), strtolower($needle))) {
+            foreach ($imageBlackList as $singleImageBlackList) {
+                if (str_contains(strtolower($src), strtolower($singleImageBlackList))) {
                     continue 2;
                 }
             }
@@ -145,13 +145,13 @@ class GrabberService
     private function removeWordpressContentRelations(array $removeLinkSelector, Crawler $crawler): void
     {
         $removeLinkSelector = array_merge($removeLinkSelector, $this->removeSelectors);
-        foreach ($removeLinkSelector as $removeSelector) {
-            $crawler->filter($removeSelector)->each(function (Crawler $crawler) {
-                $node = $crawler->getNode(0);
-                if ($node === null) {
+        foreach ($removeLinkSelector as $singleRemoveLinkSelector) {
+            $crawler->filter($singleRemoveLinkSelector)->each(function (Crawler $crawler) {
+                $domNode = $crawler->getNode(0);
+                if ($domNode === null) {
                     return;
                 }
-                $node->parentNode?->removeChild($node);
+                $domNode->parentNode?->removeChild($domNode);
             });
         }
     }

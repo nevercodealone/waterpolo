@@ -20,6 +20,7 @@ return static function (RectorConfig $rectorConfig): void {
     // Define what rule sets will be applied
     $rectorConfig->import(SetList::DEAD_CODE);
     $rectorConfig->import(SetList::PHP_81);
+    $rectorConfig->import(SetList::NAMING);
 
     $rectorConfig->importNames();
     $rectorConfig->importShortClasses();

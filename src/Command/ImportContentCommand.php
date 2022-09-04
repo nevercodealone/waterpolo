@@ -16,7 +16,7 @@ class ImportContentCommand extends Command
 
     public function __construct(
         private YouTubeService $youTubeService,
-        private CacheItemPoolInterface $cache,
+        private CacheItemPoolInterface $cacheItemPool,
         private GrabberService $grabberService
     ) {
         parent::__construct();
@@ -88,10 +88,10 @@ class ImportContentCommand extends Command
             'Cache handling',
         ]);
 
-        $cacheItem = $this->cache->getItem('content');
+        $cacheItem = $this->cacheItemPool->getItem('content');
 
         $cacheItem->set($content);
-        $this->cache->save($cacheItem);
+        $this->cacheItemPool->save($cacheItem);
 
         $output->writeln([
             'End job.',

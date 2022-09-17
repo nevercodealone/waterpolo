@@ -1,11 +1,16 @@
 # Waterpolo news api
 
+[Live demo](https://waterpolo.nevercodealone.de)
+
 A Never Code Alone Playground
 
 ## Setup
 - Symfony 5
 - Webpack encore
 - Bootstrap
+
+## Symfony training for testing and refactoring
+[Workshops for PHP and Javascript](https://nevercodealone.de/de/php-training)
 
 ### Run commands
 ```bash

@@ -55,8 +55,3 @@ parameters:
 			count: 1
 			path: src/Service/GrabberService.php
 
-		-
-			message: "#^Property App\\\\Service\\\\GrabberService\\:\\:\\$sourceDomains type has no value type specified in iterable type array\\.$#"
-			count: 1
-			path: src/Service/GrabberService.php
-

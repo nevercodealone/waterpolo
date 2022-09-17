@@ -2,12 +2,12 @@
 
 namespace App\Service;
 
-use Exception;
 use App\Grabber\WebsiteGrabberInterface;
 use App\Grabber\WordpressGrabber;
 use App\Handler\ImageHandler;
-use Symfony\Component\DomCrawler\Crawler;
 use function array_merge;
+use Exception;
+use Symfony\Component\DomCrawler\Crawler;
 
 class GrabberService
 {
@@ -29,19 +29,21 @@ class GrabberService
         private ImageHandler $imageHandler,
         private array $sourceDomains,
         private array $removeSelectors,
-    ) {}
+    ) {
+    }
 
     /**
      * @return array<string, array>
+     *
      * @throws Exception
      */
     public function getItems(): array
     {
         $allNews = [];
         foreach ($this->sourceDomains as $sourceDomain) {
-            if ($sourceDomain['page-type'] === 'website') {
+            if ('website' === $sourceDomain['page-type']) {
                 $news = $this->websiteGrabber->getNewsItemsFromUrl('https://'.$sourceDomain['domain'], $sourceDomain);
-                if($news) {
+                if ($news) {
                     $allNews = [...$allNews, ...$news];
                 }
             } else {
@@ -73,7 +75,7 @@ class GrabberService
 
                         $filename = $this->imageHandler->saveFileFromUrl($src);
 
-                        if ($filename === '') {
+                        if ('' === $filename) {
                             unset($news[$key]);
                             continue;
                         }
@@ -108,10 +110,10 @@ class GrabberService
 
     private function getImageFromUrl(string $url, array $removeLinkSelector): string|false
     {
-        $imageBlackList = require(__DIR__.'/../../config/disallowlist.php');
+        $imageBlackList = require __DIR__.'/../../config/disallowlist.php';
 
         $content = file_get_contents($url);
-        if(!$content){
+        if (!$content) {
             return false;
         }
         $crawler = new Crawler($content);
@@ -148,7 +150,7 @@ class GrabberService
         foreach ($removeLinkSelector as $singleRemoveLinkSelector) {
             $crawler->filter($singleRemoveLinkSelector)->each(function (Crawler $crawler) {
                 $domNode = $crawler->getNode(0);
-                if ($domNode === null) {
+                if (null === $domNode) {
                     return;
                 }
                 $domNode->parentNode?->removeChild($domNode);

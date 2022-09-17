@@ -132,27 +132,6 @@
     "google/auth": {
         "version": "v1.6.1"
     },
-    "google/cloud-core": {
-        "version": "v1.34.0"
-    },
-    "google/cloud-vision": {
-        "version": "v0.24.0"
-    },
-    "google/common-protos": {
-        "version": "1.1"
-    },
-    "google/gax": {
-        "version": "1.2.0"
-    },
-    "google/grpc-gcp": {
-        "version": "0.1.4"
-    },
-    "google/protobuf": {
-        "version": "v3.11.0"
-    },
-    "grpc/grpc": {
-        "version": "1.25.0"
-    },
     "guzzlehttp/guzzle": {
         "version": "6.4.1"
     },
@@ -197,9 +176,6 @@
     },
     "phpseclib/phpseclib": {
         "version": "2.0.23"
-    },
-    "phpspec/prophecy": {
-        "version": "1.13.0"
     },
     "phpstan/phpstan": {
         "version": "0.12.3"
@@ -262,9 +238,6 @@
     },
     "rector/rector": {
         "version": "0.11.60"
-    },
-    "rize/uri-template": {
-        "version": "0.3.2"
     },
     "sebastian/cli-parser": {
         "version": "1.0.1"

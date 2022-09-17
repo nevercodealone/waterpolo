@@ -16,7 +16,7 @@ class NewsService
      */
     private string $tmpImg = '/tmp/photos/waterpolo.jpg';
 
-    public function __construct(private CacheItemPoolInterface $cacheItemPool, private ImageService $imageService, private Filesystem $fileSystem)
+    public function __construct(private CacheItemPoolInterface $cacheItemPool, private Filesystem $fileSystem)
     {
     }
 
@@ -35,43 +35,6 @@ class NewsService
         }
 
         return $content;
-    }
-
-    /**
-     * @return array<string>
-     */
-    public function getNewsFromApi(): array
-    {
-        $httpClient = HttpClient::create();
-        $newsApiUrl = 'https://newsapi.org/v2/everything?q=wasserball&sortBy=publishedAt&language=de&apiKey=';
-        $response = $httpClient->request('GET', $newsApiUrl . $_ENV['NEWSAPI']);
-
-        $response->getStatusCode();
-        // $content = $response->getContent();
-        $content = $response->toArray();
-        $articles = $content['articles'];
-
-        foreach ($articles as $key => $news) {
-            if ('Sueddeutsche.de' === $news['source']['name']) {
-                unset($articles[$key]);
-                continue;
-            }
-
-            $this->storeTempFileWithImage($news);
-
-            $webEntities = $this->imageService->getWebEntities($this->tmpImg);
-
-            $isDetectedKeyword = $this->isDetected($webEntities);
-
-            if (!$isDetectedKeyword) {
-                unset($articles[$key]);
-                continue;
-            }
-
-            $articles[$key]['webEntities'] = $webEntities;
-        }
-
-        return $articles;
     }
 
     /**

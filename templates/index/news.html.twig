@@ -19,7 +19,7 @@
                         <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-white flex items-center h-full px-5 bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="all">Alle</li>
                         {% if news.sourceDomains is not empty %}
                             {% for item in news.sourceDomains %}
-                                <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none hover:text-white focus:text-white text-sm text-gray-600 flex items-center h-full px-5 hover:bg-indigo-700 focus:bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="{{ sourceDomain.domain|replace({'.': ''}) }}">{{ sourceDomain.domain }}</li>
+                                <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none hover:text-white focus:text-white text-sm text-gray-600 flex items-center h-full px-5 hover:bg-indigo-700 focus:bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="{{ item.domain|replace({'.': ''}) }}">{{ item.domain }}</li>
                             {% endfor %}
                         {% endif %}
                     </ul>

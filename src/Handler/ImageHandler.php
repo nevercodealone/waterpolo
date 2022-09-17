@@ -13,8 +13,7 @@ class ImageHandler
     public function __construct(
         private KernelInterface $appKernel,
         private Filesystem $filesystem
-    )
-    {
+    ) {
         $this->tmpFolder = $this->appKernel->getProjectDir().'/public/tmp/photos/';
 
         if (!$this->filesystem->exists($this->tmpFolder)) {
@@ -26,18 +25,19 @@ class ImageHandler
     {
         try {
             $filename = basename($urlToFile);
-            $this->filesystem->copy($urlToFile, $this->tmpFolder . $filename);
+            $this->filesystem->copy($urlToFile, $this->tmpFolder.$filename);
         } catch (Exception $exception) {
             return '';
         }
+
         return $filename;
     }
 
     public function getDateFromImage(string $urlToFile): string|false
     {
         $headers = get_headers($urlToFile, true);
-        if($headers) {
-            return $headers["Last-Modified"];
+        if ($headers) {
+            return $headers['Last-Modified'];
         }
 
         return false;

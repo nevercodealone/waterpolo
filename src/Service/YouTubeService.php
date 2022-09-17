@@ -5,16 +5,11 @@ namespace App\Service;
 use Google_Service_YouTube;
 use Psr\Cache\CacheItemPoolInterface;
 
-
-/**
- *
- */
 class YouTubeService
 {
     public function __construct(private Google_Service_YouTube $googleServiceYouTube, private CacheItemPoolInterface $cacheItemPool)
     {
     }
-
 
     /**
      * @return array<string>
@@ -35,6 +30,7 @@ class YouTubeService
 
     /**
      * @param array<string> $keywords
+     *
      * @return array<string,mixed>
      */
     public function getVideoByKeywordsFromApi(array $keywords): array

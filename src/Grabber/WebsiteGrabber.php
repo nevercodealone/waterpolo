@@ -2,8 +2,8 @@
 
 namespace App\Grabber;
 
-use JsonException;
 use App\Handler\ImageHandler;
+use JsonException;
 use Symfony\Component\DomCrawler\Crawler;
 
 class WebsiteGrabber implements WebsiteGrabberInterface
@@ -94,14 +94,14 @@ class WebsiteGrabber implements WebsiteGrabberInterface
         if (str_contains($url, 'deutsche-wasserball-liga.de')) {
             $crawler->filter('#carousel-eyecatcher')->each(function (Crawler $crawler) {
                 $domNode = $crawler->getNode(0);
-                if ($domNode !== null && $domNode->hasChildNodes()) {
+                if (null !== $domNode && $domNode->hasChildNodes()) {
                     $domNode->parentNode->removeChild($domNode);
                 }
             });
 
             $crawler->filter('.content-header')->each(function (Crawler $crawler) {
                 $domNode = $crawler->getNode(0);
-                if ($domNode !== null) {
+                if (null !== $domNode) {
                     $domNode->parentNode->removeChild($domNode);
                 }
             });

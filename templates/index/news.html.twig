@@ -13,34 +13,40 @@
                     </svg>
                 </div>
             </div>
-            <div class="xl:w-full rounded bg-gray-200 shadow">
-                <ul class="flex flex-wrap justify-center h-full">
-                    <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-white flex items-center h-full px-5 bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="all">Alle</li>
-                    {% for sourceDomain in news.sourceDomains %}
-                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none hover:text-white focus:text-white text-sm text-gray-600 flex items-center h-full px-5 hover:bg-indigo-700 focus:bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="{{ sourceDomain.domain|replace({'.': ''}) }}">{{ sourceDomain.domain }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                {% if news.news %}
-                    {% for key,newsItem in news.news %}
-                        <a href="{{ newsItem.link }}" target="_blank" class="group" data-domain="{{ newsItem.url|replace({'.': ''}) }}">
-                            <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
-                                <img src="/tmp/photos/{{ newsItem.image }}" alt="{{ newsItem.title }}" class="w-full h-full object-center object-cover group-hover:opacity-75">
-                            </div>
-                            <h3 class="mt-4 text-sm text-gray-700">
-                                {{ newsItem.pubDate | date("F jS \\a\\t g:ia") }}
-                            </h3>
-                            <p class="mt-1 text-lg font-medium text-gray-900">
-                                {{ newsItem.title }}
-                            </p>
-                            <p class="flex items-center py-2">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z" clip-rule="evenodd"></path></svg> <span class="px-2">{{ newsItem.url }}</span>
-                            </p>
-                        </a>
-                    {% endfor %}
-                {% endif %}
-            </div>
+            {% if news is defined and news is not empty %}
+                <div class="xl:w-full rounded bg-gray-200 shadow">
+                    <ul class="flex flex-wrap justify-center h-full">
+                        <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none focus:text-white text-sm text-white flex items-center h-full px-5 bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="all">Alle</li>
+                        {% if news.sourceDomains is not empty %}
+                            {% for item in news.sourceDomains %}
+                                <li onclick="activeTab(this)" onkeypress="activeTab(this)" tabindex="0" class="focus:outline-none hover:text-white focus:text-white text-sm text-gray-600 flex items-center h-full px-5 hover:bg-indigo-700 focus:bg-indigo-700 py-4 my-2 rounded-md mr-10 font-normal cursor-pointer" data-domain="{{ sourceDomain.domain|replace({'.': ''}) }}">{{ sourceDomain.domain }}</li>
+                            {% endfor %}
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                    {% if news.news %}
+                        {% for key,newsItem in news.news %}
+                            <a href="{{ newsItem.link }}" target="_blank" class="group" data-domain="{{ newsItem.url|replace({'.': ''}) }}">
+                                <div class="w-full aspect-w-1 aspect-h-1 bg-gray-200 rounded-lg overflow-hidden">
+                                    <img src="/tmp/photos/{{ newsItem.image }}" alt="{{ newsItem.title }}" class="w-full h-full object-center object-cover group-hover:opacity-75">
+                                </div>
+                                <h3 class="mt-4 text-sm text-gray-700">
+                                    {{ newsItem.pubDate | date("F jS \\a\\t g:ia") }}
+                                </h3>
+                                <p class="mt-1 text-lg font-medium text-gray-900">
+                                    {{ newsItem.title }}
+                                </p>
+                                <p class="flex items-center py-2">
+                                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.083 9h1.946c.089-1.546.383-2.97.837-4.118A6.004 6.004 0 004.083 9zM10 2a8 8 0 100 16 8 8 0 000-16zm0 2c-.076 0-.232.032-.465.262-.238.234-.497.623-.737 1.182-.389.907-.673 2.142-.766 3.556h3.936c-.093-1.414-.377-2.649-.766-3.556-.24-.56-.5-.948-.737-1.182C10.232 4.032 10.076 4 10 4zm3.971 5c-.089-1.546-.383-2.97-.837-4.118A6.004 6.004 0 0115.917 9h-1.946zm-2.003 2H8.032c.093 1.414.377 2.649.766 3.556.24.56.5.948.737 1.182.233.23.389.262.465.262.076 0 .232-.032.465-.262.238-.234.498-.623.737-1.182.389-.907.673-2.142.766-3.556zm1.166 4.118c.454-1.147.748-2.572.837-4.118h1.946a6.004 6.004 0 01-2.783 4.118zm-6.268 0C6.412 13.97 6.118 12.546 6.03 11H4.083a6.004 6.004 0 002.783 4.118z" clip-rule="evenodd"></path></svg> <span class="px-2">{{ newsItem.url }}</span>
+                                </p>
+                            </a>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            {% else %}
+                <div style="color: #B0413E">News import takes some time. Please check later. Thx.</div>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

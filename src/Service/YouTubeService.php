@@ -7,7 +7,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class YouTubeService
 {
-    public function __construct(private Google_Service_YouTube $googleServiceYouTube, private CacheItemPoolInterface $cacheItemPool)
+    public function __construct(private readonly Google_Service_YouTube $googleServiceYouTube, private readonly CacheItemPoolInterface $cacheItemPool)
     {
     }
 
@@ -19,13 +19,10 @@ class YouTubeService
         $cacheItem = $this->cacheItemPool->getItem('content');
 
         if (!$cacheItem->isHit()) {
-            $content = [];
-        } else {
-            $cacheContent = $cacheItem->get();
-            $content = $cacheContent['videos'];
+            return [];
         }
-
-        return $content;
+        $cacheContent = $cacheItem->get();
+        return $cacheContent['videos'];
     }
 
     /**
@@ -54,7 +51,7 @@ class YouTubeService
                 $videosFromApi[$key]['keyword'] = $keyword;
             }
 
-            $counts[$keyword] = count($videosFromApi);
+            $counts[$keyword] = is_countable($videosFromApi) ? count($videosFromApi) : 0;
 
             $videos = array_merge($videos, $videosFromApi);
         }

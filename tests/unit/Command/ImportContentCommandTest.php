@@ -17,25 +17,13 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 final class ImportContentCommandTest extends KernelTestCase
 {
-    /**
-     * @var Application
-     */
-    private $application;
+    private Application $application;
 
-    /**
-     * @var YouTubeService|MockObject
-     */
-    private $youTubeService;
+    private YouTubeService|MockObject $youTubeService;
 
-    /**
-     * @var GrabberService|MockObject
-     */
-    private $grabberService;
+    private GrabberService|MockObject $grabberService;
 
-    /**
-     * @var MockObject|CacheItemPoolInterface
-     */
-    private $cacheItem;
+    private MockObject|CacheItemPoolInterface $cacheItem;
 
     protected function setUp(): void
     {

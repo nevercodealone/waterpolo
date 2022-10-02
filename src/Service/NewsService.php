@@ -6,7 +6,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class NewsService
 {
-    public function __construct(private CacheItemPoolInterface $cacheItemPool)
+    public function __construct(private readonly CacheItemPoolInterface $cacheItemPool)
     {
     }
 
@@ -18,12 +18,9 @@ class NewsService
         $cacheItem = $this->cacheItemPool->getItem('content');
 
         if (!$cacheItem->isHit()) {
-            $content = [];
-        } else {
-            $cacheContent = $cacheItem->get();
-            $content = $cacheContent['news'];
+            return [];
         }
-
-        return $content;
+        $cacheContent = $cacheItem->get();
+        return $cacheContent['news'];
     }
 }

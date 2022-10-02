@@ -8,11 +8,11 @@ use Symfony\Component\HttpKernel\KernelInterface;
 
 class ImageHandler
 {
-    private string $tmpFolder;
+    private readonly string $tmpFolder;
 
     public function __construct(
-        private KernelInterface $appKernel,
-        private Filesystem $filesystem
+        private readonly KernelInterface $appKernel,
+        private readonly Filesystem $filesystem
     ) {
         $this->tmpFolder = $this->appKernel->getProjectDir().'/public/tmp/photos/';
 
@@ -26,7 +26,7 @@ class ImageHandler
         try {
             $filename = basename($urlToFile);
             $this->filesystem->copy($urlToFile, $this->tmpFolder.$filename);
-        } catch (Exception $exception) {
+        } catch (Exception) {
             return '';
         }
 

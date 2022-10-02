@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
-    public function __construct(private NewsService $newsService, private YouTubeService $youTubeService)
+    public function __construct(private readonly NewsService $newsService, private readonly YouTubeService $youTubeService)
     {
     }
 

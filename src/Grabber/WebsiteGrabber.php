@@ -94,9 +94,13 @@ class WebsiteGrabber implements WebsiteGrabberInterface
         if (str_contains($url, 'deutsche-wasserball-liga.de')) {
             $crawler->filter('#carousel-eyecatcher')->each(function (Crawler $crawler) {
                 $domNode = $crawler->getNode(0);
-                if (null !== $domNode && $domNode->hasChildNodes()) {
-                    $domNode->parentNode->removeChild($domNode);
+                if (null === $domNode) {
+                    return;
                 }
+                if (!$domNode->hasChildNodes()) {
+                    return;
+                }
+                $domNode->parentNode->removeChild($domNode);
             });
 
             $crawler->filter('.content-header')->each(function (Crawler $crawler) {

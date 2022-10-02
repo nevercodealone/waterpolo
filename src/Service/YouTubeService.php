@@ -19,13 +19,10 @@ class YouTubeService
         $cacheItem = $this->cacheItemPool->getItem('content');
 
         if (!$cacheItem->isHit()) {
-            $content = [];
-        } else {
-            $cacheContent = $cacheItem->get();
-            $content = $cacheContent['videos'];
+            return [];
         }
-
-        return $content;
+        $cacheContent = $cacheItem->get();
+        return $cacheContent['videos'];
     }
 
     /**

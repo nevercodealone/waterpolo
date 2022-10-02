@@ -18,12 +18,9 @@ class NewsService
         $cacheItem = $this->cacheItemPool->getItem('content');
 
         if (!$cacheItem->isHit()) {
-            $content = [];
-        } else {
-            $cacheContent = $cacheItem->get();
-            $content = $cacheContent['news'];
+            return [];
         }
-
-        return $content;
+        $cacheContent = $cacheItem->get();
+        return $cacheContent['news'];
     }
 }

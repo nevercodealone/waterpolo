@@ -22,7 +22,8 @@ return static function (RectorConfig $rectorConfig): void {
         LevelSetList::UP_TO_PHP_81,
         SetList::DEAD_CODE,
         SetList::PHP_81,
-        SetList::NAMING
+        SetList::NAMING,
+        SetList::EARLY_RETURN
     ]);
 
     $rectorConfig->importNames();

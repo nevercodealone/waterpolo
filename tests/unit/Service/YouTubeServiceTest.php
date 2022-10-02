@@ -2,6 +2,7 @@
 
 namespace App\Tests\unit\Service;
 
+use Google_Service_YouTube;
 use App\Service\YouTubeService;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
@@ -12,14 +13,11 @@ class YouTubeServiceTest extends TestCase
 {
     private $googleServiceYoutube;
 
-    private $cacheItemPoolInterface;
-
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->googleServiceYoutube = $this->createMock(\Google_Service_YouTube::class);
-        $this->cacheItemPoolInterface = $this->createMock(CacheItemPoolInterface::class);
+        $this->googleServiceYoutube = $this->createMock(Google_Service_YouTube::class);
     }
 
     public function testGetVideosReturnEmptyArrayWhenCacheItemIsFalse()

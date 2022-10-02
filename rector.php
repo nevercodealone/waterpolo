@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\Core\Configuration\Option;
+use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
 use Rector\Config\RectorConfig;
 use Rector\Core\ValueObject\PhpVersion;
@@ -15,12 +16,14 @@ return static function (RectorConfig $rectorConfig): void {
     $parameters->set(Option::PATHS, [
         __DIR__ . '/src'
     ]);
-    $parameters->set(Option::PHP_VERSION_FEATURES, PhpVersion::PHP_80);
 
     // Define what rule sets will be applied
-    $rectorConfig->import(SetList::DEAD_CODE);
-    $rectorConfig->import(SetList::PHP_81);
-    $rectorConfig->import(SetList::NAMING);
+    $rectorConfig->sets([
+        LevelSetList::UP_TO_PHP_81,
+        SetList::DEAD_CODE,
+        SetList::PHP_81,
+        SetList::NAMING
+    ]);
 
     $rectorConfig->importNames();
     $rectorConfig->importShortClasses();

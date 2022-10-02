@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Command;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use App\Command\ImportContentCommand;
 use App\Service\GrabberService;
 use App\Service\NewsService;
@@ -22,22 +23,17 @@ final class ImportContentCommandTest extends KernelTestCase
     private $application;
 
     /**
-     * @var YouTubeService|\PHPUnit\Framework\MockObject\MockObject
+     * @var YouTubeService|MockObject
      */
     private $youTubeService;
 
     /**
-     * @var NewsService|\PHPUnit\Framework\MockObject\MockObject
-     */
-    private $newsService;
-
-    /**
-     * @var GrabberService|\PHPUnit\Framework\MockObject\MockObject
+     * @var GrabberService|MockObject
      */
     private $grabberService;
 
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|CacheItemPoolInterface
+     * @var MockObject|CacheItemPoolInterface
      */
     private $cacheItem;
 
@@ -150,8 +146,8 @@ final class ImportContentCommandTest extends KernelTestCase
         ]);
 
         // the output of the command in the console
-        $output = $commandTester->getDisplay();
+        $display = $commandTester->getDisplay();
 
-        return $output;
+        return $display;
     }
 }

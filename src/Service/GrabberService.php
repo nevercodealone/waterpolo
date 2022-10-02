@@ -24,11 +24,11 @@ class GrabberService
      * @param string[] $removeSelectors
      */
     public function __construct(
-        private WordpressGrabber $wordpressGrabber,
-        private WebsiteGrabberInterface $websiteGrabber,
-        private ImageHandler $imageHandler,
-        private array $sourceDomains,
-        private array $removeSelectors,
+        private readonly WordpressGrabber $wordpressGrabber,
+        private readonly WebsiteGrabberInterface $websiteGrabber,
+        private readonly ImageHandler $imageHandler,
+        private readonly array $sourceDomains,
+        private readonly array $removeSelectors,
     ) {
     }
 

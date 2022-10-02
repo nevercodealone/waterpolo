@@ -9,7 +9,7 @@ use Symfony\Component\DomCrawler\Crawler;
 class WebsiteGrabber implements WebsiteGrabberInterface
 {
     public function __construct(
-        private ImageHandler $imageHandler
+        private readonly ImageHandler $imageHandler
     ) {
     }
 

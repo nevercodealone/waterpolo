@@ -7,7 +7,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class YouTubeService
 {
-    public function __construct(private Google_Service_YouTube $googleServiceYouTube, private CacheItemPoolInterface $cacheItemPool)
+    public function __construct(private readonly Google_Service_YouTube $googleServiceYouTube, private readonly CacheItemPoolInterface $cacheItemPool)
     {
     }
 
@@ -54,7 +54,7 @@ class YouTubeService
                 $videosFromApi[$key]['keyword'] = $keyword;
             }
 
-            $counts[$keyword] = count($videosFromApi);
+            $counts[$keyword] = is_countable($videosFromApi) ? count($videosFromApi) : 0;
 
             $videos = array_merge($videos, $videosFromApi);
         }

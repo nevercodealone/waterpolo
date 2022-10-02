@@ -15,9 +15,9 @@ class ImportContentCommand extends Command
     protected static $defaultName = 'app:import:content';
 
     public function __construct(
-        private YouTubeService $youTubeService,
-        private CacheItemPoolInterface $cacheItemPool,
-        private GrabberService $grabberService
+        private readonly YouTubeService $youTubeService,
+        private readonly CacheItemPoolInterface $cacheItemPool,
+        private readonly GrabberService $grabberService
     ) {
         parent::__construct();
     }
@@ -73,7 +73,7 @@ class ImportContentCommand extends Command
         $content['videos'] = $this->youTubeService->getVideoByKeywordsFromApi(['wasserball', 'waterpolo']);
 
         $output->writeln([
-            'Count:'.count($content['videos']['videos']),
+            'Count:'.(is_countable($content['videos']['videos']) ? count($content['videos']['videos']) : 0),
             '============',
             '',
         ]);

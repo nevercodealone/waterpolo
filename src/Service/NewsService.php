@@ -6,7 +6,7 @@ use Psr\Cache\CacheItemPoolInterface;
 
 class NewsService
 {
-    public function __construct(private CacheItemPoolInterface $cacheItemPool)
+    public function __construct(private readonly CacheItemPoolInterface $cacheItemPool)
     {
     }
 

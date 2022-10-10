@@ -133,7 +133,7 @@ class GrabberService
                 }
             }
 
-            return $src;
+            return strtok($src, '?');
         }
 
         return false;
